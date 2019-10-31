@@ -56,7 +56,7 @@ None
 * `STOP_PERCENTAGE` Percentage of equal fitness (stop criterium) <br> Default: 0.95
 * `PR_CROSS` The probability for applying crossover between two parents <br> Default: 0.95
 * `PR_MUT` The probability for applying mutation to an allele of the gene of a candidate (after crossover) <br> Default 0.05
-* `CROSSOVER` The crossover operator <br> Default: `xalt_edges`
+* `CROSSOVER` The crossover operator <br> Default: `xalt_edges` (reference to MatLab file `xalt_edges.m`)
 * `LOCALLOOP` The loop-checking mechanism (0 for False and 1 for True) <br> Default: 0
 * `ah1`, `ah2`, `ah3` Axes handles to visualize the TSP
 
