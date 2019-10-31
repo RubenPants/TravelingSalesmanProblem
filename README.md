@@ -7,6 +7,61 @@ None
 
 
 
+## Project Components
+
+### tspgui
+
+`tspgui.m` can be run to visualize the progress of the evolutionary algorithm, however, this decreases performance drastically.
+
+### run_ga
+
+`run_ga` is where its at, since this call is the one that will invoke the GA. Several arguments are given with this call:
+
+* `x` List of coordinates expressing the x-coordinate of the cities <br> Default: [0.6200, 
+      0.8328, 
+      0.8589, 
+      0.5103, 
+      0.4073, 
+      0.6189, 
+      0.0469, 
+      0.0707, 
+      1.0000, 
+      0.4881, 
+      0.5007, 
+      0.3483, 
+      0.5696, 
+      0.7694, 
+      0.3197, 
+      0.3242]
+* `y` List of coordinates expressing the y-coordinate of the cities<br> Default: [0.4647,
+      0.0117,
+      0.1958,
+      0.3871,
+      0.4804,
+      0.2203,
+      0.5166,
+      0.0584,
+      0.3687,
+      0.0681,
+      0.2556,
+      0.0704,
+      0.5459,
+      0.4746,
+      0.3242,
+      0.1927]
+* `NIND` The number of individuals<br> Default: 50
+* `MAXGEN` The maximal number of generations <br> Default: 100
+* `NVAR` The size of the chromosome (genome) <br> Default: 16
+* `ELITIST` The elitist-percentage <br> Default: 0.05
+* `STOP_PERCENTAGE` Percentage of equal fitness (stop criterium) <br> Default: 0.95
+* `PR_CROSS` The probability for applying crossover between two parents <br> Default: 0.95
+* `PR_MUT` The probability for applying mutation to an allele of the gene of a candidate (after crossover) <br> Default 0.05
+* `CROSSOVER` The crossover operator <br> Default: `xalt_edges`
+* `LOCALLOOP` The loop-checking mechanism (0 for False and 1 for True) <br> Default: 0
+* `ah1`, `ah2`, `ah3` Axes handles to visualize the TSP
+
+
+
 ## Q&As
 
 * **[Ruben] Are there constraints on which paths to take in the assignments? How to tackle those if there are any?** <br> [Answer needed]

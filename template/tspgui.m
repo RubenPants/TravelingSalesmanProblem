@@ -178,6 +178,38 @@ set(fh,'Visible','on');
         set(mutslider,'Visible','off');
         set(crossslider,'Visible','off');
         set(elitslider,'Visible','off');
+        %{
+        % Print all the parameter-values
+        disp("run_ga")
+        disp("x")
+        disp(x)
+        disp("y")
+        disp(y)
+        disp("NIND")
+        disp(NIND)
+        disp("MAXGEN")
+        disp(MAXGEN)
+        disp("NVAR")
+        disp(NVAR)
+        disp("ELITIST")
+        disp(ELITIST)
+        disp("STOP_PERCENTAGE")
+        disp(STOP_PERCENTAGE)
+        disp("PR_CROSS")
+        disp(PR_CROSS)
+        disp("PR_MUT")
+        disp(PR_MUT)
+        disp("CROSSOVER")
+        disp(CROSSOVER)
+        disp("LOCALLOOP")
+        disp(LOCALLOOP)
+        disp("ah1")
+        disp(ah1)
+        disp("ah2")
+        disp(ah2)
+        disp("ah3")
+        disp(ah3)
+        %}
         run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP, ah1, ah2, ah3);
         end_run();
     end
