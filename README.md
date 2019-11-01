@@ -1,6 +1,14 @@
 # Traveling Salesman Problem
  Solution to the Sales Man Problem using genetic algorithms (neuro-evolution)
 
+
+
+## Notes
+
+* Start custom-created files' name with `aaa_` (e.g. `aaa_test_ruben.m`), such it's easy to distinct the custom created and provided files (MatLab complaints if you only start with an underscore..).
+
+
+
 ## Project Progress
 
 None

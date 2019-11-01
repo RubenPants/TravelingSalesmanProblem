@@ -58,6 +58,14 @@ NVAR=size(data,1);
 
 datasets
 
+% TODO: Remove!
+NCITIES = 40
+x = (cos((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
+x = x(:);  % Transform to column vector
+y = (sin((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
+y = y(:);  % Transform to column vector
+NVAR = NCITIES
+
 % initialise the user interface
 fh = figure('Visible','off','Name','TSP Tool','Position',[0,0,1024,768]);
 ah1 = axes('Parent',fh,'Position',[.1 .55 .4 .4]);
@@ -178,38 +186,6 @@ set(fh,'Visible','on');
         set(mutslider,'Visible','off');
         set(crossslider,'Visible','off');
         set(elitslider,'Visible','off');
-        %{
-        % Print all the parameter-values
-        disp("run_ga")
-        disp("x")
-        disp(x)
-        disp("y")
-        disp(y)
-        disp("NIND")
-        disp(NIND)
-        disp("MAXGEN")
-        disp(MAXGEN)
-        disp("NVAR")
-        disp(NVAR)
-        disp("ELITIST")
-        disp(ELITIST)
-        disp("STOP_PERCENTAGE")
-        disp(STOP_PERCENTAGE)
-        disp("PR_CROSS")
-        disp(PR_CROSS)
-        disp("PR_MUT")
-        disp(PR_MUT)
-        disp("CROSSOVER")
-        disp(CROSSOVER)
-        disp("LOCALLOOP")
-        disp(LOCALLOOP)
-        disp("ah1")
-        disp(ah1)
-        disp("ah2")
-        disp(ah2)
-        disp("ah3")
-        disp(ah3)
-        %}
         run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP, ah1, ah2, ah3);
         end_run();
     end
