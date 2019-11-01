@@ -43,7 +43,7 @@ if CALCULATE_NEW == 1
     Avg = zeros(STEPS+1);
     for m = 0:STEPS  
         for c = 0:STEPS
-            fprintf("%.2f percent done\n", (m*STEPS + c)/(STEPS^2+STEPS));
+            fprintf("%.3f percent done\n", (m*STEPS + c)/(STEPS^2+STEPS));
             total = zeros(1,AVG_COUNT);
             for i = 1:AVG_COUNT
                 total(i) = aaa_run_ga_sec(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, c/STEPS, m/STEPS, CROSSOVER, LOCALLOOP);
