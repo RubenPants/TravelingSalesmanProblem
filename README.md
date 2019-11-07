@@ -15,6 +15,55 @@ None
 
 
 
+## Questions
+
+### Question 2 [Ruben]
+
+* Map out a Matrix, beautify the boi.
+
+* Mutation vs Selection (matrix)
+* Number of generations vs population size
+
+### Question 3 [Sieben]
+
+* Stagnation (multiple species?)
+* Cut-off (stop when threshold found) --> Rational in report why not idea
+
+### Question 4 [Ruben]
+
+* Adjacency to path representation (needed?)
+* Binary representation (with corresponding mutation and selection). Generalize to variable length of bit-strings.
+* Cycle-crossover
+
+### Question 5 [Sieben]
+
+* Not completely sure Extra form of mutation <br>
+   https://arxiv.org/ftp/arxiv/papers/1409/1409.3078.pdf 
+
+### Question 6 [NaN]
+
+* Run the boiii
+
+### Question 7
+
+#### Sub-question a
+
+* H5 
+
+#### Sub-question b [Ruben]
+
+* Novelty Search
+
+#### Sub-question c
+
+* k-NN for specie-selection
+
+#### Sub-question d
+
+* Let the mutation rates, k-NN (if used) and other parameters co-evolve.
+
+
+
 ## Project Components
 
 ### tspgui
@@ -72,14 +121,14 @@ None
 
 ## Q&As
 
-* **[Ruben] Are there constraints on which paths to take in the assignments? How to tackle those if there are any?** <br> [Answer needed]
+* **[Ruben] Are there constraints on which paths to take in the assignments? How to tackle those if there are any?** <br> No.
 
 
 
 ## TODOs
 
 * [Ruben] Experiment with different **selection** mechanisms from chapter 5.
-* [Ruben] Most likely we'll use an *Integer **Representation*** (p54).
+* [Ruben] Most likely we'll use an *Integer **Representation*** (p54). (Adjacency)
 * [Ruben] For **recombination**, I'd choose the *cycle crossover* discussed on page 73. An alternative would be to choose order crossover. Interesting comparison if you ask me? (I think the latter would become unstable due to the many fluctuations in choices, i.e. the crossover would become too stochastic).
 
 
