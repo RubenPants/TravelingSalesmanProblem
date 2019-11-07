@@ -50,8 +50,10 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
         	minimum=best(gen+1);
             mean_fits(gen+1)=mean(ObjV);
             worst(gen+1)=max(ObjV);
+            fprintf("---");
             for t=1:size(ObjV,1)
                 if (ObjV(t)==minimum)
+                    fprintf("Hoi %d %f \n", t, ObjV(t));
                     break;
                 end
             end
@@ -59,6 +61,7 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
             % Visualize progress
             visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
 
+            % Stop criteria if 95% of candidates equal to minimum 
             if (sObjV(stopN)-sObjV(1) <= 1e-15)
                   break;
             end          

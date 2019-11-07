@@ -59,12 +59,12 @@ NVAR=size(data,1);
 datasets
 
 % TODO: Remove!
-NCITIES = 40
-x = (cos((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
-x = x(:);  % Transform to column vector
-y = (sin((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
-y = y(:);  % Transform to column vector
-NVAR = NCITIES
+% NCITIES = 40
+% x = (cos((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
+% x = x(:);  % Transform to column vector
+% y = (sin((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
+% y = y(:);  % Transform to column vector
+% NVAR = NCITIES
 
 % initialise the user interface
 fh = figure('Visible','off','Name','TSP Tool','Position',[0,0,1024,768]);
