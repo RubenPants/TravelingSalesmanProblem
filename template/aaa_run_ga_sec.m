@@ -41,6 +41,7 @@ function min_obj = aaa_run_ga_sec(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCEN
     % evaluate initial population
     ObjV = tspfun(Chrom,Dist);
     best=zeros(1,MAXGEN);
+    
 
     % generational loop
     while gen < MAXGEN
@@ -49,15 +50,15 @@ function min_obj = aaa_run_ga_sec(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCEN
         minimum=best(gen+1);
         mean_fits(gen+1)=mean(ObjV);
         worst(gen+1)=max(ObjV);
+        
+               
         for t=1:size(ObjV,1)
             if (ObjV(t)==minimum)
                 break;
             end
         end
-
-        if (sObjV(stopN)-sObjV(1) <= 1e-15)
-              break;
-        end          
+        
+             
 
         %assign fitness values to entire population
         FitnV=ranking(ObjV);

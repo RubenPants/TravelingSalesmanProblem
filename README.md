@@ -27,7 +27,8 @@ None
 ### Question 3 [Sieben]
 
 * Stagnation (multiple species?)
-* Cut-off (stop when threshold found) --> Rational in report why not idea
+* Cut-off (stop when threshold found) --> Rational in report why not ideal
+http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.91.9167&rep=rep1&type=pdf (stopping criterion reference)
 
 ### Question 4 [Ruben]
 
