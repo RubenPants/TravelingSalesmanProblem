@@ -1,4 +1,4 @@
-function aaa_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRESHHOLD, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP, ah1, ah2, ah3)
+function aaa_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRESHHOLD, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP,LOCAL_MUT, ah1, ah2, ah3)
 % usage: run_ga(x, y, 
 %               NIND, MAXGEN, NVAR, 
 %               ELITIST, STOP_PERCENTAGE, 
@@ -27,13 +27,14 @@ function aaa_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
                 Dist(i,j)=sqrt((x(i)-x(j))^2+(y(i)-y(j))^2);
             end
         end
-        
+       
         % initialize population
         Chrom=zeros(NIND,NVAR);
         for row=1:NIND
         	Chrom(row,:)=path2adj(randperm(NVAR));
             %Chrom(row,:)=randperm(NVAR);
         end
+        
         gen=0;
         
         % number of individuals of equal fitness needed to stop
@@ -96,6 +97,12 @@ function aaa_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
             %reinsert offspring into population
         	[Chrom ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
             Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist);
+            
+            %LOCAL HEURISTIC 1: four vertices three edges
+            Chrom = aaa_four_vertices_three_edges(Chrom,Dist,NVAR,NIND);
+            
+            %LOCAL HEURISTIC 2: single_sample_mutation
+            Chrom = aaa_single_sample_mutation(Chrom,Dist,NVAR,NIND,LOCAL_MUT);
             
         	%increment generation counter
         	gen=gen+1;            
