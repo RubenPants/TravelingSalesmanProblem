@@ -46,7 +46,7 @@ if CALCULATE_NEW == 1
             fprintf("%.3f percent done\n", (m*STEPS + c)/(STEPS^2+STEPS));
             total = zeros(1,AVG_COUNT);
             for i = 1:AVG_COUNT
-                total(i) = aaa_run_ga_sec(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, c/STEPS, m/STEPS, CROSSOVER, LOCALLOOP);
+                total(i) = run_ga_sec(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, c/STEPS, m/STEPS, CROSSOVER, LOCALLOOP);
             end
             Avg(m+1, c+1) = mean(total);
         end
