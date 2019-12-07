@@ -10,7 +10,7 @@ happen again, which is very time-consuming.
 %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-NIND=64;                    % Number of individuals
+NIND=128;                   % Number of individuals
 MAXGEN=100;                 % Maximum no. of generations
 PRECI=1;                    % Precision of variables
 ELITIST=0.05;               % percentage of the elite population
@@ -68,8 +68,9 @@ surf(X,Y,Avg)
 ylabel("Mutation")
 xlabel("Crossover")
 colorbar
-% savefig("exercise1_figure.fig")
+savefig("exercise1_figure.fig")
 
+%{
 % Plot the interpolated result
 figure(3);
 s = size(Avg);
@@ -86,6 +87,7 @@ mesh(X,Y,hor)
 hold off
 colorbar
 % savefig("exercise1_figure_interpolation.fig")
+%}
 
 %{
 NCITIES - Shortest distance
