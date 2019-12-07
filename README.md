@@ -5,24 +5,17 @@
 
 ## Notes
 
-* Start custom-created files' name with `aaa_` (e.g. `aaa_test_ruben.m`), such it's easy to distinct the custom created and provided files (MatLab complaints if you only start with an underscore..).
+* Put all the custom-created files in the subfolder `custom_scripts`. If a file is exercise-specific (i.e. nowhere used outside of that exercise), than please name it `exerciseX_*`.
 
 
 
 ## Project Progress
 
-None
+* Question 2 - Finished
 
 
 
-## Questions
-
-### Question 2 [Ruben]
-
-* Map out a Matrix, beautify the boi.
-
-* Mutation vs Selection (matrix)
-* Number of generations vs population size
+## Questions - TODO
 
 ### Question 3 [Sieben]
 
@@ -38,7 +31,7 @@ http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.91.9167&rep=rep1&type=p
 
 ### Question 5 [Sieben]
 
-* Not completely sure Extra form of mutation <br>
+* Not completely sure, extra form of mutation <br>
    https://arxiv.org/ftp/arxiv/papers/1409/1409.3078.pdf 
 
 ### Question 6 [NaN]
@@ -75,38 +68,8 @@ http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.91.9167&rep=rep1&type=p
 
 `run_ga` is where its at, since this call is the one that will invoke the GA. Several arguments are given with this call:
 
-* `x` List of coordinates expressing the x-coordinate of the cities <br> Default: [0.6200, 
-      0.8328, 
-      0.8589, 
-      0.5103, 
-      0.4073, 
-      0.6189, 
-      0.0469, 
-      0.0707, 
-      1.0000, 
-      0.4881, 
-      0.5007, 
-      0.3483, 
-      0.5696, 
-      0.7694, 
-      0.3197, 
-      0.3242]
-* `y` List of coordinates expressing the y-coordinate of the cities<br> Default: [0.4647,
-      0.0117,
-      0.1958,
-      0.3871,
-      0.4804,
-      0.2203,
-      0.5166,
-      0.0584,
-      0.3687,
-      0.0681,
-      0.2556,
-      0.0704,
-      0.5459,
-      0.4746,
-      0.3242,
-      0.1927]
+* `x` List of coordinates expressing the x-coordinate of the cities 
+* `y` List of coordinates expressing the y-coordinate of the cities
 * `NIND` The number of individuals<br> Default: 50
 * `MAXGEN` The maximal number of generations <br> Default: 100
 * `NVAR` The size of the chromosome (genome) <br> Default: 16

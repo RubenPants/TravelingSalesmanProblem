@@ -11,11 +11,11 @@ PRECI=1;                    % Precision of variables
 ELITIST=0.05;               % percentage of the elite population
 GGAP=1-ELITIST;             % Generation gap
 STOP_PERCENTAGE=.95;        % percentage of equal fitness individuals for stopping
-LOCALLOOP=0;                % local loop removal
+LOCALLOOP=1;                % local loop removal
 CROSSOVER='xalt_edges';     % default crossover operator
 
 % Custom parameters
-AVG_COUNT=10;               % No. of times the same configuration is played
+AVG_COUNT=20;               % No. of times the same configuration is played
 CALCULATE_NEW=1;            % Calculate a new Avg array (time consuming)
 NCITIES=40;                 % No. of cities
 STEPS=20;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
@@ -36,15 +36,15 @@ scatter(x,y)
 % Run for all the possibilities, this may take a while
 if CALCULATE_NEW == 1
     Avg = zeros(STEPS+1, 1);
-    for size=[16, 32, 128, 256, 512, 1024]
+    for size=[12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512]
         tic
         total = zeros(1,AVG_COUNT);
         fprintf("%d - ", size);
         for i = 1:AVG_COUNT
-            total(i) = run_ga_thr(x, y, size, NCITIES, ELITIST, STOP_PERCENTAGE, 0.0, 0.40, CROSSOVER, LOCALLOOP, 3.14);
+            total(i) = run_ga_thr(x, y, size, NCITIES, ELITIST, STOP_PERCENTAGE, 0.025, 0.40, CROSSOVER, LOCALLOOP, 3.14);
             fprintf("#");
         end
-        fprintf("\n --> Size: %d - Time (s): %f - Number of generations needed: %d \n", size, toc, mean(total));
+        fprintf("\n --> Size: %d - Time (s): %f - Number of generations needed: %d \n", size, toc/AVG_COUNT, mean(total));
     end
 
     % Save the array as a text file
@@ -52,54 +52,61 @@ if CALCULATE_NEW == 1
 end
 
 %{
-Crossover=0.05, Mutation:0.40
+Crossover=0.05, Mutation:0.40, no loop-detection
 
-16 - ##########
- --> Size: 16 - Time (s): 2.102279 - Number of generations needed: 7.343000e+02 
-32 - ##########
- --> Size: 32 - Time (s): 2.250948 - Number of generations needed: 5.248000e+02 
-128 - ##########
- --> Size: 128 - Time (s): 4.420304 - Number of generations needed: 2.913000e+02 
-256 - ##########
- --> Size: 256 - Time (s): 6.736575 - Number of generations needed: 2.164000e+02 
-512 - ##########
- --> Size: 512 - Time (s): 21.189499 - Number of generations needed: 1.992000e+02 
-1024 - ##########
- --> Size: 1024 - Time (s): 60.501540 - Number of generations needed: 1.719000e+02 
+12 - ####################
+ --> Size: 12 - Time (s): 0.266623 - Number of generations needed: 1.149500e+03 
+16 - ####################
+ --> Size: 16 - Time (s): 0.226572 - Number of generations needed: 8.333000e+02 
+24 - ####################
+ --> Size: 24 - Time (s): 0.222415 - Number of generations needed: 6.396000e+02 
+32 - ####################
+ --> Size: 32 - Time (s): 0.215578 - Number of generations needed: 5.107000e+02 
+48 - ####################
+ --> Size: 48 - Time (s): 0.275935 - Number of generations needed: 4.693500e+02 
+64 - ####################
+ --> Size: 64 - Time (s): 0.275879 - Number of generations needed: 3.522500e+02 
+96 - ####################
+ --> Size: 96 - Time (s): 0.337878 - Number of generations needed: 3.106500e+02 
+128 - ####################
+ --> Size: 128 - Time (s): 0.387839 - Number of generations needed: 2.732500e+02 
+192 - ####################
+ --> Size: 192 - Time (s): 0.543884 - Number of generations needed: 2.539000e+02 
+256 - ####################
+ --> Size: 256 - Time (s): 0.668059 - Number of generations needed: 2.354500e+02 
+384 - ####################
+ --> Size: 384 - Time (s): 1.407828 - Number of generations needed: 2.118000e+02 
+512 - ####################
+ --> Size: 512 - Time (s): 1.980649 - Number of generations needed: 1.928000e+02 
 %}
 
 %{
-Crossover=0.20, Mutation:0.40
+Crossover=0.05, Mutation:0.40, with loop-detection
 
-16 - ##########
- --> Size: 16 - Time (s): 3.069060 - Number of generations needed: 8.666000e+02 
-32 - ##########
- --> Size: 32 - Time (s): 3.800148 - Number of generations needed: 6.198000e+02 
-128 - ##########
- --> Size: 128 - Time (s): 7.021100 - Number of generations needed: 3.156000e+02 
-256 - ##########
- --> Size: 256 - Time (s): 11.108763 - Number of generations needed: 2.409000e+02 
-512 - ##########
- --> Size: 512 - Time (s): 28.547403 - Number of generations needed: 2.052000e+02 
-1024 - ##########
- --> Size: 1024 - Time (s): 76.666797 - Number of generations needed: 1.825000e+02 
-%}
-
-%{
-Crossover=0.20, Mutation:0.40
-
-16 - ##########
- --> Size: 16 - Time (s): 2.110742 - Number of generations needed: 8.243000e+02 
-32 - ##########
- --> Size: 32 - Time (s): 2.070218 - Number of generations needed: 5.497000e+02 
-128 - ##########
- --> Size: 128 - Time (s): 3.571978 - Number of generations needed: 2.701000e+02 
-256 - ##########
- --> Size: 256 - Time (s): 6.005493 - Number of generations needed: 235 
-512 - ##########
- --> Size: 512 - Time (s): 19.928341 - Number of generations needed: 2.062000e+02 
-1024 - ##########
- --> Size: 1024 - Time (s): 63.292165 - Number of generations needed: 1.877000e+02 
+12 - ####################
+ --> Size: 12 - Time (s): 0.072884 - Number of generations needed: 2.106500e+02 
+16 - ####################
+ --> Size: 16 - Time (s): 0.063272 - Number of generations needed: 1.846500e+02 
+24 - ####################
+ --> Size: 24 - Time (s): 0.051015 - Number of generations needed: 1.133500e+02 
+32 - ####################
+ --> Size: 32 - Time (s): 0.056286 - Number of generations needed: 106 
+48 - ####################
+ --> Size: 48 - Time (s): 0.053607 - Number of generations needed: 7.175000e+01 
+64 - ####################
+ --> Size: 64 - Time (s): 0.072027 - Number of generations needed: 6.410000e+01 
+96 - ####################
+ --> Size: 96 - Time (s): 0.093991 - Number of generations needed: 6.130000e+01 
+128 - ####################
+ --> Size: 128 - Time (s): 0.097220 - Number of generations needed: 4.965000e+01 
+192 - ####################
+ --> Size: 192 - Time (s): 0.138085 - Number of generations needed: 4.440000e+01 
+256 - ####################
+ --> Size: 256 - Time (s): 0.170744 - Number of generations needed: 4.195000e+01 
+384 - ####################
+ --> Size: 384 - Time (s): 0.341448 - Number of generations needed: 3.920000e+01 
+512 - ####################
+ --> Size: 512 - Time (s): 0.464260 - Number of generations needed: 3.525000e+01
 %}
 
 %{
