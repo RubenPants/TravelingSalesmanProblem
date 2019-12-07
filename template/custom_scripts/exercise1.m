@@ -21,7 +21,7 @@ CROSSOVER='xalt_edges';     % default crossover operator
 
 % Custom parameters
 AVG_COUNT=5;                % No. of times the same configuration is played
-CALCULATE_NEW=0;            % Calculate a new Avg array (time consuming)
+CALCULATE_NEW=1;            % Calculate a new Avg array (time consuming)
 NCITIES=40;                 % No. of cities
 STEPS=50;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -53,11 +53,11 @@ if CALCULATE_NEW == 1
     end
 
     % Save the array as a text file
-    save('aaa_exercise1_matrix.txt', 'Avg');
+    save('exercise1_matrix.txt', 'Avg');
 end
 
 % Load the saved file
-file = matfile('aaa_exercise1_matrix.txt');
+file = matfile('exercise1_matrix.txt');
 Avg = file.Avg;
 
 % Plot the result
@@ -66,7 +66,7 @@ s = size(Avg);
 [X,Y] = meshgrid(0:1.0/(s(1)-1):1, 0:1.0/(s(2)-1):1);
 surf(X,Y,Avg)
 colorbar
-savefig("aaa_exercise1_figure.fig")
+savefig("exercise1_figure.fig")
 
 %{
 NCITIES - Shortest distance
