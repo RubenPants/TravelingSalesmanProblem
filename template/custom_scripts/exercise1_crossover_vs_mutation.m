@@ -10,7 +10,7 @@ happen again, which is very time-consuming.
 %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-NIND=128;                   % Number of individuals
+NIND=64;                    % Number of individuals
 MAXGEN=100;                 % Maximum no. of generations
 PRECI=1;                    % Precision of variables
 ELITIST=0.05;               % percentage of the elite population
@@ -20,13 +20,13 @@ LOCALLOOP=0;                % local loop removal
 CROSSOVER='xalt_edges';     % default crossover operator
 
 % Custom parameters
-AVG_COUNT=5;                % No. of times the same configuration is played
+AVG_COUNT=10;               % No. of times the same configuration is played
 CALCULATE_NEW=0;            % Calculate a new Avg array (time consuming)
 NCITIES=40;                 % No. of cities
-STEPS=50;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
+STEPS=20;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Create circular city dataset
+% Dataset: Create circular city dataset
 x = (cos((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
 x = x(:);  % Transform to column vector
 y = (sin((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
@@ -41,7 +41,7 @@ scatter(x,y)
 % Run for all the possibilities, this may take a while
 if CALCULATE_NEW == 1
     Avg = zeros(STEPS+1);
-    for m = 0:STEPS  
+    for m = 0:STEPS 
         for c = 0:STEPS
             fprintf("%.3f percent done\n", (m*STEPS + c)/(STEPS^2+STEPS));
             total = zeros(1,AVG_COUNT);
@@ -53,11 +53,11 @@ if CALCULATE_NEW == 1
     end
 
     % Save the array as a text file
-    save('aaa_exercise1_matrix.txt', 'Avg');
+    save('exercise1_matrix.txt', 'Avg');
 end
 
 % Load the saved file
-file = matfile('aaa_exercise1_matrix.txt');
+file = matfile('exercise1_matrix.txt');
 Avg = file.Avg;
 
 % Plot the result
@@ -65,8 +65,27 @@ figure(2);
 s = size(Avg);
 [X,Y] = meshgrid(0:1.0/(s(1)-1):1, 0:1.0/(s(2)-1):1);
 surf(X,Y,Avg)
+ylabel("Mutation")
+xlabel("Crossover")
 colorbar
-savefig("aaa_exercise1_figure.fig")
+% savefig("exercise1_figure.fig")
+
+% Plot the interpolated result
+figure(3);
+s = size(Avg);
+[X,Y] = meshgrid(0:1.0/(s(1)-1):1, 0:1.0/(s(2)-1):1);
+[xq,yq] = meshgrid(0:0.05:1, 0:0.05:1);
+vq = griddata(X,Y,Avg,xq,yq);
+surf(xq,yq,vq)
+ylabel("Mutation")
+xlabel("Crossover")
+hold on
+% Add vertical plane at height 8
+hor = 7.5 * ones(size(Avg));
+mesh(X,Y,hor)
+hold off
+colorbar
+% savefig("exercise1_figure_interpolation.fig")
 
 %{
 NCITIES - Shortest distance
