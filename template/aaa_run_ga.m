@@ -43,8 +43,9 @@ function aaa_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
         % evaluate initial population
         ObjV = tspfun(Chrom,Dist);
         best=zeros(1,MAXGEN);
-        stopping_counter = 0;
-        previous_minimum=0;
+        
+        %initialize the stopping criterion
+        stopping_criterion = 0;
         
         % generational loop
         while gen<MAXGEN
@@ -54,22 +55,18 @@ function aaa_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
             mean_fits(gen+1)=mean(ObjV);
             worst(gen+1)=max(ObjV);
             %%stopping criterion counter
-            if (previous_minimum == minimum)
-                stopping_counter = stopping_counter+1;
-            else
-                previous_minimum = minimum;
-                stopping_counter=0;
-            end     
+            stopping_criterion = minimum/gen;
             for t=1:size(ObjV,1)
                 if (ObjV(t)==minimum)
                     break;
+                    
                 end
             end
             % Visualize progress
             visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
 
             %%Stopping Criterion
-            if (stopping_counter == STOP_TRESHHOLD)
+            if (stopping_criterion < STOP_TRESHHOLD)
                 disp('Stopping criterion reached');
                 break;
             end
@@ -96,14 +93,16 @@ function aaa_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
             
             %reinsert offspring into population
         	[Chrom ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
-            Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist);
-            
+            Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist)
+            size(Chrom)
+            disp("Heuristic 1");
             %LOCAL HEURISTIC 1: four vertices three edges
-            Chrom = aaa_four_vertices_three_edges(Chrom,Dist,NVAR,NIND);
-            
+            Chrom = aaa_four_vertices_three_edges(Chrom,Dist,NVAR,NIND)
+            size(Chrom)
+            disp("Heuristic 2");
             %LOCAL HEURISTIC 2: single_sample_mutation
             Chrom = aaa_single_sample_mutation(Chrom,Dist,NVAR,NIND,LOCAL_MUT);
-            
+            size(Chrom)
         	%increment generation counter
         	gen=gen+1;            
         end

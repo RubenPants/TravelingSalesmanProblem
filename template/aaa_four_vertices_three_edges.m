@@ -18,7 +18,6 @@ for indiv = 1:NInd
             break;
         end
     end
-    Chrom(indiv,1:NVar)=individual;
-    end
+Chrom(indiv,1:NVar)=individual;
 end
 end
