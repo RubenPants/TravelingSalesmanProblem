@@ -1,17 +1,12 @@
 %{
-aaa_exercise1.m
+exercise1_population_size.m
 
-Visualize the impact the mutation and selection rates have on the total
-minimum distance in a three dimensional graph.
-
-If you only want to view the latest created graph, then make sure to set
-CALCULATE_NEW to zero! Otherwise, the whole computation (run_ga) will
-happen again, which is very time-consuming.
+Visualize the impact that the population size has on finding the shortest
+path. In this experiment, crossover and mutation rates are fixed at 0.05
+and 0.4 respectively.
 %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-NIND=128;                   % Number of individuals
-MAXGEN=100;                 % Maximum no. of generations
 PRECI=1;                    % Precision of variables
 ELITIST=0.05;               % percentage of the elite population
 GGAP=1-ELITIST;             % Generation gap
@@ -21,7 +16,7 @@ CROSSOVER='xalt_edges';     % default crossover operator
 
 % Custom parameters
 AVG_COUNT=10;               % No. of times the same configuration is played
-CALCULATE_NEW=0;            % Calculate a new Avg array (time consuming)
+CALCULATE_NEW=1;            % Calculate a new Avg array (time consuming)
 NCITIES=40;                 % No. of cities
 STEPS=20;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -40,53 +35,71 @@ scatter(x,y)
 
 % Run for all the possibilities, this may take a while
 if CALCULATE_NEW == 1
-    Avg = zeros(STEPS+1);
-    for m = 0:STEPS 
-        for c = 0:STEPS
-            fprintf("%.3f percent done\n", (m*STEPS + c)/(STEPS^2+STEPS));
-            total = zeros(1,AVG_COUNT);
-            for i = 1:AVG_COUNT
-                total(i) = run_ga_sec(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, c/STEPS, m/STEPS, CROSSOVER, LOCALLOOP);
-            end
-            Avg(m+1, c+1) = mean(total);
+    Avg = zeros(STEPS+1, 1);
+    for size=[16, 32, 128, 256, 512, 1024]
+        tic
+        total = zeros(1,AVG_COUNT);
+        fprintf("%d - ", size);
+        for i = 1:AVG_COUNT
+            total(i) = run_ga_thr(x, y, size, NCITIES, ELITIST, STOP_PERCENTAGE, 0.0, 0.40, CROSSOVER, LOCALLOOP, 3.14);
+            fprintf("#");
         end
+        fprintf("\n --> Size: %d - Time (s): %f - Number of generations needed: %d \n", size, toc, mean(total));
     end
 
     % Save the array as a text file
     save('exercise1_matrix.txt', 'Avg');
 end
 
-% Load the saved file
-file = matfile('exercise1_matrix.txt');
-Avg = file.Avg;
+%{
+Crossover=0.05, Mutation:0.40
 
-% Plot the result
-figure(2);
-s = size(Avg);
-[X,Y] = meshgrid(0:1.0/(s(1)-1):1, 0:1.0/(s(2)-1):1);
-surf(X,Y,Avg)
-ylabel("Mutation")
-xlabel("Crossover")
-colorbar
-savefig("exercise1_figure.fig")
+16 - ##########
+ --> Size: 16 - Time (s): 2.102279 - Number of generations needed: 7.343000e+02 
+32 - ##########
+ --> Size: 32 - Time (s): 2.250948 - Number of generations needed: 5.248000e+02 
+128 - ##########
+ --> Size: 128 - Time (s): 4.420304 - Number of generations needed: 2.913000e+02 
+256 - ##########
+ --> Size: 256 - Time (s): 6.736575 - Number of generations needed: 2.164000e+02 
+512 - ##########
+ --> Size: 512 - Time (s): 21.189499 - Number of generations needed: 1.992000e+02 
+1024 - ##########
+ --> Size: 1024 - Time (s): 60.501540 - Number of generations needed: 1.719000e+02 
+%}
 
 %{
-% Plot the interpolated result
-figure(3);
-s = size(Avg);
-[X,Y] = meshgrid(0:1.0/(s(1)-1):1, 0:1.0/(s(2)-1):1);
-[xq,yq] = meshgrid(0:0.05:1, 0:0.05:1);
-vq = griddata(X,Y,Avg,xq,yq);
-surf(xq,yq,vq)
-ylabel("Mutation")
-xlabel("Crossover")
-hold on
-% Add vertical plane at height 8
-hor = 7.5 * ones(size(Avg));
-mesh(X,Y,hor)
-hold off
-colorbar
-% savefig("exercise1_figure_interpolation.fig")
+Crossover=0.20, Mutation:0.40
+
+16 - ##########
+ --> Size: 16 - Time (s): 3.069060 - Number of generations needed: 8.666000e+02 
+32 - ##########
+ --> Size: 32 - Time (s): 3.800148 - Number of generations needed: 6.198000e+02 
+128 - ##########
+ --> Size: 128 - Time (s): 7.021100 - Number of generations needed: 3.156000e+02 
+256 - ##########
+ --> Size: 256 - Time (s): 11.108763 - Number of generations needed: 2.409000e+02 
+512 - ##########
+ --> Size: 512 - Time (s): 28.547403 - Number of generations needed: 2.052000e+02 
+1024 - ##########
+ --> Size: 1024 - Time (s): 76.666797 - Number of generations needed: 1.825000e+02 
+%}
+
+%{
+Crossover=0.20, Mutation:0.40
+
+16 - ##########
+ --> Size: 16 - Time (s): 2.110742 - Number of generations needed: 8.243000e+02 
+32 - ##########
+ --> Size: 32 - Time (s): 2.070218 - Number of generations needed: 5.497000e+02 
+128 - ##########
+ --> Size: 128 - Time (s): 3.571978 - Number of generations needed: 2.701000e+02 
+256 - ##########
+ --> Size: 256 - Time (s): 6.005493 - Number of generations needed: 235 
+512 - ##########
+ --> Size: 512 - Time (s): 19.928341 - Number of generations needed: 2.062000e+02 
+1024 - ##########
+ --> Size: 1024 - Time (s): 63.292165 - Number of generations needed: 1.877000e+02 
 %}
 
 %{

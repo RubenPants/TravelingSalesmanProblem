@@ -1,7 +1,7 @@
 %{
-aaa_exercise1.m
+exercise1_crossover_vs_mutation.m
 
-Visualize the impact the mutation and selection rates have on the total
+Visualize the impact the mutation and crossover rates have on the total
 minimum distance in a three dimensional graph.
 
 If you only want to view the latest created graph, then make sure to set
