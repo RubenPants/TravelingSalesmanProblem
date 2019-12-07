@@ -16,7 +16,7 @@ PRECI=1;                    % Precision of variables
 ELITIST=0.05;               % percentage of the elite population
 GGAP=1-ELITIST;             % Generation gap
 STOP_PERCENTAGE=.95;        % percentage of equal fitness individuals for stopping
-LOCALLOOP=0;                % local loop removal
+LOCALLOOP=1;                % local loop removal
 CROSSOVER='xalt_edges';     % default crossover operator
 
 % Custom parameters
@@ -26,11 +26,15 @@ NCITIES=40;                 % No. of cities
 STEPS=20;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+data = load(['exercise1_roundrit127.tsp']);
+x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
+%{
 % Dataset: Create circular city dataset
 x = (cos((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
 x = x(:);  % Transform to column vector
 y = (sin((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
 y = y(:);  % Transform to column vector
+%}
 
 % Visualize cities
 %{
@@ -53,11 +57,11 @@ if CALCULATE_NEW == 1
     end
 
     % Save the array as a text file
-    save('exercise1_crossover_vs_mutation_matrix.txt', 'Avg');
+    save('exercise1_crossover_vs_mutation_matrix2.txt', 'Avg');
 end
 
 % Load the saved file
-file = matfile('exercise1_crossover_vs_mutation_matrix.txt');
+file = matfile('exercise1_crossover_vs_mutation_matrix2.txt');
 Avg = file.Avg;
 
 % Plot the result
@@ -68,7 +72,7 @@ surf(X,Y,Avg)
 ylabel("Mutation")
 xlabel("Crossover")
 colorbar
-savefig("exercise1_crossover_vs_mutation.fig")
+savefig("exercise1_crossover_vs_mutation2.fig")
 
 %{
 % Plot the interpolated result
