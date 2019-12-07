@@ -53,11 +53,11 @@ if CALCULATE_NEW == 1
     end
 
     % Save the array as a text file
-    save('exercise1_crossover_vs_mutation_matrix.txt', 'Avg');
+    save('exercise1_matrix.txt', 'Avg');
 end
 
 % Load the saved file
-file = matfile('exercise1_crossover_vs_mutation_matrix.txt');
+file = matfile('exercise1_matrix.txt');
 Avg = file.Avg;
 
 % Plot the result
@@ -68,7 +68,7 @@ surf(X,Y,Avg)
 ylabel("Mutation")
 xlabel("Crossover")
 colorbar
-savefig("exercise1_crossover_vs_mutation.fig")
+savefig("exercise1_figure.fig")
 
 %{
 % Plot the interpolated result
