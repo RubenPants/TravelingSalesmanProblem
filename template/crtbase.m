@@ -1,7 +1,6 @@
 % CRTBASE.m - Create base vector 
 %
-% This function creates a vector containing the base of the loci
-% in a chromosome.
+% This function creates a vector containing the base of the loci in a chromosome.
 %
 % Syntax: BaseVec = crtbase(Lind, Base)
 %
@@ -24,18 +23,18 @@
 
 function BaseVec = crtbase(Lind, Base)
 
-[ml LenL] = size(Lind) ;
+[ml, LenL] = size(Lind) ;
 if nargin < 2 
 	Base = 2 * ones(LenL,1) ; % default to base 2
 end
-[mb LenB] = size(Base) ;
+[mb, LenB] = size(Base) ;
 
 % check parameter consistency
-if ml > 1 | mb > 1
+if ml > 1 || mb > 1
 	error( 'Lind or Base is not a vector') ;
-elseif (LenL > 1 & LenB > 1 & LenL ~= LenB) | (LenL == 1 & LenB > 1 ) 
+elseif (LenL > 1 && LenB > 1 && LenL ~= LenB) || (LenL == 1 && LenB > 1 ) 
 	error( 'Vector dimensions must agree' ) ;
-elseif LenB == 1 & LenL > 1
+elseif LenB == 1 && LenL > 1
 	Base = Base * ones(LenL,1) ;
 	
 end
