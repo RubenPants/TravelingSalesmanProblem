@@ -81,7 +81,7 @@ function ex4_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS
             
             %reinsert offspring into population
         	[Chrom ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
-            disp(["CHROM AFTER REINS",CHROM])
+            disp(["CHROM AFTER REINS",Chrom])
             Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist)
                       
             disp("Heuristic 1");
