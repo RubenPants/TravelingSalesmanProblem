@@ -5,32 +5,26 @@
 %	2 : path representation
 %
 
-function NewChrom = inversion(OldChrom,Representation);
+function NewChrom = inversion(OldChrom,Representation)
+    NewChrom=OldChrom;
 
-NewChrom=OldChrom;
+    if Representation==1 
+        NewChrom=adj2path(NewChrom);
+    end
 
-if Representation==1 
-	NewChrom=adj2path(NewChrom);
-end
+    % select two positions in the tour
+    rndi=zeros(1,2);
 
-% select two positions in the tour
+    while rndi(1)==rndi(2)
+        rndi=rand_int(1,2,[1 size(NewChrom,2)]);
+    end
+    rndi = sort(rndi);
 
-rndi=zeros(1,2);
+    NewChrom(rndi(1):rndi(2)) = NewChrom(rndi(2):-1:rndi(1));
+    %buffer=NewChrom(rndi(1));
+    %NewChrom(rndi(1))=NewChrom(rndi(2));
+    %NewChrom(rndi(2))=buffer;
 
-while rndi(1)==rndi(2)
-	rndi=rand_int(1,2,[1 size(NewChrom,2)]);
-end
-rndi = sort(rndi);
-
-NewChrom(rndi(1):rndi(2)) = NewChrom(rndi(2):-1:rndi(1));
-%buffer=NewChrom(rndi(1));
-%NewChrom(rndi(1))=NewChrom(rndi(2));
-%NewChrom(rndi(2))=buffer;
-
-
-if Representation==1
-	NewChrom=path2adj(NewChrom);
-end
-
-
-% End of function
+    if Representation==1
+        NewChrom=path2adj(NewChrom);
+    end
