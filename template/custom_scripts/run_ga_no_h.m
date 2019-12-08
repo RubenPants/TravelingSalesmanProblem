@@ -1,12 +1,12 @@
 %{
-aaa_run_ga_sec.m
+run_ga_no_h.m
 
 A literal copy of "run_ga.m" with the main difference that now no
 visualizations will be given. On the other hand, useful statistics will be
 returned (which was not the case for "run_ga.m").
 %}
 
-function min_obj = aaa_run_ga_sec(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP)
+function min_obj = run_ga_no_h(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP)
 % x, y: coordinates of the cities
 % NIND: number of individuals
 % MAXGEN: maximal number of generations

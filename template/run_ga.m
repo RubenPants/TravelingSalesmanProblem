@@ -53,7 +53,6 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
             fprintf("---");
             for t=1:size(ObjV,1)
                 if (ObjV(t)==minimum)
-                    fprintf("Hoi %d %f \n", t, ObjV(t));
                     break;
                 end
             end

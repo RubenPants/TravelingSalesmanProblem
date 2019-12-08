@@ -1,7 +1,7 @@
 %{
-aaa_exercise1.m
+crossover_vs_mutation.m
 
-Visualize the impact the mutation and selection rates have on the total
+Visualize the impact the mutation and crossover rates have on the total
 minimum distance in a three dimensional graph.
 
 If you only want to view the latest created graph, then make sure to set
@@ -10,13 +10,13 @@ happen again, which is very time-consuming.
 %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-NIND=64;                    % Number of individuals
+NIND=128;                   % Number of individuals
 MAXGEN=100;                 % Maximum no. of generations
 PRECI=1;                    % Precision of variables
 ELITIST=0.05;               % percentage of the elite population
 GGAP=1-ELITIST;             % Generation gap
 STOP_PERCENTAGE=.95;        % percentage of equal fitness individuals for stopping
-LOCALLOOP=0;                % local loop removal
+LOCALLOOP=1;                % local loop removal
 CROSSOVER='xalt_edges';     % default crossover operator
 
 % Custom parameters
@@ -26,11 +26,19 @@ NCITIES=40;                 % No. of cities
 STEPS=20;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Add paths to other files
+addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\template'
+addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\template\custom_scripts'
+
+data = load(['exercise1_roundrit127.tsp']);
+x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
+%{
 % Dataset: Create circular city dataset
 x = (cos((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
 x = x(:);  % Transform to column vector
 y = (sin((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
 y = y(:);  % Transform to column vector
+%}
 
 % Visualize cities
 %{
@@ -46,18 +54,18 @@ if CALCULATE_NEW == 1
             fprintf("%.3f percent done\n", (m*STEPS + c)/(STEPS^2+STEPS));
             total = zeros(1,AVG_COUNT);
             for i = 1:AVG_COUNT
-                total(i) = aaa_run_ga_sec(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, c/STEPS, m/STEPS, CROSSOVER, LOCALLOOP);
+                total(i) = run_ga_no_h(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, c/STEPS, m/STEPS, CROSSOVER, LOCALLOOP);
             end
             Avg(m+1, c+1) = mean(total);
         end
     end
 
     % Save the array as a text file
-    save('exercise1_matrix.txt', 'Avg');
+    save('crossover_vs_mutation_matrix2.txt', 'Avg');
 end
 
 % Load the saved file
-file = matfile('exercise1_matrix.txt');
+file = matfile('crossover_vs_mutation_matrix2.txt');
 Avg = file.Avg;
 
 % Plot the result
@@ -68,8 +76,9 @@ surf(X,Y,Avg)
 ylabel("Mutation")
 xlabel("Crossover")
 colorbar
-% savefig("exercise1_figure.fig")
+savefig("crossover_vs_mutation2.fig")
 
+%{
 % Plot the interpolated result
 figure(3);
 s = size(Avg);
@@ -85,7 +94,8 @@ hor = 7.5 * ones(size(Avg));
 mesh(X,Y,hor)
 hold off
 colorbar
-% savefig("exercise1_figure_interpolation.fig")
+% savefig("figure_interpolation.fig")
+%}
 
 %{
 NCITIES - Shortest distance
