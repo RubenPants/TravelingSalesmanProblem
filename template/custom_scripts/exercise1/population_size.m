@@ -1,5 +1,5 @@
 %{
-exercise1_population_size.m
+population_size.m
 
 Visualize the impact that the population size has on finding the shortest
 path. In this experiment, crossover and mutation rates are fixed at 0.05
@@ -48,9 +48,6 @@ for size=[12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512]
     end
     fprintf("\n --> Size: %d - Time (s): %f - Number of generations needed: %d \n", size, toc/AVG_COUNT, mean(total));
 end
-
-% Save the array as a text file
-save('exercise1_matrix.txt', 'Avg');
 
 %{
 Crossover=0.05, Mutation:0.40, no loop-detection

@@ -1,5 +1,5 @@
 %{
-exercise1_crossover_vs_mutation.m
+crossover_vs_mutation.m
 
 Visualize the impact the mutation and crossover rates have on the total
 minimum distance in a three dimensional graph.
@@ -54,18 +54,18 @@ if CALCULATE_NEW == 1
             fprintf("%.3f percent done\n", (m*STEPS + c)/(STEPS^2+STEPS));
             total = zeros(1,AVG_COUNT);
             for i = 1:AVG_COUNT
-                total(i) = run_ga_sec(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, c/STEPS, m/STEPS, CROSSOVER, LOCALLOOP);
+                total(i) = run_ga_no_h(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, c/STEPS, m/STEPS, CROSSOVER, LOCALLOOP);
             end
             Avg(m+1, c+1) = mean(total);
         end
     end
 
     % Save the array as a text file
-    save('exercise1_crossover_vs_mutation_matrix2.txt', 'Avg');
+    save('crossover_vs_mutation_matrix2.txt', 'Avg');
 end
 
 % Load the saved file
-file = matfile('exercise1_crossover_vs_mutation_matrix2.txt');
+file = matfile('crossover_vs_mutation_matrix2.txt');
 Avg = file.Avg;
 
 % Plot the result
@@ -76,7 +76,7 @@ surf(X,Y,Avg)
 ylabel("Mutation")
 xlabel("Crossover")
 colorbar
-savefig("exercise1_crossover_vs_mutation2.fig")
+savefig("crossover_vs_mutation2.fig")
 
 %{
 % Plot the interpolated result
@@ -94,7 +94,7 @@ hor = 7.5 * ones(size(Avg));
 mesh(X,Y,hor)
 hold off
 colorbar
-% savefig("exercise1_figure_interpolation.fig")
+% savefig("figure_interpolation.fig")
 %}
 
 %{

@@ -26,6 +26,10 @@ NCITIES=40;                 % No. of cities
 STEPS=50;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Add paths to other files
+addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\template'
+addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\template\custom_scripts'
+
 % Create circular city dataset
 x = (cos((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
 x = x(:);  % Transform to column vector
@@ -46,7 +50,7 @@ if CALCULATE_NEW == 1
             fprintf("%.3f percent done\n", (m*STEPS + c)/(STEPS^2+STEPS));
             total = zeros(1,AVG_COUNT);
             for i = 1:AVG_COUNT
-                total(i) = aaa_run_ga_sec(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, c/STEPS, m/STEPS, CROSSOVER, LOCALLOOP);
+                total(i) = ex2_run_ga(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, c/STEPS, m/STEPS, CROSSOVER, LOCALLOOP);
             end
             Avg(m+1, c+1) = mean(total);
         end
