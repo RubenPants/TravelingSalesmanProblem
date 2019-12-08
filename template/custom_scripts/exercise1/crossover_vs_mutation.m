@@ -21,7 +21,7 @@ CROSSOVER='xalt_edges';     % default crossover operator
 
 % Custom parameters
 AVG_COUNT=10;               % No. of times the same configuration is played
-CALCULATE_NEW=1;            % Calculate a new Avg array (time consuming)
+CALCULATE_NEW=0;            % Calculate a new Avg array (time consuming)
 NCITIES=40;                 % No. of cities
 STEPS=20;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

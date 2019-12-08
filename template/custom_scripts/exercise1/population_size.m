@@ -16,7 +16,6 @@ CROSSOVER='xalt_edges';     % default crossover operator
 
 % Custom parameters
 AVG_COUNT=20;               % No. of times the same configuration is played
-CALCULATE_NEW=1;            % Calculate a new Avg array (time consuming)
 NCITIES=40;                 % No. of cities
 STEPS=20;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -38,22 +37,20 @@ scatter(x,y)
 %}
 
 % Run for all the possibilities, this may take a while
-if CALCULATE_NEW == 1
-    Avg = zeros(STEPS+1, 1);
-    for size=[12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512]
-        tic
-        total = zeros(1,AVG_COUNT);
-        fprintf("%d - ", size);
-        for i = 1:AVG_COUNT
-            total(i) = run_ga_thr(x, y, size, NCITIES, ELITIST, STOP_PERCENTAGE, 0.025, 0.40, CROSSOVER, LOCALLOOP, 3.14);
-            fprintf("#");
-        end
-        fprintf("\n --> Size: %d - Time (s): %f - Number of generations needed: %d \n", size, toc/AVG_COUNT, mean(total));
+Avg = zeros(STEPS+1, 1);
+for size=[12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512]
+    tic
+    total = zeros(1,AVG_COUNT);
+    fprintf("%d - ", size);
+    for i = 1:AVG_COUNT
+        total(i) = run_ga_thr(x, y, size, NCITIES, ELITIST, STOP_PERCENTAGE, 0.025, 0.40, CROSSOVER, LOCALLOOP, 3.14);
+        fprintf("#");
     end
-
-    % Save the array as a text file
-    save('exercise1_matrix.txt', 'Avg');
+    fprintf("\n --> Size: %d - Time (s): %f - Number of generations needed: %d \n", size, toc/AVG_COUNT, mean(total));
 end
+
+% Save the array as a text file
+save('exercise1_matrix.txt', 'Avg');
 
 %{
 Crossover=0.05, Mutation:0.40, no loop-detection
