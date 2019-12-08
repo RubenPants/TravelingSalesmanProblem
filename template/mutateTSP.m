@@ -11,24 +11,24 @@
 %    OldChrom  - Matrix containing the chromosomes of the old
 %                population. Each line corresponds to one individual.
 %    MutOpt    - mutation rate
+%
 % Output parameter:
 %    NewChrom  - Matrix containing the chromosomes of the population
 %                after mutation in the same format as OldChrom.
 
 
-function NewChrom = mutateTSP(MUT_F, OldChrom, MutOpt);
+function NewChrom = mutateTSP(MUT_F, OldChrom, MutOpt)
+    % Check parameter consistency
+    if nargin < 2,  error('Not enough input parameters'); end
 
-% Check parameter consistency
-   if nargin < 2,  error('Not enough input parameters'); end
+    [rows,~]=size(OldChrom);
+    NewChrom=OldChrom;
 
-[rows,cols]=size(OldChrom);
-NewChrom=OldChrom;
-
-for r=1:rows
-	if rand<MutOpt
-		NewChrom(r,:) = feval(MUT_F, OldChrom(r,:),1);
-	end
-end
+    for r=1:rows
+        if rand<MutOpt
+            NewChrom(r,:) = feval(MUT_F, OldChrom(r,:),1);
+        end
+    end
 
 % End of function
 
