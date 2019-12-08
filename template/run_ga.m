@@ -73,6 +73,8 @@ function run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR
             
         	%recombine individuals (crossover)
             SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
+            
+            % Mutation
             SelCh=mutateTSP('inversion',SelCh,PR_MUT);
             
             %evaluate offspring, call objective function
