@@ -21,6 +21,10 @@ NCITIES=40;                 % No. of cities
 STEPS=20;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Add paths to other files
+addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\template'
+addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\template\custom_scripts'
+
 % Dataset: Create circular city dataset
 x = (cos((0:NCITIES-1) * 2 * pi / NCITIES) + 1)/2;
 x = x(:);  % Transform to column vector

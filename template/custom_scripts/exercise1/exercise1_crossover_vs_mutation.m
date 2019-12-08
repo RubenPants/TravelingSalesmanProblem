@@ -21,10 +21,14 @@ CROSSOVER='xalt_edges';     % default crossover operator
 
 % Custom parameters
 AVG_COUNT=10;               % No. of times the same configuration is played
-CALCULATE_NEW=0;            % Calculate a new Avg array (time consuming)
+CALCULATE_NEW=1;            % Calculate a new Avg array (time consuming)
 NCITIES=40;                 % No. of cities
 STEPS=20;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Add paths to other files
+addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\template'
+addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\template\custom_scripts'
 
 data = load(['exercise1_roundrit127.tsp']);
 x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);

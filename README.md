@@ -44,13 +44,13 @@ http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.91.9167&rep=rep1&type=p
 
 * H5 
 
-#### Sub-question b [Ruben]
+#### Sub-question b
 
-* Novelty Search
+* Novelty Search?
 
 #### Sub-question c
 
-* k-NN for specie-selection
+* k-NN for species-selection
 
 #### Sub-question d
 
