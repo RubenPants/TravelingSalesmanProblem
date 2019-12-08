@@ -43,8 +43,8 @@ for repr=REPRESENTATION
             for i=1:11
                 total(i) = run_data(data(i), repr, cross, mut);
             end
-            summed_time = sum(total);
-            fprintf("%s - %s - %s - time (s): %f \n", repr, cross, mut, summed_time);
+            summed_distance = sum(total);
+            fprintf("%s - %s - %s - summed distance: %f \n", repr, cross, mut, summed_distance);
         end
     end
 end

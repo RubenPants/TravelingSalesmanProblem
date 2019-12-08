@@ -32,9 +32,11 @@ function min_obj = run_ga_ex3(x, y, NIND, MAXGEN, ELITIST, PR_CROSS, PR_MUT, REP
     Chrom=zeros(NIND,NVAR);
     for row=1:NIND
         if REPR=="adjacency"
-            Chrom(row,:)=path2adj(randperm(NVAR));  % Don't use adjacency
+            Chrom(row,:)=path2adj(randperm(NVAR));  % Adjacency-representation
+            ObjV = tspfun(Chrom,Dist);
         elseif REPR=="path"
-            Chrom(row,:)=randperm(NVAR);  % Use path-representation
+            Chrom(row,:)=randperm(NVAR);  % Path-representation
+            ObjV = tspfun_path(Chrom,Dist);
         else
             disp("Invalid representation")
             ME = MException("Invalid representation chosen: %s", REPR);
@@ -42,11 +44,9 @@ function min_obj = run_ga_ex3(x, y, NIND, MAXGEN, ELITIST, PR_CROSS, PR_MUT, REP
         end
     end
     gen=0;
-
-    % evaluate initial population
-    ObjV = tspfun(Chrom,Dist);
-    best=zeros(1,MAXGEN);
     
+    
+    best=zeros(1,MAXGEN);
 
     % generational loop
     while gen < MAXGEN
