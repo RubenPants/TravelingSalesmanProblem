@@ -1,5 +1,5 @@
 
-function ex2_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRESHHOLD, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP,LOCAL_MUT, ah1, ah2, ah3)
+function ex2_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP,LOCAL_MUT, ah1, ah2, ah3)
 % usage: run_ga(x, y, 
 %               NIND, MAXGEN, NVAR, 
 %               ELITIST, STOP_PERCENTAGE, 
@@ -17,7 +17,6 @@ function ex2_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
 % CROSSOVER: the crossover operator
 % calculate distance matrix between each pair of cities
 % ah1, ah2, ah3: axes handles to visualise tsp
-{NIND MAXGEN NVAR ELITIST STOP_PERCENTAGE STOP_TRESHHOLD PR_CROSS PR_MUT CROSSOVER LOCALLOOP}
 
         GGAP = 1 - ELITIST;
         mean_fits=zeros(1,MAXGEN+1);
@@ -45,9 +44,7 @@ function ex2_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
         ObjV = tspfun(Chrom,Dist);
         best=zeros(1,MAXGEN);
         
-        %initialize the stopping criterion
-        stopping_criterion = 0;
-        
+         
         % generational loop
         while gen<MAXGEN
             sObjV=sort(ObjV);
@@ -55,23 +52,13 @@ function ex2_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
         	minimum=best(gen+1);
             mean_fits(gen+1)=mean(ObjV);
             worst(gen+1)=max(ObjV);
-            %%stopping criterion counter
-            stopping_criterion = minimum/gen;
             for t=1:size(ObjV,1)
                 if (ObjV(t)==minimum)
                     break;
                     
                 end
             end
-            % Visualize progress
-            visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
-
-            %%Stopping Criterion
-            if (stopping_criterion < STOP_TRESHHOLD)
-                disp('Stopping criterion reached');
-                break;
-            end
-        
+          
             
             % Stop criteria if 95% of candidates equal to minimum
             % (convergence)
@@ -94,8 +81,16 @@ function ex2_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
             
             %reinsert offspring into population
         	[Chrom ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
-            Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist);
+            disp(["CHROM AFTER REINS",CHROM])
+            Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist)
+                      
+            disp("Heuristic 1");
+            %LOCAL HEURISTIC 1: four vertices three edges
+            Chrom = aaa_four_vertices_three_edges(Chrom,Dist,NVAR,NIND)
+            disp("Heuristic 2");
             
+            %LOCAL HEURISTIC 2: single_sample_mutation
+            Chrom = aaa_single_sample_mutation(Chrom,Dist,NVAR,NIND,LOCAL_MUT)
         	%increment generation counter
         	gen=gen+1;            
         end

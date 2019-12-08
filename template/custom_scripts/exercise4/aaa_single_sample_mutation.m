@@ -12,17 +12,18 @@
 
 function Chrom =  aaa_single_sample_mutation(Chrom, Dist, NVar, NInd, LOCAL_MUT)
 disp("Single Sample Mutation")
-disp("NVAR = ")
-disp(NVar)
 for indiv = 1:NInd
     individual = Chrom(indiv, 1:NVar);
     if (rand < LOCAL_MUT)
-        beginVar = NVar-1;
-        begin = 1+randi([1,beginVar]);
+        beginVar = NVar-2;
+        disp(["beginVar",beginVar])
+        begin = randi([2,beginVar]);
+        disp(["begin",begin])
         finalVar = NVar-begin-1;
+        disp(["finalVar",finalVar])
         final = begin + randi([1,finalVar]);
-        disp(begin);
-        disp(final);
+        disp(["final",final])
+        
         original_distance = Dist(individual(1,begin-1),individual(1,begin))+(Dist(individual(1,final),individual(1,final+1)));
         new_distance = Dist(individual(1,begin-1),individual(1,final))+(Dist(individual(1,begin),individual(1,final+1)));
         if (original_distance >= new_distance)

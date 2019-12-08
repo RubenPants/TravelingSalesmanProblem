@@ -7,8 +7,9 @@
 %NVar = the number of cities
 %NInd = the number of individuals
 function Chrom =  aaa_four_vertices_three_edges(Chrom, Dist, NVar, NInd)
+disp("Four_vertices_three_edges");
 for indiv = 1:NInd
-    individual = Chrom(indiv, 1:NVar);
+    individual = Chrom(indiv, 1:NVar)
     for quatro = 1:NVar-3
         sample = individual(1,quatro:quatro+3);
         original_distance = Dist(sample(1,1),sample(1,2))+(Dist(sample(1,3),sample(1,4)));

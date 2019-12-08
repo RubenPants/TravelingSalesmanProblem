@@ -30,7 +30,7 @@ STEPS=20;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\template'
 addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\template\custom_scripts'
 
-data = load(['exercise1_roundrit127.tsp']);
+data = load(['datasets_rondrit016.tsp']);
 x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
 %{
 % Dataset: Create circular city dataset
