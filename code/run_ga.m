@@ -18,11 +18,11 @@ function output = run_ga(data)
 %   crossover:              crossover opertor [def='xalt_edges']
 %   pr_cross:               probability for crossover [def=0.2]
 %   mutation:               mutation operator [def='inversion']
-%   pr_mut:                 probability for mutation [def=0.2]
+%   pr_mut:                 probability for mutation [def=0.4]
 %   loop_detect:            loop-detection [def=0]
-%   stopping_criteria:
-%       perc:               percentage of equal fitness (stop criterium) [def=0.9]
-%       thr:                threshold under which the algorithm stops if reached by minimum [def=0]
+%   stop_perc:              percentage of equal fitness (stop criterium) [def=0.9]
+%   stop_thr:               threshold under which the algorithm stops if reached by minimum [def=0]
+%   stop_gen_incr:          stop when less than delta increase over timespan of N generations [def=0]              
 %   visual:
 %       ah1:                graph visualization
 %       ah2:                minimum, mean, and maximum visualization
@@ -36,7 +36,7 @@ else
     x = data("x");
     y = data("y");
 end
-if any(strcmp(keys(data), "nind")); NIND=data("nind"); else; NIND=128; end
+if any(strcmp(keys(data), "nind")); NIND=data("nind"); else; NIND=64; end
 if any(strcmp(keys(data), "maxgen")); MAXGEN=data("maxgen"); else; MAXGEN=100; end
 if any(strcmp(keys(data), "elite")); ELITIST=data("elite"); else; ELITIST=0.05; end
 if any(strcmp(keys(data), "representation")); REPR=data("representation"); else; REPR='adjacency'; end
@@ -45,7 +45,7 @@ if any(strcmp(keys(data), "pr_cross")); PR_CROSS=data("pr_cross"); else; PR_CROS
 if any(strcmp(keys(data), "mutation")); MUTATION=data("mutation"); else; MUTATION='inversion'; end
 if any(strcmp(keys(data), "pr_mut")); PR_MUT=data("pr_mut"); else; PR_MUT=0.4; end
 if any(strcmp(keys(data), "loop_detect")); LOCALLOOP=data("loop_detect"); else; LOCALLOOP=0; end
-if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; STOP_PERC = 0.9; end
+if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; STOP_PERC = 0; end
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
 if any(strcmp(keys(data), "stop_gen_incr")); STOP_GEN_INCR = data('stop_gen_incr'); else; STOP_GEN_INCR = 0; end
 if any(strcmp(keys(data), "print")); PRINT = true; else; PRINT= false; end
@@ -127,19 +127,6 @@ while gen < MAXGEN
             break;
         end
     end
-    
-    % Stopping criteria based on threshold
-    if STOP_THR && minimum <= STOP_THR
-        break;
-    end 
-    
-    % Stopping criteria based on generational improvement
-    if STOP_GEN_INCR
-        gen_interval, delta = STOP_GEN_INCR;
-        if (gen > gen_interval) && (abs(best(gen+1) - best(gen+1-gen_interval)) < delta)
-            break
-        end        
-    end
 
     % Visualize progress
     if VISUAL
@@ -150,9 +137,23 @@ while gen < MAXGEN
         end
     end
 
-    % Stop criteria if 95% of candidates equal to minimum 
+    % Stop criteria if X% of candidates equal to minimum 
     if STOP_PERC && (sObjV(stopN)-sObjV(1) <= 1e-15)
-          break;
+        break;
+    end
+    
+    % Stopping criteria based on threshold
+    if STOP_THR && minimum <= STOP_THR
+        break;
+    end 
+    
+    % Stopping criteria based on generational improvement
+    if STOP_GEN_INCR
+        gen_interval = STOP_GEN_INCR(1);
+        delta = STOP_GEN_INCR(2);
+        if (gen > gen_interval) && (abs(best(gen+1) - best(gen+1-gen_interval)) < delta)
+            break
+        end        
     end
 
     %assign fitness values to entire population
