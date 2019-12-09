@@ -23,4 +23,4 @@ addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\template\cus
 data = load(['rondrit016.tsp'])
 x=data(:,1)/max([data(:,1);data(:,2)]);
 y=data(:,2)/max([data(:,1);data(:,2)]);
-ex4_run_ga(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, 0.95, 0.05, CROSSOVER, LOCALLOOP, LOCAL_MUT)
+disp(ex4_run_ga(x, y, NIND, MAXGEN, NCITIES, ELITIST, STOP_PERCENTAGE, 0.95, 0.05, CROSSOVER, LOCALLOOP, LOCAL_MUT))
