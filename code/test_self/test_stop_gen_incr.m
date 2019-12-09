@@ -8,6 +8,7 @@ test_gen_incr()
 function test_gen_incr()
     % Init test
     MAX_GEN = 100;
+    STAGNATION = 10;
     
     % Load date
     data = load('a_simple.tsp');
@@ -18,11 +19,12 @@ function test_gen_incr()
     data("x") = x;
     data("y") = y;
     data("maxgen") = MAX_GEN;
-    data("stop_gen_incr") = [10, 0.001];
+    data("stop_stagnation") = STAGNATION;
     output = run_ga(data);
     
     % Check for assert
     assert(output("generation") < MAX_GEN)
+    assert(output("generation") == STAGNATION)  % Solution found in init
     fprintf("Test '%s' succeeded!\n", "test_gen_incr")
     fprintf(" --> Finished after %d generations\n", output("generation"))
 end

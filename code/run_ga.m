@@ -36,18 +36,18 @@ else
     x = data("x");
     y = data("y");
 end
-if any(strcmp(keys(data), "nind")); NIND=data("nind"); else; NIND=64; end
+if any(strcmp(keys(data), "nind")); NIND=data("nind"); else; NIND=128; end
 if any(strcmp(keys(data), "maxgen")); MAXGEN=data("maxgen"); else; MAXGEN=100; end
 if any(strcmp(keys(data), "elite")); ELITIST=data("elite"); else; ELITIST=0.05; end
 if any(strcmp(keys(data), "representation")); REPR=data("representation"); else; REPR='adjacency'; end
 if any(strcmp(keys(data), "crossover")); CROSSOVER=data("crossover"); else; CROSSOVER="xalt_edges"; end
-if any(strcmp(keys(data), "pr_cross")); PR_CROSS=data("pr_cross"); else; PR_CROSS=0.2; end
+if any(strcmp(keys(data), "pr_cross")); PR_CROSS=data("pr_cross"); else; PR_CROSS=0.1; end
 if any(strcmp(keys(data), "mutation")); MUTATION=data("mutation"); else; MUTATION='inversion'; end
 if any(strcmp(keys(data), "pr_mut")); PR_MUT=data("pr_mut"); else; PR_MUT=0.4; end
 if any(strcmp(keys(data), "loop_detect")); LOCALLOOP=data("loop_detect"); else; LOCALLOOP=0; end
 if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; STOP_PERC = 0; end
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
-if any(strcmp(keys(data), "stop_gen_incr")); STOP_GEN_INCR = data('stop_gen_incr'); else; STOP_GEN_INCR = 0; end
+if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation'); else; STOP_STAG = 0; end
 if any(strcmp(keys(data), "print")); PRINT = true; else; PRINT= false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if VISUAL
@@ -148,12 +148,8 @@ while gen < MAXGEN
     end 
     
     % Stopping criteria based on generational improvement
-    if STOP_GEN_INCR
-        gen_interval = STOP_GEN_INCR(1);
-        delta = STOP_GEN_INCR(2);
-        if (gen > gen_interval) && (abs(best(gen+1) - best(gen+1-gen_interval)) < delta)
-            break
-        end        
+    if STOP_STAG && (gen >= STOP_STAG) && (best(gen+1) == best(gen+1-STOP_STAG))
+        break    
     end
 
     %assign fitness values to entire population
