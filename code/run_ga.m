@@ -113,11 +113,7 @@ if STOP_PERC
 end
 
 % evaluate initial population
-if REPR == ADJ
-    ObjV = tspfun_adj(Chrom,Dist);
-else  % REPR == PATH
-    ObjV = tspfun_path(Chrom,Dist);
-end
+ObjV = tspfun(Chrom, Dist, REPR_ID);
 
 % generational loop
 while gen < MAXGEN
@@ -165,11 +161,7 @@ while gen < MAXGEN
     SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID);
 
     % Evaluate offspring, call objective function
-    if REPR == ADJ
-        ObjVSel = tspfun_adj(SelCh,Dist);
-    else  % REPR == PATH
-        ObjVSel = tspfun_path(SelCh,Dist);
-    end
+    ObjVSel = tspfun(SelCh, Dist, REPR_ID);
 
     %reinsert offspring into population
     [Chrom, ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
