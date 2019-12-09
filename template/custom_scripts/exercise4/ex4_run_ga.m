@@ -19,7 +19,7 @@ function best = ex4_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, P
 % ah1, ah2, ah3: axes handles to visualise tsp
 
         GGAP = 1 - ELITIST;
-        mean_fits=zeros(1,MAXGEN+1);
+        mean_fits=zeros(1,MAXGEN);
         worst=zeros(1,MAXGEN+1);
         Dist=zeros(NVAR,NVAR);
         for i=1:size(x,1)
@@ -63,7 +63,9 @@ function best = ex4_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, P
             % Stop criteria if 95% of candidates equal to minimum
             % (convergence)
             if (sObjV(stopN)-sObjV(1) <= 1e-15)
+                    %finalMean = mean_fits(gen+1);
                     while(gen<MAXGEN)
+                        %mean_fits(gen+1)=finalMean;
                         best(gen+1)=minimum;
                         gen = gen + 1;
                     end

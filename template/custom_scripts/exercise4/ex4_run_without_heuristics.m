@@ -1,6 +1,6 @@
 function best =  run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP)
         GGAP = 1 - ELITIST;
-        mean_fits=zeros(1,MAXGEN+1);
+        mean_fits=zeros(1,MAXGEN);
         worst=zeros(1,MAXGEN+1);
         Dist=zeros(NVAR,NVAR);
         for i=1:size(x,1)
@@ -40,7 +40,9 @@ function best =  run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_C
            
             % Stop criteria if 95% of candidates equal to minimum 
             if (sObjV(stopN)-sObjV(1) <= 1e-15)
-                while(gen<MAXGEN)
+                %finalMean = mean_fits(gen+1);
+                    while(gen<MAXGEN)
+                        %mean_fits(gen+1)=finalMean;
                         best(gen+1)=minimum;
                         gen = gen + 1;
                     end
