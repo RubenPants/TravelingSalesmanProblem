@@ -50,6 +50,7 @@ if any(strcmp(keys(data), "pr_mut")); PR_MUT=data("pr_mut"); else; PR_MUT=0.4; e
 if any(strcmp(keys(data), "loop_detect")); LOCALLOOP=data("loop_detect"); else; LOCALLOOP=0; end
 if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; STOP_PERC = 0.9; end
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
+if any(strcmp(keys(data), "stop_gen_incr")); STOP_GEN_INCR = data('stop_gen_incr'); else; STOP_GEN_INCR = 0; end
 if any(strcmp(keys(data), "print")); PRINT = true; else; PRINT= false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if any(strcmp(keys(data), "heu_threefour")); THREEFOUR = true; else; THREEFOUR = false; end
@@ -87,11 +88,9 @@ end
 
 % Initialize the algorithm
 GGAP = 1 - ELITIST;
-if VISUAL
-    mean_fits=zeros(1,MAXGEN+1);
-    worst=zeros(1,MAXGEN+1);
-    best=zeros(1,MAXGEN);
-end
+mean_fits = zeros(1,0);
+worst = zeros(1,0);
+best = zeros(1, 0);
 
 Dist=zeros(NVAR,NVAR);
 for i=1:size(x,1)
@@ -109,7 +108,6 @@ for row=1:NIND
         Chrom(row,:)=randperm(NVAR);
     end
 end
-gen=0;
 
 % number of individuals of equal fitness needed to stop
 if STOP_PERC
@@ -120,17 +118,15 @@ end
 ObjV = tspfun(Chrom, Dist, REPR_ID);
 
 % generational loop
+gen=0;
 while gen < MAXGEN
     sObjV=sort(ObjV);
-    if VISUAL
-        best(gen+1)=min(ObjV);
-        minimum=best(gen+1);
-        mean_fits(gen+1)=mean(ObjV);
-        worst(gen+1)=max(ObjV);
-    else
-        minimum=min(ObjV);
-    end
+    best(gen+1)=min(ObjV);
+    minimum=best(gen+1);
+    mean_fits(gen+1)=mean(ObjV);
+    worst(gen+1)=max(ObjV);
     
+    % TODO: remove if 't' is never used
     for t=1:size(ObjV,1)
         if (ObjV(t)==minimum)
             break;
@@ -141,6 +137,14 @@ while gen < MAXGEN
     if STOP_THR && minimum <= STOP_THR
         break;
     end 
+    
+    % Stopping criteria based on generational improvement
+    if STOP_GEN_INCR
+        gen_interval, delta = STOP_GEN_INCR;
+        if (gen > gen_interval) && (abs(best(gen+1) - best(gen+1-gen_interval)) < delta)
+            break
+        end        
+    end
 
     % Visualize progress
     if VISUAL
