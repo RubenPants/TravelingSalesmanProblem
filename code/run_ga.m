@@ -59,8 +59,7 @@ end
 
 % Fill in other used parameters
 NVAR = size(x,1);
-ADJ = "adjacency";
-if REPR == ADJ
+if REPR == "adjacency"
     REPR_ID = 1;
 else
     REPR_ID = 2;
@@ -99,9 +98,9 @@ end
 % initialize population
 Chrom=zeros(NIND,NVAR);
 for row=1:NIND
-    if REPR == ADJ
+    if REPR_ID == 1  % Adjacency
         Chrom(row,:)=path2adj(randperm(NVAR));
-    else  % REPR == PATH
+    else  % Path
         Chrom(row,:)=randperm(NVAR);
     end
 end
@@ -140,7 +139,11 @@ while gen < MAXGEN
 
     % Visualize progress
     if VISUAL
-        visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
+        if REPR_ID == 1
+            visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
+        else
+            visualizeTSP(x,y,Chrom(t,:), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
+        end
     end
 
     % Stop criteria if 95% of candidates equal to minimum 
