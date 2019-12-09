@@ -62,7 +62,8 @@ crosssliderv = uicontrol(ph,'Style','text','String',round(PR_CROSS*100),'Positio
 uicontrol(ph,'Style','text','String','% elite','Position',[0 80 130 20]);
 elitslider = uicontrol(ph,'Style','slider','Max',100,'Min',0,'Value',round(ELITIST*100),'Sliderstep',[0.01 0.05],'Position',[130 80 150 20],'Callback',@elitslider_Callback);
 elitsliderv = uicontrol(ph,'Style','text','String',round(ELITIST*100),'Position',[280 80 50 20]);
-uicontrol(ph,'Style','popupmenu', 'String',{'xalt_edges'}, 'Value',1,'Position',[10 50 130 20],'Callback',@crossover_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'xalt_edges'}, 'Value',1,'Position',[50 50 120 20],'Callback',@crossover_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'inversion', 'reciprocal_exchange'}, 'Value',1,'Position',[200 50 120 20],'Callback',@mutation_Callback);
 uicontrol(ph,'Style','pushbutton','String','START','Position',[0 10 50 30],'Callback',@runbutton_Callback);
 
 set(fh,'Visible','on');
@@ -126,6 +127,12 @@ set(fh,'Visible','on');
         crossovers = get(hObject,'String');
         CROSSOVER = crossovers(crossover_value);
         CROSSOVER = CROSSOVER{1};
+    end
+    function mutation_Callback(hObject,~)
+        mutation_value = get(hObject,'Value');
+        mutations = get(hObject,'String');
+        MUTATION = mutations(mutation_value);
+        MUTATION = MUTATION{1};
     end
     function runbutton_Callback(~,~)
         %set(ncitiesslider, 'Visible','off');

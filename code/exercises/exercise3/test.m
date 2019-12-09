@@ -19,11 +19,3 @@ for d=data
     c = run_ga(data);
     fprintf("%s - minimum: %f - generation: %f\n", d, c("minimum"), c("generation"))
 end
-
-function c = run_data(set, repr, cross, mut)
-    global NIND MAXGEN ELITIST PR_CROSS PR_MUT LOCALLOOP
-    % Run the given configuration on the requested dataset
-    data = load(sprintf('rondrit%s.tsp', set));
-    x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
-    c = run_ga_ex3(x, y, NIND, MAXGEN, ELITIST, PR_CROSS, PR_MUT, repr, cross, mut, LOCALLOOP);
-end

@@ -39,7 +39,7 @@ end
 if any(strcmp(keys(data), "nind")); NIND=data("nind"); else; NIND=128; end
 if any(strcmp(keys(data), "maxgen")); MAXGEN=data("maxgen"); else; MAXGEN=100; end
 if any(strcmp(keys(data), "elite")); ELITIST=data("elite"); else; ELITIST=0.05; end
-if any(strcmp(keys(data), "repr")); REPR=data("repr"); else; REPR='adjacency'; end
+if any(strcmp(keys(data), "representation")); REPR=data("representation"); else; REPR='adjacency'; end
 if any(strcmp(keys(data), "crossover")); CROSSOVER=data("crossover"); else; CROSSOVER="xalt_edges"; end
 if any(strcmp(keys(data), "pr_cross")); PR_CROSS=data("pr_cross"); else; PR_CROSS=0.2; end
 if any(strcmp(keys(data), "mutation")); MUTATION=data("mutation"); else; MUTATION='inversion'; end
@@ -137,8 +137,8 @@ while gen < MAXGEN
         break;
     end 
 
-    % Visualize progress if h* is given
-    if nargin == VISUAL
+    % Visualize progress
+    if VISUAL
         visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
     end
 
