@@ -29,25 +29,25 @@ function output = run_ga(data)
 %       ah3:                population-fitness overview
 
 % Parse data from data-container
-if ~contains("x", keys(data)) && ~contains("y", keys(data))
+if ~any(strcmp(keys(data), "x")) && ~any(strcmp(keys(data), "y"))
     ME = MException("Coordinates must be given");
     throw(ME)
 else
     x = data("x");
     y = data("y");
 end
-if contains("nind", keys(data)); NIND=data("nind"); else; NIND=64; end
-if contains("maxgen", keys(data)); MAXGEN=data("maxgen"); else; MAXGEN=100; end
-if contains("elite", keys(data)); ELITIST=data("elite"); else; ELITIST=0.05; end
-if contains("repr", keys(data)); REPR=data("repr"); else; REPR='adjacency'; end
-if contains("crossover", keys(data)); CROSSOVER=data("crossover"); else; CROSSOVER="xalt_edges"; end
-if contains("pr_cross", keys(data)); PR_CROSS=data("pr_cross"); else; PR_CROSS=0.2; end
-if contains("mutation", keys(data)); MUTATION=data("mutation"); else; MUTATION='inversion'; end
-if contains("pr_mut", keys(data)); PR_MUT=data("pr_mut"); else; PR_MUT=0.2; end
-if contains("loop_detect", keys(data)); LOCALLOOP=data("loop_detect"); else; LOCALLOOP=0; end
-if contains("stop_perc", keys(data)); STOP_PERC = data('stop_perc'); else; STOP_PERC = 0.9; end
-if contains("stop_thr", keys(data)); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
-if contains("visual", keys(data)); VISUAL = true; else; VISUAL = false; end
+if any(strcmp(keys(data), "nind")); NIND=data("nind"); else; NIND=128; end
+if any(strcmp(keys(data), "maxgen")); MAXGEN=data("maxgen"); else; MAXGEN=100; end
+if any(strcmp(keys(data), "elite")); ELITIST=data("elite"); else; ELITIST=0.05; end
+if any(strcmp(keys(data), "repr")); REPR=data("repr"); else; REPR='adjacency'; end
+if any(strcmp(keys(data), "crossover")); CROSSOVER=data("crossover"); else; CROSSOVER="xalt_edges"; end
+if any(strcmp(keys(data), "pr_cross")); PR_CROSS=data("pr_cross"); else; PR_CROSS=0.2; end
+if any(strcmp(keys(data), "mutation")); MUTATION=data("mutation"); else; MUTATION='inversion'; end
+if any(strcmp(keys(data), "pr_mut")); PR_MUT=data("pr_mut"); else; PR_MUT=0.2; end
+if any(strcmp(keys(data), "loop_detect")); LOCALLOOP=data("loop_detect"); else; LOCALLOOP=0; end
+if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; STOP_PERC = 0.9; end
+if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
+if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
@@ -102,7 +102,9 @@ end
 gen=0;
 
 % number of individuals of equal fitness needed to stop
-stopN=ceil(STOP_PERC*NIND);
+if STOP_PERC
+    stopN=ceil(STOP_PERC*NIND);
+end
 
 % evaluate initial population
 if REPR == ADJ
@@ -130,7 +132,7 @@ while gen < MAXGEN
     end
     
     % Stopping criteria based on threshold
-    if minimum <= STOP_THR
+    if STOP_THR && minimum <= STOP_THR
         break;
     end 
 
@@ -140,7 +142,7 @@ while gen < MAXGEN
     end
 
     % Stop criteria if 95% of candidates equal to minimum 
-    if (sObjV(stopN)-sObjV(1) <= 1e-15)
+    if STOP_PERC && (sObjV(stopN)-sObjV(1) <= 1e-15)
           break;
     end          
 

@@ -1,7 +1,7 @@
 function tspgui()
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-NIND=50;                    % Number of individuals
+NIND=128;                   % Number of individuals
 MAXGEN=100;                 % Maximum no. of generations
 NVAR=26;                    % No. of variables
 ELITIST=0.05;               % percentage of the elite population
