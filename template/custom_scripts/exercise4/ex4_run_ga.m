@@ -1,5 +1,5 @@
 
-function best = ex4_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP,LOCAL_MUT, ah1, ah2, ah3)
+function best = ex4_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP,LOCAL_MUT)
 % usage: run_ga(x, y, 
 %               NIND, MAXGEN, NVAR, 
 %               ELITIST, STOP_PERCENTAGE, 
@@ -63,6 +63,10 @@ function best = ex4_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, P
             % Stop criteria if 95% of candidates equal to minimum
             % (convergence)
             if (sObjV(stopN)-sObjV(1) <= 1e-15)
+                    while(gen<MAXGEN)
+                        best(gen+1)=minimum;
+                        gen = gen + 1;
+                    end
                   break;
             end          
             

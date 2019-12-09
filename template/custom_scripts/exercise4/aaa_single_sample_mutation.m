@@ -13,7 +13,8 @@
 function Chrom =  aaa_single_sample_mutation(Chrom, Dist, NVar, NInd, LOCAL_MUT)
 for indiv = 1:NInd
     individual = adj2path(Chrom(indiv, 1:NVar));
-    if (rand < LOCAL_MUT)
+    random = rand;
+    if (random < LOCAL_MUT)
         beginVar = NVar-2;
         begin = randi([2,beginVar]);
         finalVar = NVar-begin-1;

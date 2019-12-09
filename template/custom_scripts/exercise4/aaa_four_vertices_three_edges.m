@@ -14,6 +14,7 @@ for indiv = 1:NInd
         original_distance = Dist(sample(1,1),sample(1,2))+(Dist(sample(1,3),sample(1,4)));
         new_distance = Dist(sample(1,1),sample(1,3))+(Dist(sample(1,2),sample(1,4)));
         if (original_distance >= new_distance)
+            disp("LOCAL_HEURISTIC_1");
             individual(1,quatro+1:quatro+2) = [sample(1,3),sample(1,2)];
             break;
         end
