@@ -149,7 +149,7 @@ while gen < MAXGEN
     % Stop criteria if 95% of candidates equal to minimum 
     if STOP_PERC && (sObjV(stopN)-sObjV(1) <= 1e-15)
           break;
-    end          
+    end
 
     %assign fitness values to entire population
     FitnV=ranking(ObjV);
@@ -166,11 +166,11 @@ while gen < MAXGEN
     % Evaluate offspring, call objective function
     ObjVSel = tspfun(SelCh, Dist, REPR_ID);
 
-    %reinsert offspring into population
+    % Reinsert offspring into population
     [Chrom, ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
 
-    %increment generation counter
+    % Increment generation counter
     gen=gen+1;            
 end
 
