@@ -20,14 +20,12 @@ function Offspring=cross_alternate_edges(Parents)
     % the last two rows contain the inversed tours
 	
 	start_index=rand_int(1,1,[1 cols]);
-%	start_index=1;
 	walking_index=start_index; % select a random seed edge
 	parentNr=1;
 	visited_list=zeros(1,cols);
 	visited_list(walking_index)=1;
 	cities=1;
 	while cities<cols
-%		fprintf('%i',cities');
         direction=rand_int(1,1,[0,1]); % randomly chose the direction
 		new_city=AllParents(parentNr+2*direction,walking_index);
         % if direction=1, use inverse direction (rows 3 and 4), hence the
@@ -63,4 +61,3 @@ function Offspring=cross_alternate_edges(Parents)
 		parentNr=3-parentNr;  % switch the parents (1->2 or 2->1)
 	end
 	Offspring(walking_index)=start_index;
-% end function

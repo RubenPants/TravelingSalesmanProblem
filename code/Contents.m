@@ -16,7 +16,7 @@
 %   reins	- uniform random and fitness-based reinsertion
 %   rws		- roulette wheel selection
 %   select	- high-level selection routine
-%   sues		- stochastic universal sampling
+%   sues	- stochastic universal sampling
 %   
 % Mutation operators
 %   mut		- discrete mutation
@@ -28,7 +28,7 @@
 %   recint	- intermediate recombination
 %   reclin	- line recombination
 %   recmut	- line recombination with mutation features
-%   recombin	- high-level recombination function
+%   recombin- high-level recombination function
 %   xovdp	- double-point crossover
 %   xovdprs	- double-point reduced surrogate crossover
 %   xovmp	- general multi-point crossover
@@ -39,7 +39,6 @@
 %   
 % Subpopulation support
 %   migrate	- exchange individuals between subpopulations
-%   
 %   
 % Utility functions
 %   bs2rv	- binary string to real-value conversion

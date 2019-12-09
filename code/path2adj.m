@@ -1,16 +1,28 @@
-% path2adj(Path)
-% function to convert between path and adjacency representation for TSP
-% Path and Adj are row vectors
-%
-% Example:
-%   Path      = [4,1,2,3]
-%   Adjacency = [2,3,4,1], since 1(first_pos)->2, 2(second_pos)->3, 3->4, 4->1
-%
+%{
+path2adj.m
+
+This function converts the path representation to the adjacency 
+representation. 
+
+Example:
+    Path =
+        1   2   3
+        3   2   1
+    Adj =
+        2   3   1
+        3   1   2
+%}
 
 function Adj = path2adj(Path)
 	Adj=zeros(size(Path));
-	for t=1:size(Path,2)-1
-		Adj(Path(t))=Path(t+1);
-	end
-	Adj(Path(size(Path,2)))=Path(1);
+    if size(Path, 1) == 1
+        for t=1:size(Path,2)-1
+            Adj(Path(t))=Path(t+1);
+        end
+        Adj(Path(size(Path,2)))=Path(1);
+    else
+        for r=1:size(Path,1)
+            Adj(r,:) = path2adj(Path(r,:));
+        end
+    end
 	

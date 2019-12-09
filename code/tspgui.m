@@ -1,17 +1,17 @@
 function tspgui()
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-NIND=50;                    % Number of individuals
-MAXGEN=100;                 % Maximum no. of generations
-NVAR=26;                    % No. of variables
-ELITIST=0.05;               % percentage of the elite population
-STOP_PERCENTAGE=.90;        % percentage of equal fitness individuals for stopping
-REPR = "adjacency";         % Chosen representation (genome)
-CROSSOVER = 'xalt_edges';   % default crossover operator
-PR_CROSS=.20;               % probability of crossover
-MUTATION = 'inversion';     % default mutation operator
-PR_MUT=.20;                 % probability of mutation
-LOCALLOOP=0;                % local loop removal
+NIND=128;                       % Number of individuals
+MAXGEN=100;                     % Maximum no. of generations
+NVAR=26;                        % No. of variables
+ELITIST=0.05;                   % percentage of the elite population
+STOP_PERCENTAGE=.90;            % percentage of equal fitness individuals for stopping
+REPRESENTATION = "adjacency";   % Chosen representation (genome)
+CROSSOVER = 'xalt_edges';       % default crossover operator
+PR_CROSS=.20;                   % probability of crossover
+MUTATION = 'inversion';         % default mutation operator
+PR_MUT=.20;                     % probability of mutation
+LOCALLOOP=0;                    % local loop removal
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % load the data sets
@@ -23,7 +23,8 @@ end
 
 % start with first dataset
 data = load(['datasets/' datasets{1}]);
-x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
+x=data(:,1)/max([data(:,1);data(:,2)]);
+y=data(:,2)/max([data(:,1);data(:,2)]);
 NVAR=size(data,1);
 
 % initialise the user interface
@@ -62,8 +63,10 @@ crosssliderv = uicontrol(ph,'Style','text','String',round(PR_CROSS*100),'Positio
 uicontrol(ph,'Style','text','String','% elite','Position',[0 80 130 20]);
 elitslider = uicontrol(ph,'Style','slider','Max',100,'Min',0,'Value',round(ELITIST*100),'Sliderstep',[0.01 0.05],'Position',[130 80 150 20],'Callback',@elitslider_Callback);
 elitsliderv = uicontrol(ph,'Style','text','String',round(ELITIST*100),'Position',[280 80 50 20]);
-uicontrol(ph,'Style','popupmenu', 'String',{'xalt_edges'}, 'Value',1,'Position',[10 50 130 20],'Callback',@crossover_Callback);
-uicontrol(ph,'Style','pushbutton','String','START','Position',[0 10 50 30],'Callback',@runbutton_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'adjacency', 'path'}, 'Value',1,'Position',[60 50 100 20],'Callback',@crossover_Representation);
+uicontrol(ph,'Style','popupmenu', 'String',{'xalt_edges'}, 'Value',1,'Position',[180 50 100 20],'Callback',@crossover_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'inversion', 'reciprocal_exchange'}, 'Value',1,'Position',[300 50 100 20],'Callback',@mutation_Callback);
+uicontrol(ph,'Style','pushbutton','String','START','Position',[60 10 340 30],'Callback',@runbutton_Callback);
 
 set(fh,'Visible','on');
     function datasetpopup_Callback(hObject,~)
@@ -127,6 +130,18 @@ set(fh,'Visible','on');
         CROSSOVER = crossovers(crossover_value);
         CROSSOVER = CROSSOVER{1};
     end
+    function crossover_Representation(hObject,~)
+        representation_value = get(hObject,'Value');
+        representations = get(hObject,'String');
+        REPRESENTATION = representations(representation_value);
+        REPRESENTATION = REPRESENTATION{1};
+    end
+    function mutation_Callback(hObject,~)
+        mutation_value = get(hObject,'Value');
+        mutations = get(hObject,'String');
+        MUTATION = mutations(mutation_value);
+        MUTATION = MUTATION{1};
+    end
     function runbutton_Callback(~,~)
         %set(ncitiesslider, 'Visible','off');
         set(nindslider,'Visible','off');
@@ -141,7 +156,7 @@ set(fh,'Visible','on');
         data("nind") = NIND;
         data("maxgen") = MAXGEN;
         data("elite") = ELITIST;
-        data("repr") = REPR;
+        data("representation") = REPRESENTATION;
         data("crossover") = CROSSOVER;
         data("pr_cross") = PR_CROSS;
         data("mutation") = MUTATION;
