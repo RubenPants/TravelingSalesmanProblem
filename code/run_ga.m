@@ -27,6 +27,9 @@ function output = run_ga(data)
 %       ah1:                graph visualization
 %       ah2:                minimum, mean, and maximum visualization
 %       ah3:                population-fitness overview
+%   heuristics:
+%       threefour:
+%       localmut:
 
 % Parse data from data-container
 if ~any(strcmp(keys(data), "x")) && ~any(strcmp(keys(data), "y"))
@@ -49,6 +52,8 @@ if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; ST
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
 if any(strcmp(keys(data), "print")); PRINT = true; else; PRINT= false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
+if any(strcmp(keys(data), "heu_threefour")); THREEFOUR = true; else; THREEFOUR = false; end
+if any(strcmp(keys(data), "heu_localMUT")); LOCALMUT = data("heu_localMut"); else; LOCALMUT = 0; end
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
@@ -169,7 +174,15 @@ while gen < MAXGEN
     % Reinsert offspring into population
     [Chrom, ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
-
+    
+    %Local heuristics
+    if THREEFOUR       
+        Chrom = four_vertices_three_edges(Chrom,Dist,NVAR,NIND);           
+    end
+    if LOCALMUT
+        Chrom = single_sample_mutation(Chrom,Dist,NVAR,NIND,LOCALMUT);
+    end
+    
     % Increment generation counter
     gen=gen+1;            
 end
@@ -178,3 +191,6 @@ end
 output = containers.Map;
 output('minimum') = minimum;
 output('generation') = gen;
+output('best')=best;
+output('worst')=worst;
+output('mean_fits')=mean_fits;
