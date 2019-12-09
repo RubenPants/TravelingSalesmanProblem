@@ -66,7 +66,7 @@ end
 050 - Stagnation occurred after 282 generations - Found solution: 5.961795 - Real solution: 5.828265
 051 - Stagnation occurred after 303 generations - Found solution: 6.305255 - Real solution: 6.217125
 067 - Stagnation occurred after 387 generations - Found solution: 4.384586 - Real solution: 4.368553
-070 - Stagnation occurred after 485 generations - Found solution: 6.825748 - Real solution: 6.848685
+070 - Stagnation occurred after 485 generations - Found solution: 6.825748 - Real solution: 6.825748
 100 - Stagnation occurred after 702 generations - Found solution: 7.917037 - Real solution: 7.854177
 127 - Stagnation occurred after 1006 generations- Found solution: 6.100259 - Real solution: 5.929081
 %}
