@@ -11,7 +11,7 @@ happen again, which is very time-consuming.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 AVG_COUNT=10;               % No. of times the same configuration is played
-CALCULATE_NEW=1;            % Calculate a new Avg array (time consuming)
+CALCULATE_NEW=false;        % Calculate a new Avg array (time consuming)
 NCITIES=40;                 % No. of cities
 STEPS=20;                   % 1/STEPS = STEP_SIZE (mutation, crossover)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -33,7 +33,7 @@ data("y") = y;
 data("stop_perc") = false;
 
 % Run for all the possibilities, this may take a while
-if CALCULATE_NEW == 1
+if CALCULATE_NEW
     Avg = zeros(STEPS+1);
     for m = 0:STEPS 
         for c = 0:STEPS
