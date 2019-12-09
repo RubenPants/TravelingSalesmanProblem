@@ -60,6 +60,11 @@ end
 % Fill in other used parameters
 NVAR = size(x,1);
 ADJ = "adjacency";
+if REPR == ADJ
+    REPR_ID = 1;
+else
+    REPR_ID = 2;
+end
 
 % Print out GA configuration (only for tspgui)
 if VISUAL || PRINT
@@ -68,7 +73,7 @@ if VISUAL || PRINT
     fprintf("\tMaximum generations: %d\n", MAXGEN)
     fprintf("\tNumber of cities: %d\n", NVAR)
     fprintf("\tElitist percentage: %.2f\n", ELITIST)
-    fprintf("\tChosen representation: %s\n", REPR)
+    fprintf("\tChosen representation: %s (ID: %d)\n", REPR, REPR_ID)
     fprintf("\tCrossover operator: %s - with percentage %.2f\n", CROSSOVER, PR_CROSS)
     fprintf("\tMutation operator: %s - with percentage %.2f\n", MUTATION, PR_MUT)
     fprintf("\tLoop-detection enabled: %d\n", LOCALLOOP)
@@ -154,10 +159,10 @@ while gen < MAXGEN
     SelCh=select('sus', Chrom, FitnV, GGAP);
 
     %recombine individuals (crossover)
-    SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
+    SelCh = recombin(CROSSOVER, SelCh, REPR_ID, PR_CROSS);
 
     % Mutation
-    SelCh=mutateTSP(MUTATION,SelCh,PR_MUT);
+    SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID);
 
     % Evaluate offspring, call objective function
     if REPR == ADJ
@@ -168,7 +173,7 @@ while gen < MAXGEN
 
     %reinsert offspring into population
     [Chrom, ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
-    Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom,LOCALLOOP,Dist);
+    Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
 
     %increment generation counter
     gen=gen+1;            

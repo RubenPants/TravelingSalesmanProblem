@@ -4,20 +4,23 @@
 % representation of the individuals in the current population,
 % mutates the individuals and returns the resulting population.
 %
-% Syntax:  NewChrom = mutate(MUT_F, OldChrom, MutOpt)
+% Syntax:  NewChrom = mutate(MUT_F, OldChrom, MutOpt, Representation)
 %
 % Input parameter:
-%    MUT_F     - String containing the name of the mutation function
-%    OldChrom  - Matrix containing the chromosomes of the old
-%                population. Each line corresponds to one individual.
-%    MutOpt    - mutation rate
+%   MUT_F           - String containing the name of the mutation function
+%   OldChrom        - Matrix containing the chromosomes of the old
+%                     population. Each line corresponds to one individual.
+%   MutOpt          - mutation rate
+%   Representation  - integer specifying which encoding is used
+%                       1 : adjacency representation
+%                       2 : path representation
 %
 % Output parameter:
 %    NewChrom  - Matrix containing the chromosomes of the population
 %                after mutation in the same format as OldChrom.
 
 
-function NewChrom = mutateTSP(MUT_F, OldChrom, MutOpt)
+function NewChrom = mutateTSP(MUT_F, OldChrom, MutOpt, Representation)
     % Check parameter consistency
     if nargin < 2,  error('Not enough input parameters'); end
 
@@ -25,10 +28,8 @@ function NewChrom = mutateTSP(MUT_F, OldChrom, MutOpt)
     NewChrom=OldChrom;
 
     for r=1:rows
-        if rand<MutOpt
-            NewChrom(r,:) = feval(MUT_F, OldChrom(r,:),1);
+        if rand < MutOpt
+            NewChrom(r,:) = feval(MUT_F, OldChrom(r,:), Representation);
         end
     end
-
-% End of function
 

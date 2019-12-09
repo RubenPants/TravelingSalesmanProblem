@@ -16,7 +16,7 @@ optima = [2.828427, 3.128609, 3.138306, 3.349954, 2.927273, 3.242449, 4.017236, 
 REPRESENTATION = ["adjacency", "path"];
 
 % Possible crossover operators
-CROSSOVER = ["xalt_edges", "order", "sequential_constructive"];
+CROSSOVER = ["xalt_edges"]; %, "order", "sequential_constructive"];
 
 % Possible mutation operators
 MUTATION = ["reciprocal_exchange", "inversion"];

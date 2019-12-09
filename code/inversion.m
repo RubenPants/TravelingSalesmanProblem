@@ -3,12 +3,12 @@
 % Representation is an integer specifying which encoding is used
 %	1 : adjacency representation
 %	2 : path representation
-%
 
 function NewChrom = inversion(OldChrom,Representation)
     NewChrom=OldChrom;
 
-    if Representation==1 
+    % Transform adjacency to path
+    if Representation==1
         NewChrom=adj2path(NewChrom);
     end
 
@@ -21,6 +21,7 @@ function NewChrom = inversion(OldChrom,Representation)
 
     NewChrom(rndi(1):rndi(2)) = NewChrom(rndi(2):-1:rndi(1));
 
+    % Transform path back to adjacency
     if Representation==1
         NewChrom=path2adj(NewChrom);
     end

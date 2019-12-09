@@ -3,7 +3,6 @@
 % Representation is an integer specifying which encoding is used
 %	1 : adjacency representation
 %	2 : path representation
-%
 
 function NewChrom = reciprocal_exchange(OldChrom,Representation)
     NewChrom=OldChrom;

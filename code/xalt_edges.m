@@ -1,20 +1,22 @@
-% alternating edges crossover for TSP
-% as described in the book by Zbigniew Michalewicz on page 212
-% this crossover assumes that the ajacency representation is used to represent
-% TSP tours
+% alternating edges crossover for TSP as described in the book by Zbigniew 
+% Michalewicz on page 212. This crossover assumes that the ADJACENCY
+% representation is used to represent TSP tours.
 %
 % KULeuven, december 2002 
 % email: Tim.Volodine@cs.kuleuven.ac.be
 %
 %
-% Syntax:  NewChrom = xals_edges(OldChrom, XOVR)
+% Syntax:  NewChrom = xals_edges(OldChrom, Representation, XOVR)
 %
 % Input parameters:
-%    OldChrom  - Matrix containing the chromosomes of the old
-%                population. Each line corresponds to one individual
-%                (in any form, not necessarily real values).
-%    XOVR      - Probability of recombination occurring between pairs
-%                of individuals.
+%    OldChrom       - Matrix containing the chromosomes of the old
+%                     population. Each line corresponds to one individual
+%                     (in any form, not necessarily real values).
+%   Representation  - integer specifying which encoding is used
+%                       1 : adjacency representation
+%                       2 : path representation
+%    XOVR           - Probability of recombination occurring between pairs
+%                     of individuals.
 %
 % Output parameter:
 %    NewChrom  - Matrix containing the chromosomes of the population
@@ -22,9 +24,14 @@
 %                in the same format as OldChrom.
 %
 
-function NewChrom = xalt_edges(OldChrom, XOVR)
-    if nargin < 2, XOVR = NaN; end
+function NewChrom = xalt_edges(OldChrom, Representation, XOVR)
+    if nargin < 3, XOVR = NaN; end
 
+    % Transform path to adjacency
+    if Representation==2
+        OldChrom=path2adj(OldChrom);
+    end
+    
     [rows,~]=size(OldChrom);
 
     maxrows=rows;
@@ -47,4 +54,8 @@ function NewChrom = xalt_edges(OldChrom, XOVR)
     if rem(rows,2)~=0
         NewChrom(rows,:)=OldChrom(rows,:);
     end
-
+    
+    % Transform adjacency back to path
+    if Representation==2
+        NewChrom=adj2path(NewChrom);
+    end
