@@ -15,7 +15,7 @@ Implementation of the TSP fitness function
 function ObjVal = tspfun(Phen, Dist, Repr)
     % Transform Phen to adj representaion if needed
     if Repr==2
-        Phen = adj2path(Phen);
+        Phen = path2adj(Phen);
     end
     
     % Calculate the distances
