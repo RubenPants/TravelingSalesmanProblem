@@ -6,9 +6,13 @@
 %Dist = The matrix containing the distances between the cities
 %NVar = the number of cities
 %NInd = the number of individuals
-function Chrom =  aaa_four_vertices_three_edges(Chrom, Dist, NVar, NInd)
+function Chrom =  aaa_four_vertices_three_edges(Chrom, Dist, NVar, NInd, REPR_ID)
 for indiv = 1:NInd
-    individual = adj2path(Chrom(indiv, 1:NVar));
+    if REPR_ID == 1
+        individual = adj2path(Chrom(indiv, 1:NVar));
+    else
+        individual = Chrom(indiv, 1:NVar);
+    end
     for quatro = 1:NVar-3
         sample = individual(1,quatro:quatro+3);
         original_distance = Dist(sample(1,1),sample(1,2))+(Dist(sample(1,3),sample(1,4)));
@@ -18,6 +22,10 @@ for indiv = 1:NInd
             break;
         end
     end
-Chrom(indiv,1:NVar)=path2adj(individual);
+if(REPR_ID==1)
+    Chrom(indiv,1:NVar)=path2adj(individual);
+else
+    Chrom(indiv,1:NVar)=individual;
+end
 end
 end

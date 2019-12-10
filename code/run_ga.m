@@ -54,7 +54,7 @@ if any(strcmp(keys(data), "stop_gen_incr")); STOP_GEN_INCR = data('stop_gen_incr
 if any(strcmp(keys(data), "print")); PRINT = true; else; PRINT= false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if any(strcmp(keys(data), "heu_threefour")); THREEFOUR = true; else; THREEFOUR = false; end
-if any(strcmp(keys(data), "heu_localMUT")); LOCALMUT = data("heu_localMut"); else; LOCALMUT = 0; end
+if any(strcmp(keys(data), "heu_localMUT")); LOCALMUT = data("heu_localMUT"); else; LOCALMUT = 0; end
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
@@ -181,10 +181,10 @@ while gen < MAXGEN
     
     %Local heuristics
     if THREEFOUR       
-        Chrom = four_vertices_three_edges(Chrom,Dist,NVAR,NIND);           
+        Chrom = four_vertices_three_edges(Chrom,Dist,NVAR,NIND, REPR_ID);           
     end
     if LOCALMUT
-        Chrom = single_sample_mutation(Chrom,Dist,NVAR,NIND,LOCALMUT);
+        Chrom = single_sample_mutation(Chrom,Dist,NVAR,NIND,LOCALMUT, REPR_ID);
     end
     
     % Increment generation counter
@@ -195,6 +195,6 @@ end
 output = containers.Map;
 output('minimum') = minimum;
 output('generation') = gen;
-output('best')=best;
-output('worst')=worst;
-output('mean_fits')=mean_fits;
+output('best') = best;
+output('worst') = worst;
+output('mean_fits') = mean_fits;

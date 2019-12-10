@@ -10,9 +10,13 @@
 %NInd = the number of individuals
 %LOCAL_MUT = parameter to trigger the local mutation
 
-function Chrom =  aaa_single_sample_mutation(Chrom, Dist, NVar, NInd, LOCAL_MUT)
+function Chrom =  aaa_single_sample_mutation(Chrom, Dist, NVar, NInd, LOCAL_MUT, REPR_ID)
 for indiv = 1:NInd
-    individual = adj2path(Chrom(indiv, 1:NVar));
+    if REPR_ID == 1
+        individual = adj2path(Chrom(indiv, 1:NVar));
+    else
+        individual = Chrom(indiv, 1:NVar);
+    end
     random = rand;
     if (random < LOCAL_MUT)
         beginVar = NVar-2;
@@ -23,7 +27,11 @@ for indiv = 1:NInd
         new_distance = Dist(individual(1,begin-1),individual(1,final))+(Dist(individual(1,begin),individual(1,final+1)));
         if (original_distance >= new_distance)
             individual(1,begin:final) = flip(individual(1,begin:final));
-            Chrom(indiv,1:NVar)=path2adj(individual);
+            if REPR_ID == 1
+                Chrom(indiv,1:NVar)=path2adj(individual);
+            else
+                Chrom(indiv,1:NVar)=individual;
+            end
         end        
     end 
 end
