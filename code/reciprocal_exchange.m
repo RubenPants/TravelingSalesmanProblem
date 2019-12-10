@@ -1,8 +1,13 @@
-% low level function for TSP mutation
-% reciprocal exchange : two random cities in a tour are swapped
-% Representation is an integer specifying which encoding is used
-%	1 : adjacency representation
-%	2 : path representation
+%{
+reciprocal_exchange.m
+
+Swap two cities in the tour at random.
+Parameters:
+    OldChrom:       List of cities
+    Representation: Integer indicating the used representation
+                        1: Adjacency
+                        2: Path
+%}
 
 function NewChrom = reciprocal_exchange(OldChrom,Representation)
     NewChrom=OldChrom;

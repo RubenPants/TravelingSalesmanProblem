@@ -29,10 +29,10 @@ for r=REPRESENTATION
             total = zeros(1,length(data_list));
             for i=1:length(data_list)
                 fprintf("\t%s - ", data_list(i))
-                itermediate = zeros(1, 10);
+                intermediate = zeros(1, 10);
                 for j=1:10
                     output = run_data(data_list(i), r, c, m);
-                    intermediate = output("minimum");
+                    intermediate(j) = output("minimum");
                     fprintf("#")
                 end
                 total(i) = mean(intermediate) / optima(i);

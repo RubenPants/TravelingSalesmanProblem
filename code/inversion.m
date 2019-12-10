@@ -1,12 +1,17 @@
-% low level function for TSP mutation
-% reciprocal exchange : two random cities in a tour are swapped
-% Representation is an integer specifying which encoding is used
-%	1 : adjacency representation
-%	2 : path representation
+%{
+inversion.m
+
+Reverse a subsequence of cities.
+Parameters:
+    OldChrom:       List of cities
+    Representation: Integer indicating the used representation
+                        1: Adjacency
+                        2: Path
+%}
 
 function NewChrom = inversion(OldChrom,Representation)
     NewChrom=OldChrom;
-
+    
     % Transform adjacency to path
     if Representation==1
         NewChrom=adj2path(NewChrom);
