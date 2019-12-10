@@ -1,7 +1,7 @@
 %{
 heuristic_crossover.m
 
-heuristic crossover for TSP. This crossover assumes that the ADJACENCY
+heuristic crossover for TSP. This crossover assumes that the PATH 
 representation is used to represent TSP tours.
 
 Input parameters:
