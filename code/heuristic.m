@@ -26,13 +26,15 @@ function Offspring=heuristic(ParentA, ParentB, Dist)
         b = find(ParentB == Offspring(walking_index)) + 1;
         if (a > cities); a = 1; end
         if (b > cities); b = 1; end
-        
-        if ismember(ParentA(a), used) && ismember(ParentB(b), used)
+
+        member_a = any(ParentA(a)==used);
+        member_b = any(ParentB(b)==used);
+        if member_a && member_b 
             % Get minimal distance of remaining cities
             best_dist = Inf;
             best_city = 0;
             for i=1:cities
-                if ~ismember(i, used)
+                if ~any(i==used)
                     dist = Dist(Offspring(walking_index), i);
                     if dist < best_dist
                         best_dist = dist;
@@ -42,10 +44,10 @@ function Offspring=heuristic(ParentA, ParentB, Dist)
             end
             Offspring(walking_index + 1) = best_city;
             used(walking_index + 1) = best_city;
-        elseif ismember(ParentA(a), used)
+        elseif member_a
             Offspring(walking_index + 1) = ParentB(b);
             used(walking_index + 1) = ParentB(b);
-        elseif ismember(ParentB(b), used)
+        elseif member_b
             Offspring(walking_index + 1) = ParentA(a);
             used(walking_index + 1) = ParentA(a);
         else
