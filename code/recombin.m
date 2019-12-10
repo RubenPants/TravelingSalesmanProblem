@@ -8,7 +8,7 @@
 % Syntax:  NewChrom = recombin(REC_F, OldChrom, Representation, RecOpt, SUBPOP)
 %
 % Input parameters:
-%   REC_F           - String containing the name of the recombination or
+%   REC_F           - String containing the name of the recombination or 
 %                     crossover function
 %   Chrom           - Matrix containing the chromosomes of the old
 %                     population. Each line corresponds to one individual
@@ -20,21 +20,22 @@
 %   Representation  - integer specifying which encoding is used
 %                       1 : adjacency representation
 %                       2 : path representation
+%   Dist            - Distance matrix
 %
 % Output parameter:
 %   NewChrom        - Matrix containing the chromosomes of the population
 %                     after recombination in the same format as OldChrom.
 
 
-function NewChrom = recombin(REC_F, Chrom, Representation, RecOpt, SUBPOP)
+function NewChrom = recombin(REC_F, Chrom, Representation, Dist, RecOpt, SUBPOP)
     % Check parameter consistency
-    if nargin < 3, error('Not enough input parameter'); end
+    if nargin < 4, error('Not enough input parameter'); end
     
     % Identify the population size (Nind)
     [Nind,~] = size(Chrom);
     
-    if nargin < 5, SUBPOP = 1; end
-    if nargin > 4
+    if nargin < 6, SUBPOP = 1; end
+    if nargin > 5
         if isempty(SUBPOP), SUBPOP = 1;
         elseif isnan(SUBPOP), SUBPOP = 1;
         elseif length(SUBPOP) ~= 1, error('SUBPOP must be a scalar'); 
@@ -44,8 +45,8 @@ function NewChrom = recombin(REC_F, Chrom, Representation, RecOpt, SUBPOP)
     if (Nind/SUBPOP) ~= fix(Nind/SUBPOP), error('Chrom and SUBPOP disagree'); end
     Nind = Nind/SUBPOP;  % Compute number of individuals per subpopulation
 
-    if nargin < 4, RecOpt = 0.7; end
-    if nargin > 3
+    if nargin < 5, RecOpt = 0.7; end
+    if nargin > 4
         if isempty(RecOpt), RecOpt = 0.7;
         elseif isnan(RecOpt), RecOpt = 0.7;
         elseif length(RecOpt) ~= 1, error('RecOpt must be a scalar');
@@ -57,7 +58,7 @@ function NewChrom = recombin(REC_F, Chrom, Representation, RecOpt, SUBPOP)
     NewChrom = [];
     for irun = 1:SUBPOP
         ChromSub = Chrom((irun-1)*Nind+1:irun*Nind,:);  
-        NewChromSub = feval(REC_F, ChromSub, Representation, RecOpt);
+        NewChromSub = feval(REC_F, ChromSub, Representation, Dist, RecOpt);
         NewChrom=[NewChrom; NewChromSub];
     end
 

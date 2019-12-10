@@ -11,7 +11,7 @@ Parameters:
 
 function NewChrom = inversion(OldChrom,Representation)
     NewChrom=OldChrom;
-
+    
     % Transform adjacency to path
     if Representation==1
         NewChrom=adj2path(NewChrom);

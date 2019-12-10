@@ -159,7 +159,7 @@ while gen < MAXGEN
     SelCh=select('sus', Chrom, FitnV, GGAP);
 
     %recombine individuals (crossover)
-    SelCh = recombin(CROSSOVER, SelCh, REPR_ID, PR_CROSS);
+    SelCh = recombin(CROSSOVER, SelCh, REPR_ID, Dist, PR_CROSS);
 
     % Mutation
     SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID);

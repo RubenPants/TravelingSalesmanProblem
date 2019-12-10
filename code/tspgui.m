@@ -150,7 +150,7 @@ set(fh,'Visible','on');
             case 'AEX'
                 CROSSOVER = 'xalt_edges';
             case 'HGreX'
-                CROSSOVER = 'heuristic';
+                CROSSOVER = 'heuristic_crossover';
             case 'SCX'
                 CROSSOVER = 'sequential_constructive';               
         end

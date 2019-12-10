@@ -24,8 +24,8 @@
 %                in the same format as OldChrom.
 %
 
-function NewChrom = xalt_edges(OldChrom, Representation, XOVR)
-    if nargin < 3, XOVR = NaN; end
+function NewChrom = xalt_edges(OldChrom, Representation, ~, XOVR)
+    if nargin < 4, XOVR = NaN; end  % No recombination will happen
 
     % Transform path to adjacency
     if Representation==2
@@ -39,10 +39,10 @@ function NewChrom = xalt_edges(OldChrom, Representation, XOVR)
         maxrows=maxrows-1;
     end
 
+    NewChrom = zeros(size(OldChrom));
     for row=1:2:maxrows
-        % crossover of the two chromosomes
-        % results in 2 offsprings
-        if rand<XOVR			% recombine with a given probability
+        % crossover of the two chromosomes results in 2 offsprings
+        if rand<XOVR
             NewChrom(row,:) =cross_alternate_edges([OldChrom(row,:);OldChrom(row+1,:)]);
             NewChrom(row+1,:)=cross_alternate_edges([OldChrom(row+1,:);OldChrom(row,:)]);
         else
