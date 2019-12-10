@@ -42,31 +42,32 @@ xlabel('Distance');
 ylabel('Number');
 
 ph = uipanel('Parent',fh,'Title','Settings','Position',[.55 .05 .45 .45]);
-uicontrol(ph,'Style','text','String','Dataset','Position',[0 260 130 20]);
-uicontrol(ph,'Style','popupmenu','String',datasets,'Value',1,'Position',[130 260 130 20],'Callback',@datasetpopup_Callback);
-uicontrol(ph,'Style','text','String','Loop Detection','Position',[260 260 130 20]);
-uicontrol(ph,'Style','popupmenu','String',{'off','on'},'Value',1,'Position',[390 260 50 20],'Callback',@llooppopup_Callback); 
-uicontrol(ph,'Style','text','String','# Cities','Position',[0 230 130 20]);
-ncitiessliderv = uicontrol(ph,'Style','text','String',NVAR,'Position',[280 230 50 20]);
-uicontrol(ph,'Style','text','String','# Individuals','Position',[0 200 130 20]);
-nindslider = uicontrol(ph,'Style','slider','Max',1000,'Min',10,'Value',NIND,'Sliderstep',[0.001 0.05],'Position',[130 200 150 20],'Callback',@nindslider_Callback);
-nindsliderv = uicontrol(ph,'Style','text','String',NIND,'Position',[280 200 50 20]);
-uicontrol(ph,'Style','text','String','# Generations','Position',[0 170 130 20]);
-genslider = uicontrol(ph,'Style','slider','Max',1000,'Min',10,'Value',MAXGEN,'Sliderstep',[0.001 0.05],'Position',[130 170 150 20],'Callback',@genslider_Callback);
-gensliderv = uicontrol(ph,'Style','text','String',MAXGEN,'Position',[280 170 50 20]);
-uicontrol(ph,'Style','text','String','Pr. Mutation','Position',[0 140 130 20]);
-mutslider = uicontrol(ph,'Style','slider','Max',100,'Min',0,'Value',round(PR_MUT*100),'Sliderstep',[0.01 0.05],'Position',[130 140 150 20],'Callback',@mutslider_Callback);
-mutsliderv = uicontrol(ph,'Style','text','String',round(PR_MUT*100),'Position',[280 140 50 20]);
-uicontrol(ph,'Style','text','String','Pr. Crossover','Position',[0 110 130 20]);
-crossslider = uicontrol(ph,'Style','slider','Max',100,'Min',0,'Value',round(PR_CROSS*100),'Sliderstep',[0.01 0.05],'Position',[130 110 150 20],'Callback',@crossslider_Callback);
-crosssliderv = uicontrol(ph,'Style','text','String',round(PR_CROSS*100),'Position',[280 110 50 20]);
-uicontrol(ph,'Style','text','String','% elite','Position',[0 80 130 20]);
-elitslider = uicontrol(ph,'Style','slider','Max',100,'Min',0,'Value',round(ELITIST*100),'Sliderstep',[0.01 0.05],'Position',[130 80 150 20],'Callback',@elitslider_Callback);
-elitsliderv = uicontrol(ph,'Style','text','String',round(ELITIST*100),'Position',[280 80 50 20]);
-uicontrol(ph,'Style','popupmenu', 'String',{'adjacency', 'path'}, 'Value',1,'Position',[60 50 100 20],'Callback',@crossover_Representation);
-uicontrol(ph,'Style','popupmenu', 'String',{'xalt_edges'}, 'Value',1,'Position',[180 50 100 20],'Callback',@crossover_Callback);
-uicontrol(ph,'Style','popupmenu', 'String',{'inversion', 'reciprocal_exchange'}, 'Value',1,'Position',[300 50 100 20],'Callback',@mutation_Callback);
-uicontrol(ph,'Style','pushbutton','String','START','Position',[60 10 340 30],'Callback',@runbutton_Callback);
+uicontrol(ph,'Style','text','String','Dataset','Position',[0 290 130 20]);
+uicontrol(ph,'Style','popupmenu','String',datasets,'Value',1,'Position',[130 290 130 20],'Callback',@datasetpopup_Callback);
+uicontrol(ph,'Style','text','String','Loop Detection','Position',[265 290 130 20]);
+uicontrol(ph,'Style','popupmenu','String',{'off','on'},'Value',1,'Position',[400 290 50 20],'Callback',@llooppopup_Callback); 
+uicontrol(ph,'Style','text','String','# Cities','Position',[0 260 130 20]);
+ncitiessliderv = uicontrol(ph,'Style','text','String',NVAR,'Position',[280 260 50 20]);
+uicontrol(ph,'Style','text','String','# Individuals','Position',[0 230 130 20]);
+nindslider = uicontrol(ph,'Style','slider','Max',1000,'Min',10,'Value',NIND,'Sliderstep',[0.001 0.05],'Position',[130 230 150 20],'Callback',@nindslider_Callback);
+nindsliderv = uicontrol(ph,'Style','text','String',NIND,'Position',[280 230 50 20]);
+uicontrol(ph,'Style','text','String','# Generations','Position',[0 200 130 20]);
+genslider = uicontrol(ph,'Style','slider','Max',1000,'Min',10,'Value',MAXGEN,'Sliderstep',[0.001 0.05],'Position',[130 200 150 20],'Callback',@genslider_Callback);
+gensliderv = uicontrol(ph,'Style','text','String',MAXGEN,'Position',[280 200 50 20]);
+uicontrol(ph,'Style','text','String','Pr. Mutation','Position',[0 170 130 20]);
+mutslider = uicontrol(ph,'Style','slider','Max',100,'Min',0,'Value',round(PR_MUT*100),'Sliderstep',[0.01 0.05],'Position',[130 170 150 20],'Callback',@mutslider_Callback);
+mutsliderv = uicontrol(ph,'Style','text','String',round(PR_MUT*100),'Position',[280 170 50 20]);
+uicontrol(ph,'Style','text','String','Pr. Crossover','Position',[0 140 130 20]);
+crossslider = uicontrol(ph,'Style','slider','Max',100,'Min',0,'Value',round(PR_CROSS*100),'Sliderstep',[0.01 0.05],'Position',[130 140 150 20],'Callback',@crossslider_Callback);
+crosssliderv = uicontrol(ph,'Style','text','String',round(PR_CROSS*100),'Position',[280 140 50 20]);
+uicontrol(ph,'Style','text','String','% elite','Position',[0 110 130 20]);
+elitslider = uicontrol(ph,'Style','slider','Max',100,'Min',0,'Value',round(ELITIST*100),'Sliderstep',[0.01 0.05],'Position',[130 110 150 20],'Callback',@elitslider_Callback);
+elitsliderv = uicontrol(ph,'Style','text','String',round(ELITIST*100),'Position',[280 110 50 20]);
+uicontrol(ph,'Style','popupmenu', 'String',{'adjacency', 'path'}, 'Value',1,'Position',[20 80 100 20],'Callback',@representation_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'AEX', 'HGreX', 'SCX'}, 'Value',1,'Position',[130 80 100 20],'Callback',@crossover_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'inversion', 'swap'}, 'Value',1,'Position',[240 80 100 20],'Callback',@mutation_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'TODO'}, 'Value',1,'Position',[350 80 100 20],'Callback',@heuristic_Callback);  % TODO: Sieben, voeg mogelijkheden toe binnen de '{...}'
+uicontrol(ph,'Style','pushbutton','String','START','Position',[20 40 430 30],'Callback',@runbutton_Callback);
 
 set(fh,'Visible','on');
     function datasetpopup_Callback(hObject,~)
@@ -124,13 +125,7 @@ set(fh,'Visible','on');
         set(elitsliderv,'String',slider_value);
         ELITIST = round(slider_value)/100;
     end
-    function crossover_Callback(hObject,~)
-        crossover_value = get(hObject,'Value');
-        crossovers = get(hObject,'String');
-        CROSSOVER = crossovers(crossover_value);
-        CROSSOVER = CROSSOVER{1};
-    end
-    function crossover_Representation(hObject,~)
+    function representation_Callback(hObject,~)
         representation_value = get(hObject,'Value');
         representations = get(hObject,'String');
         REPRESENTATION = representations(representation_value);
@@ -139,8 +134,29 @@ set(fh,'Visible','on');
     function mutation_Callback(hObject,~)
         mutation_value = get(hObject,'Value');
         mutations = get(hObject,'String');
-        MUTATION = mutations(mutation_value);
-        MUTATION = MUTATION{1};
+        value = mutations(mutation_value);
+        switch value{1}
+            case 'inversion'
+                MUTATION = 'inversion';
+            case 'swap'
+                MUTATION = 'reciprocal_exchange';           
+        end
+    end
+    function crossover_Callback(hObject,~)
+        crossover_value = get(hObject,'Value');
+        crossovers = get(hObject,'String');
+        value = crossovers(crossover_value);
+        switch value{1}
+            case 'AEX'
+                CROSSOVER = 'xalt_edges';
+            case 'HGreX'
+                CROSSOVER = 'heuristic';
+            case 'SCX'
+                CROSSOVER = 'sequential_constructive';               
+        end
+    end
+    function heuristic_Callback(hObject,~)
+        % TODO: Sieben
     end
     function runbutton_Callback(~,~)
         %set(ncitiesslider, 'Visible','off');
