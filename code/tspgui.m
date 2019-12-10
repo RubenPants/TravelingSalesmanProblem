@@ -64,7 +64,7 @@ uicontrol(ph,'Style','text','String','% elite','Position',[0 110 130 20]);
 elitslider = uicontrol(ph,'Style','slider','Max',100,'Min',0,'Value',round(ELITIST*100),'Sliderstep',[0.01 0.05],'Position',[130 110 150 20],'Callback',@elitslider_Callback);
 elitsliderv = uicontrol(ph,'Style','text','String',round(ELITIST*100),'Position',[280 110 50 20]);
 uicontrol(ph,'Style','popupmenu', 'String',{'adjacency', 'path'}, 'Value',1,'Position',[20 80 100 20],'Callback',@representation_Callback);
-uicontrol(ph,'Style','popupmenu', 'String',{'AEX', 'HGreX', 'SCX'}, 'Value',1,'Position',[130 80 100 20],'Callback',@crossover_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'AEX', 'HGreX'}, 'Value',1,'Position',[130 80 100 20],'Callback',@crossover_Callback);
 uicontrol(ph,'Style','popupmenu', 'String',{'inversion', 'swap'}, 'Value',1,'Position',[240 80 100 20],'Callback',@mutation_Callback);
 uicontrol(ph,'Style','popupmenu', 'String',{'TODO'}, 'Value',1,'Position',[350 80 100 20],'Callback',@heuristic_Callback);  % TODO: Sieben, voeg mogelijkheden toe binnen de '{...}'
 uicontrol(ph,'Style','pushbutton','String','START','Position',[20 40 430 30],'Callback',@runbutton_Callback);
@@ -150,9 +150,7 @@ set(fh,'Visible','on');
             case 'AEX'
                 CROSSOVER = 'xalt_edges';
             case 'HGreX'
-                CROSSOVER = 'heuristic_crossover';
-            case 'SCX'
-                CROSSOVER = 'sequential_constructive';               
+                CROSSOVER = 'heuristic_crossover';              
         end
     end
     function heuristic_Callback(hObject,~)
