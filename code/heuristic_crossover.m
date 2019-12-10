@@ -36,14 +36,13 @@ function NewChrom = heuristic_crossover(OldChrom, Representation, Dist, XOVR)
     end
 
     NewChrom = zeros(size(OldChrom));
-    for row=1:2:maxrows
+    for row=1:maxrows
         if rand<XOVR
             % Create single offspring from current and next parent
-            NewChrom(row,:) = heuristic(OldChrom(row,:),OldChrom(row+1,:),Dist);
-            NewChrom(row+1,:)= heuristic(OldChrom(row+1,:),OldChrom(row,:),Dist);
+            if (row < maxrows); next = row + 1; else; next = 1; end
+            NewChrom(row,:) = heuristic(OldChrom(row,:),OldChrom(next,:),Dist);
         else
             NewChrom(row,:)=OldChrom(row,:);
-            NewChrom(row+1,:)=OldChrom(row+1,:);
         end
     end
 
