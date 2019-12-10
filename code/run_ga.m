@@ -49,6 +49,7 @@ if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; ST
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
 if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation'); else; STOP_STAG = 0; end
 if any(strcmp(keys(data), "print")); PRINT = true; else; PRINT= false; end
+if any(strcmp(keys(data), "diversify")); DIVERSIFY = true; else; DIVERSIFY = false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if VISUAL
     temp = data("visual");
@@ -162,7 +163,7 @@ while gen < MAXGEN
     SelCh = recombin(CROSSOVER, SelCh, REPR_ID, Dist, PR_CROSS);
 
     % Mutation
-    SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID);
+    SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID, DIVERSIFY);  
 
     % Evaluate offspring, call objective function
     ObjVSel = tspfun(SelCh, Dist, REPR_ID);
