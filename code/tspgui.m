@@ -77,7 +77,7 @@ elitsliderv = uicontrol(ph,'Style','text','String',round(ELITIST*100),'Position'
 row = new_row(row);
 uicontrol(ph,'Style','popupmenu', 'String',{'adjacency', 'path'}, 'Value',1,'Position',[20 row 100 20],'Callback',@representation_Callback);
 uicontrol(ph,'Style','popupmenu', 'String',{'AEX', 'HGreX'}, 'Value',1,'Position',[130 row 100 20],'Callback',@crossover_Callback);
-uicontrol(ph,'Style','popupmenu', 'String',{'inversion', 'swap'}, 'Value',1,'Position',[240 row 100 20],'Callback',@mutation_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'inversion', 'swap', 'merge'}, 'Value',1,'Position',[240 row 100 20],'Callback',@mutation_Callback);
 uicontrol(ph,'Style','popupmenu', 'String',{'TODO'}, 'Value',1,'Position',[350 row 100 20],'Callback',@heuristic_Callback);  % TODO: Sieben, voeg mogelijkheden toe binnen de '{...}'
 row = new_row(row);
 uicontrol(ph,'Style','pushbutton','String','START','Position',[20 row 430 30],'Callback',@runbutton_Callback);
@@ -160,7 +160,9 @@ set(fh,'Visible','on');
             case 'inversion'
                 MUTATION = 'inversion';
             case 'swap'
-                MUTATION = 'reciprocal_exchange';           
+                MUTATION = 'reciprocal_exchange';    
+            case 'merge'
+                MUTATION = 'merge';           
         end
     end
     function crossover_Callback(hObject,~)

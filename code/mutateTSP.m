@@ -23,16 +23,33 @@
 %                after mutation in the same format as OldChrom.
 
 
-function NewChrom = mutateTSP(MUT_F, OldChrom, MutOpt, Representation, diversify)
-    % Check parameter consistency
-    if nargin < 2,  error('Not enough input parameters'); end
-
-    [rows,~]=size(OldChrom);
-    NewChrom=OldChrom;
-
-    for r=1:rows
-        if (diversify && (r > 1) && ismember(OldChrom(r,:),NewChrom(1:r-1,:),'rows')) || (rand < MutOpt)  % TODO: Check if really needed!
-            NewChrom(r,:) = feval(MUT_F, OldChrom(r,:), Representation);
-        end
+function Chrom = mutateTSP(MUT_F, Chrom, MutOpt, Representation, diversify)
+    % Ensure path-representation
+    if Representation==1 
+        Chrom=adj2path(Chrom);
     end
-
+    
+    % Loop over all the chromosomes and mutate if needed
+    [rows,~]=size(Chrom);
+    dic = string(zeros(1,rows));
+    frac = rows / 20;
+    for r=1:rows
+        k = join(string(Chrom(r,:)),"");
+        if (diversify && sum(k==dic) > frac) || (rand < MutOpt)
+            if MUT_F == "merge"
+                Chrom(r,:) = inversion(Chrom(r,:));
+                if rand < 0.5
+                    Chrom(r,:) = reciprocal_exchange(Chrom(r,:));
+                end
+            else
+                Chrom(r,:) = feval(MUT_F, Chrom(r,:));
+            end
+            k = join(string(Chrom(r,:)),"");
+        end
+        dic(r) = k;
+    end
+    
+    % Put back to starting representation
+    if Representation==1
+        Chrom=path2adj(Chrom);
+    end
