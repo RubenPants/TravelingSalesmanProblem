@@ -29,7 +29,7 @@ for r=REPRESENTATION
         fprintf("Calculating %s - %s - Progress: ", r, c)
         tic
         for j=1:NUMBER_TESTS
-            run_data("127", r, c, "inversion", d);
+            run_data("127", r, c, "inversion");
         fprintf("#")
         end
         fprintf("\nResult: %s - %s - time (c): %.2f\n\n", r, c, toc / NUMBER_TESTS);
@@ -37,7 +37,7 @@ for r=REPRESENTATION
 end
 
 
-function c = run_data(set, repr, cross, mut, div)
+function c = run_data(set, repr, cross, mut)
     % Load data
     data = load(sprintf('rondrit%s.tsp', set));
     x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
@@ -52,7 +52,6 @@ function c = run_data(set, repr, cross, mut, div)
     data("pr_cross") = 0.2;
     data("mutation") = mut;
     data("pr_mut") = 0.2;
-    data("diversify") = div;
     
     % Run experiment
     c = run_ga(data);
@@ -61,9 +60,9 @@ end
 %{
 Results:
 
-Result: adjacency - xalt_edges - time (s):  14.50
-Result: path - xalt_edges - time (s):       14.33
+Result: adjacency - xalt_edges - time (s):  18.44
+Result: path - xalt_edges - time (s):       18.83
 
-Result: adjacency - heuristic_crossover - time (s): 18.20
-Result: path - heuristic_crossover - time (s):      16.41
+Result: adjacency - heuristic_crossover - time (s): 22.00
+Result: path - heuristic_crossover - time (s):      21.58
 %}
