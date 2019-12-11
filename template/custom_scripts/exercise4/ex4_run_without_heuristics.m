@@ -1,26 +1,6 @@
-
-function ex2_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRESHHOLD, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP,LOCAL_MUT, ah1, ah2, ah3)
-% usage: run_ga(x, y, 
-%               NIND, MAXGEN, NVAR, 
-%               ELITIST, STOP_PERCENTAGE, 
-%               PR_CROSS, PR_MUT, CROSSOVER, 
-%               ah1, ah2, ah3)
-%
-%
-% x, y: coordinates of the cities
-% NIND: number of individuals
-% MAXGEN: maximal number of generations
-% ELITIST: percentage of elite population
-% STOP_PERCENTAGE: percentage of equal fitness (stop criterium)
-% PR_CROSS: probability for crossover
-% PR_MUT: probability for mutation
-% CROSSOVER: the crossover operator
-% calculate distance matrix between each pair of cities
-% ah1, ah2, ah3: axes handles to visualise tsp
-{NIND MAXGEN NVAR ELITIST STOP_PERCENTAGE STOP_TRESHHOLD PR_CROSS PR_MUT CROSSOVER LOCALLOOP}
-
+function best =  run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE, PR_CROSS, PR_MUT, CROSSOVER, LOCALLOOP)
         GGAP = 1 - ELITIST;
-        mean_fits=zeros(1,MAXGEN+1);
+        mean_fits=zeros(1,MAXGEN);
         worst=zeros(1,MAXGEN+1);
         Dist=zeros(NVAR,NVAR);
         for i=1:size(x,1)
@@ -28,14 +8,13 @@ function ex2_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
                 Dist(i,j)=sqrt((x(i)-x(j))^2+(y(i)-y(j))^2);
             end
         end
-       
+        
         % initialize population
         Chrom=zeros(NIND,NVAR);
         for row=1:NIND
         	Chrom(row,:)=path2adj(randperm(NVAR));
             %Chrom(row,:)=randperm(NVAR);
         end
-        
         gen=0;
         
         % number of individuals of equal fitness needed to stop
@@ -45,9 +24,6 @@ function ex2_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
         ObjV = tspfun(Chrom,Dist);
         best=zeros(1,MAXGEN);
         
-        %initialize the stopping criterion
-        stopping_criterion = 0;
-        
         % generational loop
         while gen<MAXGEN
             sObjV=sort(ObjV);
@@ -55,27 +31,21 @@ function ex2_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
         	minimum=best(gen+1);
             mean_fits(gen+1)=mean(ObjV);
             worst(gen+1)=max(ObjV);
-            %%stopping criterion counter
-            stopping_criterion = minimum/gen;
             for t=1:size(ObjV,1)
                 if (ObjV(t)==minimum)
                     break;
-                    
                 end
             end
-            % Visualize progress
-            visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
-
-            %%Stopping Criterion
-            if (stopping_criterion < STOP_TRESHHOLD)
-                disp('Stopping criterion reached');
-                break;
-            end
-        
             
-            % Stop criteria if 95% of candidates equal to minimum
-            % (convergence)
+           
+            % Stop criteria if 95% of candidates equal to minimum 
             if (sObjV(stopN)-sObjV(1) <= 1e-15)
+                %finalMean = mean_fits(gen+1);
+                    while(gen<MAXGEN)
+                        %mean_fits(gen+1)=finalMean;
+                        best(gen+1)=minimum;
+                        gen = gen + 1;
+                    end
                   break;
             end          
             
@@ -87,6 +57,8 @@ function ex2_run_ga(x, y, NIND, MAXGEN, NVAR, ELITIST, STOP_PERCENTAGE,STOP_TRES
             
         	%recombine individuals (crossover)
             SelCh = recombin(CROSSOVER,SelCh,PR_CROSS);
+            
+            % Mutation
             SelCh=mutateTSP('inversion',SelCh,PR_MUT);
             
             %evaluate offspring, call objective function
