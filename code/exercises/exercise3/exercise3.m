@@ -31,18 +31,17 @@ for r=REPRESENTATION
             for d=DIVERSIFY
                 fprintf("Calculating %s - %s - %s - diversify: %d - Progress: ", r, c, m, d)
                 total = zeros(1,length(data_list));
-                tic
                 for i=1:length(data_list)
                     intermediate = zeros(1, 10);
                     for j=1:10
                         output = run_data(data_list(i), r, c, m, d);
                         intermediate(j) = output("minimum");
                     end
-                    total(i) = mean(intermediate) / optima(i);
+                    total(i) = geomean(intermediate) / optima(i);
                     fprintf("#")
                 end
                 performance = mean(total) * 100;  % Percentage of 100 is perfect match
-                fprintf("\nResult: %s - %s - %s - diversify: %d - performance: %.2f - time (s): %.2f\n\n", r, c, m, d, performance, toc);
+                fprintf("\nResult: %s - %s - %s - diversify: %d - performance: %.2f\n\n", r, c, m, d, performance);
             end
         end
     end
@@ -73,21 +72,29 @@ end
 %{
 Results:
 
-Result: adjacency - xalt_edges - reciprocal_exchange - diversify: 0 - performance: 195.68 - time (s): 80.75
-Result: adjacency - xalt_edges - reciprocal_exchange - diversify: 1 - performance: 191.55 - time (s): 83.91
-Result: adjacency - xalt_edges - inversion - diversify: 0 - performance: 185.38 - time (s): 84.88
-Result: adjacency - xalt_edges - inversion - diversify: 1 - performance: 185.13 - time (s): 87.00
-Result: adjacency - heuristic_crossover - reciprocal_exchange - diversify: 0 - performance: 104.14 - time (s): 100.61
-Result: adjacency - heuristic_crossover - reciprocal_exchange - diversify: 1 - performance: 105.19 - time (s): 103.14
-Result: adjacency - heuristic_crossover - inversion - diversify: 0 - performance: 103.01 - time (s): 103.99
-Result: adjacency - heuristic_crossover - inversion - diversify: 1 - performance: 103.36 - time (s): 104.28
+Result: adjacency - xalt_edges - reciprocal_exchange - diversify: 0 - performance: 188.21
+Result: adjacency - xalt_edges - reciprocal_exchange - diversify: 1 - performance: 189.18
+Result: adjacency - xalt_edges - inversion - diversify: 0 - performance: 183.15
+Result: adjacency - xalt_edges - inversion - diversify: 1 - performance: 184.60
+Result: adjacency - xalt_edges - merge - diversify: 0 - performance: 189.04
+Result: adjacency - xalt_edges - merge - diversify: 1 - performance: 188.82
+Result: adjacency - heuristic_crossover - reciprocal_exchange - diversify: 0 - performance: 104.11
+Result: adjacency - heuristic_crossover - reciprocal_exchange - diversify: 1 - performance: 104.13
+Result: adjacency - heuristic_crossover - inversion - diversify: 0 - performance: 102.75
+Result: adjacency - heuristic_crossover - inversion - diversify: 1 - performance: 103.02
+Result: adjacency - heuristic_crossover - merge - diversify: 0 - performance: 103.18
+Result: adjacency - heuristic_crossover - merge - diversify: 1 - performance: 103.12
 
-Result: path - xalt_edges - reciprocal_exchange - diversify: 0 - performance: 194.84 - time (s): 86.15
-Result: path - xalt_edges - reciprocal_exchange - diversify: 1 - performance: 191.34 - time (s): 85.91
-Result: path - xalt_edges - inversion - diversify: 0 - performance: 184.44 - time (s): 85.26
-Result: path - xalt_edges - inversion - diversify: 1 - performance: 185.73 - time (s): 87.40
-Result: path - heuristic_crossover - reciprocal_exchange - diversify: 0 - performance: 104.26 - time (s): 94.87
-Result: path - heuristic_crossover - reciprocal_exchange - diversify: 1 - performance: 105.09 - time (s): 96.92
-Result: path - heuristic_crossover - inversion - diversify: 0 - performance: 103.10 - time (s): 98.92
-Result: path - heuristic_crossover - inversion - diversify: 1 - performance: 103.79 - time (s): 96.79
+Result: path - xalt_edges - reciprocal_exchange - diversify: 0 - performance: 188.95
+Result: path - xalt_edges - reciprocal_exchange - diversify: 1 - performance: 189.63
+Result: path - xalt_edges - inversion - diversify: 0 - performance: 184.33
+Result: path - xalt_edges - inversion - diversify: 1 - performance: 184.75
+Result: path - xalt_edges - merge - diversify: 0 - performance: 189.61
+Result: path - xalt_edges - merge - diversify: 1 - performance: 188.86
+Result: path - heuristic_crossover - reciprocal_exchange - diversify: 0 - performance: 105.47
+Result: path - heuristic_crossover - reciprocal_exchange - diversify: 1 - performance: 105.76
+Result: path - heuristic_crossover - inversion - diversify: 0 - performance: 103.92
+Result: path - heuristic_crossover - inversion - diversify: 1 - performance: 103.83
+Result: path - heuristic_crossover - merge - diversify: 0 - performance: 104.56
+Result: path - heuristic_crossover - merge - diversify: 1 - performance: 104.63
 %}
