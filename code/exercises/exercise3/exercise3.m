@@ -60,9 +60,10 @@ function c = run_data(set, repr, cross, mut)
     data("maxgen") = 100;
     data("representation") = repr;
     data("crossover") = cross;
-    data("pr_cross") = 0.4;
+    data("pr_cross") = 0.2;
     data("mutation") = mut;
     data("pr_mut") = 0.4;
+    data("diversify") = true;
     
     % Run experiment
     c = run_ga(data);
@@ -72,13 +73,41 @@ end
 Results:
 
 --> pr_cross=0.2; pr_mut=0.2;
-Result: adjacency - xalt_edges - reciprocal_exchange - performance: 190.84
 Result: adjacency - xalt_edges - inversion - performance: 187.93
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 190.84
 Result: adjacency - xalt_edges - scramble - performance: 210.85
 
-Result: path - heuristic_crossover - reciprocal_exchange - performance: 106.24
 Result: path - heuristic_crossover - inversion - performance: 105.10
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 106.24
 Result: path - heuristic_crossover - scramble - performance: 107.08
 
+
+--> pr_cross=0.2; pr_mut=0.4;
+Result: adjacency - xalt_edges - inversion - performance: 184.46
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 192.31
+Result: adjacency - xalt_edges - scramble - performance: 222.37
+
+Result: path - heuristic_crossover - inversion - performance: 103.52
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 105.44
+Result: path - heuristic_crossover - scramble - performance: 105.89
+
+
+--> pr_cross=0.4; pr_mut=0.2;
+Result: adjacency - xalt_edges - inversion - performance: 188.03
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 190.81
+Result: adjacency - xalt_edges - scramble - performance: 209.07
+
+Result: path - heuristic_crossover - inversion - performance: 102.75
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 103.58
+Result: path - heuristic_crossover - scramble - performance: 103.68
+
+
 --> pr_cross=0.4; pr_mut=0.4;
+Result: adjacency - xalt_edges - inversion - performance: 191.29
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 198.10
+Result: adjacency - xalt_edges - scramble - performance: 221.52
+
+Result: path - heuristic_crossover - inversion - performance: 102.33
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 103.54
+Result: path - heuristic_crossover - scramble - performance: 103.52
 %}
