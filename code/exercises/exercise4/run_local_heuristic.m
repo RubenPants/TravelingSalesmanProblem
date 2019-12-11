@@ -1,6 +1,7 @@
 
 
 % Add paths to other files
+addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code'
 addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code\datasets'
 
 data = load(['rondrit016.tsp']);
@@ -12,4 +13,3 @@ data = containers.Map;
     data("heu_localMUT")=0.3;
     data("heu_threefour")=1;
 result = run_ga(data);
-result('best')
