@@ -36,14 +36,7 @@ function Chrom = mutateTSP(MUT_F, Chrom, MutOpt, Representation, diversify)
     for r=1:rows
         k = join(string(Chrom(r,:)),"");
         if (diversify && sum(k==dic) > frac) || (rand < MutOpt)
-            if MUT_F == "merge"
-                Chrom(r,:) = inversion(Chrom(r,:));
-                if rand < 0.5
-                    Chrom(r,:) = reciprocal_exchange(Chrom(r,:));
-                end
-            else
-                Chrom(r,:) = feval(MUT_F, Chrom(r,:));
-            end
+            Chrom(r,:) = feval(MUT_F, Chrom(r,:));
             k = join(string(Chrom(r,:)),"");
         end
         dic(r) = k;

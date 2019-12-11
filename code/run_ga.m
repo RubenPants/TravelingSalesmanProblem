@@ -48,8 +48,8 @@ if any(strcmp(keys(data), "loop_detect")); LOCALLOOP=data("loop_detect"); else; 
 if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; STOP_PERC = 0; end
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
 if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation'); else; STOP_STAG = 0; end
-if any(strcmp(keys(data), "print")); PRINT = true; else; PRINT= false; end
-if any(strcmp(keys(data), "diversify")); DIVERSIFY = true; else; DIVERSIFY = false; end
+if any(strcmp(keys(data), "print")); PRINT = data('print'); else; PRINT= false; end
+if any(strcmp(keys(data), "diversify")); DIVERSIFY = data('diversify'); else; DIVERSIFY = false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if VISUAL
     temp = data("visual");
