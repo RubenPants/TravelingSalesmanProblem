@@ -54,8 +54,8 @@ if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation
 if any(strcmp(keys(data), "print")); PRINT = data('print'); else; PRINT= false; end
 if any(strcmp(keys(data), "diversify")); DIVERSIFY = data('diversify'); else; DIVERSIFY = false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
-if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR = false; end
-if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.3; end
+if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR = "off"; end
+if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.2; end
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
@@ -171,7 +171,7 @@ while gen < MAXGEN
     SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID, DIVERSIFY);  
     
     %Local heuristics
-    if HEUR
+    if HEUR ~= "off"
         SelCh = local_heuristic(HEUR, SelCh, Dist, REPR_ID, HEUR_PR);
     end
 

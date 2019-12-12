@@ -10,7 +10,7 @@ function Chrom = local_heuristic(HEUR_F, Chrom, Dist, Representation, MutPr)
         Chrom = adj2path(Chrom);
     end
     
-    for i=1:size(Chrom,2)
+    for i=1:size(Chrom,1)
         switch HEUR_F
             case "2-opt"
                 Chrom(i,:) = two_opt(Chrom(i,:), Dist);

@@ -17,7 +17,7 @@ the real optimum.
 data_list = ["016", "018", "023", "025", "048", "050", "051", "067", "070", "100", "127"];
 optima = load('rondrit_optima.tsp');
 
-HEURISTIC = [false, "inversion", "2-opt", "both"];
+HEURISTIC = ["off", "inversion", "2-opt", "both"];
 
 % Run the experiment
 for h=HEURISTIC
@@ -26,7 +26,7 @@ for h=HEURISTIC
     for i=1:length(data_list)
         intermediate = zeros(1, 10);
         for j=1:10
-            output = run_data(data_list(i), "path", "heuristic_crossover", "inversion");
+            output = run_data(data_list(i), h);
             intermediate(j) = output("minimum");
         end
         total(i) = geomean(intermediate) / optima(i);
@@ -36,7 +36,7 @@ for h=HEURISTIC
     fprintf("\nResult: %s - performance: %.2f\n\n", h, performance);
 end
 
-function c = run_data(set, repr, cross, mut)
+function c = run_data(set, h)
     % Load data
     data = load(sprintf('rondrit%s.tsp', set));
     x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
@@ -46,12 +46,13 @@ function c = run_data(set, repr, cross, mut)
     data("x") = x;
     data("y") = y;
     data("maxgen") = 100;
-    data("representation") = repr;
-    data("crossover") = cross;
+    data("representation") = "path";
+    data("crossover") = "heuristic_crossover";
     data("pr_cross") = 0.2;
-    data("mutation") = mut;
-    data("pr_mut") = 0.4;
+    data("mutation") = "inversion";
+    data("pr_mut") = 0.2;
     data("diversify") = true;
+    data("local_heur") = h;
     
     % Run experiment
     c = run_ga(data);
@@ -60,4 +61,5 @@ end
 %{
 Results:
 
+Result:   - performance: 103.98
 %}

@@ -13,7 +13,7 @@ MUTATION = 'inversion';         % default mutation operator
 PR_MUT=.20;                     % probability of mutation
 LOCALLOOP=false;                % local loop removal
 DIVERSIFY=false;                % enforce diversity in the population
-LOCAL_HEUR=false;               % local heursitic method
+LOCAL_HEUR="off";               % local heursitic method
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % load the data sets
@@ -183,11 +183,13 @@ set(fh,'Visible','on');
         value = heuristics(heur_value);
         switch value{1}
             case '2-opt'
-                LOCAL_HEUR = '2-opt';
+                LOCAL_HEUR = "2-opt";
             case 'inversion'
-                LOCAL_HEUR = 'inversion';     
+                LOCAL_HEUR = "inversion";     
             case 'both'
-                LOCAL_HEUR = 'both';              
+                LOCAL_HEUR = "both";   
+            otherwise
+                LOCAL_HEUR = "off";
         end
     end
     function runbutton_Callback(~,~)
