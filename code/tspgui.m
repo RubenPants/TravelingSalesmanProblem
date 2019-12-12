@@ -11,8 +11,9 @@ CROSSOVER = 'xalt_edges';       % default crossover operator
 PR_CROSS=.20;                   % probability of crossover
 MUTATION = 'inversion';         % default mutation operator
 PR_MUT=.20;                     % probability of mutation
-LOCALLOOP=0;                    % local loop removal
-DIVERSIFY=0;                    % enforce diversity in the population
+LOCALLOOP=false;                % local loop removal
+DIVERSIFY=false;                % enforce diversity in the population
+LOCAL_HEUR=false;               % local heursitic method
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % load the data sets
@@ -78,7 +79,7 @@ row = new_row(row);
 uicontrol(ph,'Style','popupmenu', 'String',{'adjacency', 'path'}, 'Value',1,'Position',[20 row 100 20],'Callback',@representation_Callback);
 uicontrol(ph,'Style','popupmenu', 'String',{'AEX', 'HGreX'}, 'Value',1,'Position',[130 row 100 20],'Callback',@crossover_Callback);
 uicontrol(ph,'Style','popupmenu', 'String',{'inversion', 'swap', 'scramble'}, 'Value',1,'Position',[240 row 100 20],'Callback',@mutation_Callback);
-uicontrol(ph,'Style','popupmenu', 'String',{'TODO'}, 'Value',1,'Position',[350 row 100 20],'Callback',@heuristic_Callback);  % TODO: Sieben, voeg mogelijkheden toe binnen de '{...}'
+uicontrol(ph,'Style','popupmenu', 'String',{'off', '2-opt', 'inversion'}, 'Value',1,'Position',[350 row 100 20],'Callback',@heuristic_Callback);  % TODO: Sieben, voeg mogelijkheden toe binnen de '{...}'
 row = new_row(row);
 uicontrol(ph,'Style','pushbutton','String','START','Position',[20 row 430 30],'Callback',@runbutton_Callback);
 
@@ -177,7 +178,15 @@ set(fh,'Visible','on');
         end
     end
     function heuristic_Callback(hObject,~)
-        % TODO: Sieben
+        heur_value = get(hObject,'Value');
+        heuristics = get(hObject,'String');
+        value = heuristics(heur_value);
+        switch value{1}
+            case '2-opt'
+                LOCAL_HEUR = '2-opt';
+            case 'inversion'
+                LOCAL_HEUR = 'inversion';              
+        end
     end
     function runbutton_Callback(~,~)
         %set(ncitiesslider, 'Visible','off');
@@ -200,6 +209,7 @@ set(fh,'Visible','on');
         data("pr_mut") = PR_MUT;
         data("loop_detect") = LOCALLOOP;
         data("diversify") = DIVERSIFY;
+        data("local_heur") = LOCAL_HEUR;
         data("stop_perc") = STOP_PERCENTAGE;
         visual = containers.Map;
         visual("ah1") = ah1;

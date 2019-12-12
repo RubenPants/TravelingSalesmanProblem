@@ -54,14 +54,13 @@ if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation
 if any(strcmp(keys(data), "print")); PRINT = data('print'); else; PRINT= false; end
 if any(strcmp(keys(data), "diversify")); DIVERSIFY = data('diversify'); else; DIVERSIFY = false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
-if any(strcmp(keys(data), "heu_threefour")); THREEFOUR = true; else; THREEFOUR = false; end
-if any(strcmp(keys(data), "heu_localMUT")); LOCALMUT = data("heu_localMUT"); else; LOCALMUT = 0; end
+if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR = false; end
+if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.3; end
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
     ah2 = temp("ah2");
     ah3 = temp("ah3");
-    if MAXGEN == Inf; MAXGEN = 9999; end
 end
 
 % Fill in other used parameters
@@ -85,6 +84,7 @@ if VISUAL || PRINT
     fprintf("\tLoop-detection enabled: %d\n", LOCALLOOP)
     fprintf("\tStop percentage: %.2f\n", STOP_PERC)
     fprintf("\tStop threshold: %.2f\n", STOP_THR)
+    fprintf("\tHeuristic: %s\n", HEUR)
 end
 
 % Initialize the algorithm
@@ -178,11 +178,8 @@ while gen < MAXGEN
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
     
     %Local heuristics
-    if THREEFOUR       
-        Chrom = four_vertices_three_edges(Chrom,Dist,NVAR,NIND, REPR_ID);           
-    end
-    if LOCALMUT
-        Chrom = single_sample_mutation(Chrom,Dist,NVAR,NIND,LOCALMUT, REPR_ID);
+    if HEUR
+        Chrom = local_heuristic(HEUR, Chrom, Dist, REPR_ID, HEUR_PR);
     end
     
     % Increment generation counter
