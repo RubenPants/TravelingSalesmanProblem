@@ -4,7 +4,7 @@ addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\code'
 addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\code\datasets'
 
 % Load all the datasets
-data = ["050", "051", "067", "070", "100", "127"];
+data = ["051", "067", "070", "100", "127"];
 
 for d=data
     data = load(sprintf('rondrit%s.tsp', d));
@@ -21,6 +21,9 @@ for d=data
         data("pr_cross") = 0.1;
         data("pr_mut") = 0.4;
         data("loop_detect") = true;
+        data("diversify") = true;
+        data("crossover") = 'heuristic_crossover';
+        data("mutation") = 'inversion';
         c = run_ga(data);
         dist(i) = c("minimum");
         fprintf("#")

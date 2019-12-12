@@ -51,7 +51,8 @@ if any(strcmp(keys(data), "loop_detect")); LOCALLOOP=data("loop_detect"); else; 
 if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; STOP_PERC = 0; end
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
 if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation'); else; STOP_STAG = 0; end
-if any(strcmp(keys(data), "print")); PRINT = true; else; PRINT= false; end
+if any(strcmp(keys(data), "print")); PRINT = data('print'); else; PRINT= false; end
+if any(strcmp(keys(data), "diversify")); DIVERSIFY = data('diversify'); else; DIVERSIFY = false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if any(strcmp(keys(data), "heu_threefour")); THREEFOUR = true; else; THREEFOUR = false; end
 if any(strcmp(keys(data), "heu_localMUT")); LOCALMUT = data("heu_localMUT"); else; LOCALMUT = 0; end
@@ -167,7 +168,7 @@ while gen < MAXGEN
     SelCh = recombin(CROSSOVER, SelCh, REPR_ID, Dist, PR_CROSS);
 
     % Mutation
-    SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID);
+    SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID, DIVERSIFY);  
 
     % Evaluate offspring, call objective function
     ObjVSel = tspfun(SelCh, Dist, REPR_ID);

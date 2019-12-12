@@ -11,39 +11,42 @@ addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\code\dataset
 
 % Load all the datasets
 data_list = ["016", "018", "023", "025", "048", "050", "051", "067", "070", "100", "127"];
-optima = [2.828427, 3.128609, 3.138306, 3.349954, 2.927273, 3.242449, 4.017236, 4.371113, 5.828265, 6.235421, 4.450222, 6.999226, 8.213131, 6.151962];
+optima = load('rondrit_optima.tsp');
+
 % Possible representations
-REPRESENTATION = ["adjacency", "path"];
+% REPRESENTATION = ["adjacency", "path"];
 
 % Possible crossover operators
-CROSSOVER = ["xalt_edges"]; %, "order", "sequential_constructive"];
+% CROSSOVER = ["xalt_edges", "heuristic_crossover"];
 
 % Possible mutation operators
-MUTATION = ["reciprocal_exchange", "inversion"];
+MUTATION = ["reciprocal_exchange", "inversion", "scramble"];
 
 % Run the experiment
-for r=REPRESENTATION
-    for c=CROSSOVER
-        for m=MUTATION
-            fprintf("Calculating %s - %s - %s\n", r, c, m)
-            total = zeros(1,length(data_list));
-            for i=1:length(data_list)
-                fprintf("\t%s - ", data_list(i))
-                intermediate = zeros(1, 10);
-                for j=1:10
-                    output = run_data(data_list(i), r, c, m);
-                    intermediate(j) = output("minimum");
-                    fprintf("#")
-                end
-                total(i) = mean(intermediate) / optima(i);
-                fprintf("\n")
+for i=1:2
+    if i == 1
+        r = "adjacency";
+        c = "xalt_edges";
+    else
+        r = "path";
+        c = "heuristic_crossover";
+    end
+    for m=MUTATION
+        fprintf("Calculating %s - %s - %s - Progress: ", r, c, m)
+        total = zeros(1,length(data_list));
+        for i=1:length(data_list)
+            intermediate = zeros(1, 10);
+            for j=1:10
+                output = run_data(data_list(i), r, c, m);
+                intermediate(j) = output("minimum");
             end
-            performance = mean(total) * 100;  % Percentage of 100 is perfect match
-            fprintf("Result: %s - %s - %s - performance: %.2f \n\n", r, c, m, performance);
+            total(i) = geomean(intermediate) / optima(i);
+            fprintf("#")
         end
+        performance = mean(total) * 100;  % Percentage of 100 is perfect match
+        fprintf("\nResult: %s - %s - %s - performance: %.2f\n\n", r, c, m, performance);
     end
 end
-
 
 function c = run_data(set, repr, cross, mut)
     % Load data
@@ -54,13 +57,57 @@ function c = run_data(set, repr, cross, mut)
     data = containers.Map;
     data("x") = x;
     data("y") = y;
-    data("maxgen") = 500;
+    data("maxgen") = 100;
     data("representation") = repr;
     data("crossover") = cross;
     data("pr_cross") = 0.2;
     data("mutation") = mut;
     data("pr_mut") = 0.4;
+    data("diversify") = true;
     
     % Run experiment
     c = run_ga(data);
 end
+
+%{
+Results:
+
+--> pr_cross=0.2; pr_mut=0.2;
+Result: adjacency - xalt_edges - inversion - performance: 187.93
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 190.84
+Result: adjacency - xalt_edges - scramble - performance: 210.85
+
+Result: path - heuristic_crossover - inversion - performance: 105.10
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 106.24
+Result: path - heuristic_crossover - scramble - performance: 107.08
+
+
+--> pr_cross=0.2; pr_mut=0.4;
+Result: adjacency - xalt_edges - inversion - performance: 184.46
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 192.31
+Result: adjacency - xalt_edges - scramble - performance: 222.37
+
+Result: path - heuristic_crossover - inversion - performance: 103.52
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 105.44
+Result: path - heuristic_crossover - scramble - performance: 105.89
+
+
+--> pr_cross=0.4; pr_mut=0.2;
+Result: adjacency - xalt_edges - inversion - performance: 188.03
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 190.81
+Result: adjacency - xalt_edges - scramble - performance: 209.07
+
+Result: path - heuristic_crossover - inversion - performance: 102.75
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 103.58
+Result: path - heuristic_crossover - scramble - performance: 103.68
+
+
+--> pr_cross=0.4; pr_mut=0.4;
+Result: adjacency - xalt_edges - inversion - performance: 191.29
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 198.10
+Result: adjacency - xalt_edges - scramble - performance: 221.52
+
+Result: path - heuristic_crossover - inversion - performance: 102.33
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 103.54
+Result: path - heuristic_crossover - scramble - performance: 103.52
+%}

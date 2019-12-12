@@ -14,22 +14,35 @@
 %   Representation  - integer specifying which encoding is used
 %                       1 : adjacency representation
 %                       2 : path representation
+%   diversify       - integer specifying if diversity must be enforced
+%                       0: No
+%                       1: Yes
 %
 % Output parameter:
 %    NewChrom  - Matrix containing the chromosomes of the population
 %                after mutation in the same format as OldChrom.
 
 
-function NewChrom = mutateTSP(MUT_F, OldChrom, MutOpt, Representation)
-    % Check parameter consistency
-    if nargin < 2,  error('Not enough input parameters'); end
-
-    [rows,~]=size(OldChrom);
-    NewChrom=OldChrom;
-
-    for r=1:rows
-        if rand < MutOpt
-            NewChrom(r,:) = feval(MUT_F, OldChrom(r,:), Representation);
-        end
+function Chrom = mutateTSP(MUT_F, Chrom, MutOpt, Representation, diversify)
+    % Ensure path-representation
+    if Representation==1 
+        Chrom=adj2path(Chrom);
     end
-
+    
+    % Loop over all the chromosomes and mutate if needed
+    [rows,~]=size(Chrom);
+    dic = string(zeros(1,rows));
+    frac = rows / 20;
+    for r=1:rows
+        k = join(string(Chrom(r,:)),"");
+        if (diversify && sum(k==dic) > frac) || (rand < MutOpt)
+            Chrom(r,:) = feval(MUT_F, Chrom(r,:));
+            k = join(string(Chrom(r,:)),"");
+        end
+        dic(r) = k;
+    end
+    
+    % Put back to starting representation
+    if Representation==1
+        Chrom=path2adj(Chrom);
+    end

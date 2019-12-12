@@ -42,7 +42,7 @@ for size=[12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512]
         total(i) = container('generation');
         fprintf("#");
     end
-    fprintf("\n --> Size: %d - Time (s): %f - Number of generations needed: %d \n", size, toc/AVG_COUNT, mean(total));
+    fprintf("\n --> Size: %d - Time (s): %f - Number of generations needed: %d \n", size, toc/AVG_COUNT, geomean(total));
 end
 
 %{
