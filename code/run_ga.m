@@ -56,6 +56,8 @@ if any(strcmp(keys(data), "diversify")); DIVERSIFY = true; else; DIVERSIFY = fal
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if any(strcmp(keys(data), "heu_threefour")); THREEFOUR = true; else; THREEFOUR = false; end
 if any(strcmp(keys(data), "heu_localMUT")); LOCALMUT = data("heu_localMUT"); else; LOCALMUT = 0; end
+if any(strcmp(keys(data), "selection")); SELECTION = data("selection"); else; SELECTION = "ranking"; end
+
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
@@ -117,7 +119,6 @@ end
 
 % evaluate initial population
 ObjV = tspfun(Chrom, Dist, REPR_ID);
-
 % generational loop
 gen=0;
 while gen < MAXGEN
@@ -158,16 +159,25 @@ while gen < MAXGEN
         break    
     end
 
-    %assign fitness values to entire population
-    FitnV=ranking(ObjV);
-
-    %select individuals for breeding
-    SelCh=select('sus', Chrom, FitnV, GGAP);
+    
+    if SELECTION == "ranking"
+        FitnV=ranking(ObjV);
+    elseif SELECTION == "scaling"
+        FitnV=scaling(ObjV);   
+    end
+    
+    if SELECTION=="tournament"
+        SelCh = tournament_selection(ObjV,Chrom);
+    else
+        SelCh=select('sus', Chrom, FitnV, GGAP);
+    end
+    disp("SELCH");
+    size(SelCh)
 
     %recombine individuals (crossover)
     SelCh = recombin(CROSSOVER, SelCh, REPR_ID, Dist, PR_CROSS);
 
-    % Mutation
+    % Mutation --> ex7c
     SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID, DIVERSIFY);  
 
     % Evaluate offspring, call objective function
