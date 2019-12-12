@@ -61,5 +61,8 @@ end
 %{
 Results:
 
-Result:   - performance: 103.98
+Result: off - performance: 104.02
+Result: inversion - performance: 103.61
+Result: 2-opt - performance: 102.42
+Result: both - performance: 102.32
 %}
