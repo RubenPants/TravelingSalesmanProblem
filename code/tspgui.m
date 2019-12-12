@@ -79,7 +79,7 @@ row = new_row(row);
 uicontrol(ph,'Style','popupmenu', 'String',{'adjacency', 'path'}, 'Value',1,'Position',[20 row 100 20],'Callback',@representation_Callback);
 uicontrol(ph,'Style','popupmenu', 'String',{'AEX', 'HGreX'}, 'Value',1,'Position',[130 row 100 20],'Callback',@crossover_Callback);
 uicontrol(ph,'Style','popupmenu', 'String',{'inversion', 'swap', 'scramble'}, 'Value',1,'Position',[240 row 100 20],'Callback',@mutation_Callback);
-uicontrol(ph,'Style','popupmenu', 'String',{'off', '2-opt', 'inversion'}, 'Value',1,'Position',[350 row 100 20],'Callback',@heuristic_Callback);  % TODO: Sieben, voeg mogelijkheden toe binnen de '{...}'
+uicontrol(ph,'Style','popupmenu', 'String',{'off', '2-opt', 'inversion', 'both'}, 'Value',1,'Position',[350 row 100 20],'Callback',@heuristic_Callback);
 row = new_row(row);
 uicontrol(ph,'Style','pushbutton','String','START','Position',[20 row 430 30],'Callback',@runbutton_Callback);
 
@@ -185,7 +185,9 @@ set(fh,'Visible','on');
             case '2-opt'
                 LOCAL_HEUR = '2-opt';
             case 'inversion'
-                LOCAL_HEUR = 'inversion';              
+                LOCAL_HEUR = 'inversion';     
+            case 'both'
+                LOCAL_HEUR = 'both';              
         end
     end
     function runbutton_Callback(~,~)

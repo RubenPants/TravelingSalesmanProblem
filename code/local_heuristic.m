@@ -11,20 +11,25 @@ function Chrom = local_heuristic(HEUR_F, Chrom, Dist, Representation, MutPr)
     end
     
     for i=1:size(Chrom,2)
-        % Do the local heuristic
-        if HEUR_F == "2-opt"
-            Chrom(i,:) = two_opt(Chrom(i,:), Dist);
-        elseif HEUR_F == "inversion"
-            if rand < MutPr
-                NewChrom = inversion(Chrom(i,:));
-                if tspfun(NewChrom, Dist, 2) < tspfun(Chrom(i,:), Dist, 2)
-                    Chrom(i,:) = NewChrom;
+        switch HEUR_F
+            case "2-opt"
+                Chrom(i,:) = two_opt(Chrom(i,:), Dist);
+            case "inversion"
+                if rand < MutPr
+                    NewChrom = inversion(Chrom(i,:));
+                    if tspfun(NewChrom, Dist, 2) < tspfun(Chrom(i,:), Dist, 2)
+                        Chrom(i,:) = NewChrom;
+                    end
                 end
-            end
-        else
-            ME = MException("Requested local heuristic is not supported!");
-            throw(ME)
-        end        
+            case "both"
+                Chrom(i,:) = two_opt(Chrom(i,:), Dist);
+                if rand < MutPr
+                    NewChrom = inversion(Chrom(i,:));
+                    if tspfun(NewChrom, Dist, 2) < tspfun(Chrom(i,:), Dist, 2)
+                        Chrom(i,:) = NewChrom;
+                    end
+                end
+        end
     end
     
     if Representation == 1

@@ -169,6 +169,11 @@ while gen < MAXGEN
 
     % Mutation
     SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID, DIVERSIFY);  
+    
+    %Local heuristics
+    if HEUR
+        SelCh = local_heuristic(HEUR, SelCh, Dist, REPR_ID, HEUR_PR);
+    end
 
     % Evaluate offspring, call objective function
     ObjVSel = tspfun(SelCh, Dist, REPR_ID);
@@ -176,11 +181,6 @@ while gen < MAXGEN
     % Reinsert offspring into population
     [Chrom, ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
-    
-    %Local heuristics
-    if HEUR
-        Chrom = local_heuristic(HEUR, Chrom, Dist, REPR_ID, HEUR_PR);
-    end
     
     % Increment generation counter
     gen=gen+1;            
