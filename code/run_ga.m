@@ -167,7 +167,7 @@ while gen < MAXGEN
     end
     
     if SELECTION=="tournament"
-        SelCh = tournament_selection(ObjV,Chrom);
+        SelCh = tournament_selection(ObjV,Chrom,floor(0.5*NIND));
     else
         SelCh=select('sus', Chrom, FitnV, GGAP);
     end

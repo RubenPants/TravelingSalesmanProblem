@@ -25,9 +25,10 @@
 % History:    10.03.94     file created
 
 function SelCh = select(SEL_F, Chrom, FitnV, GGAP, SUBPOP);
-
 % Check parameter consistency
-   if nargin < 3, error('Not enough input parameter'); end
+
+   if nargin < 3, error('Not enough input parameter');
+   end
 
    % Identify the population size (Nind)
    [NindCh,Nvar] = size(Chrom);
