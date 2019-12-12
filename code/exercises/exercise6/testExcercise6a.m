@@ -12,15 +12,15 @@ y=data(:,2)/max([data(:,1);data(:,2)]);
 dataWithRanking = containers.Map;
     dataWithRanking("x") = x;
     dataWithRanking("y") = y;
-    dataWithRanking("selection")="ranking";
+    dataWithRanking("parent_selection")="ranking";
 dataWithScaling = containers.Map;
     dataWithScaling("x") = x;
     dataWithScaling("y") = y;
-    dataWithScaling("selection") = "scaling";
+    dataWithScaling("parent_selection") = "scaling";
 dataWithTournament = containers.Map;
     dataWithTournament("x") = x;
     dataWithTournament("y") = y;
-    dataWithTournament("selection") = "tournament";
+    dataWithTournament("parent_selection") = "tournament";
 
 wait = waitbar(0,'Please wait for senpai to notice me...');
 resultScaling = run_ga(dataWithScaling);
@@ -73,5 +73,5 @@ tournamentWorst = tournamentWorst/NUMBER_OF_TESTS;
 
 
 
-plot(x_values,tournamentBest,'g',x_values,rankingBest,'g--',x_values,scalingBest,'g:',x_values,tournamentMean,'b',x_values,rankingMean,'b--',x_values,scalingMean,'b:',x_values,tournamentWorst,'m',x_values,rankingWorst,'m--',x_values,scalingWorst,'m:')
+plot(x_values,tournamentBest,'r',x_values,rankingBest,'r--',x_values,scalingBest,'r:',x_values,tournamentMean,'b',x_values,rankingMean,'b--',x_values,scalingMean,'b:',x_values,tournamentWorst,'g',x_values,rankingWorst,'g--',x_values,scalingWorst,'g:')
     

@@ -56,7 +56,9 @@ if any(strcmp(keys(data), "diversify")); DIVERSIFY = true; else; DIVERSIFY = fal
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if any(strcmp(keys(data), "heu_threefour")); THREEFOUR = true; else; THREEFOUR = false; end
 if any(strcmp(keys(data), "heu_localMUT")); LOCALMUT = data("heu_localMUT"); else; LOCALMUT = 0; end
-if any(strcmp(keys(data), "selection")); SELECTION = data("selection"); else; SELECTION = "ranking"; end
+if any(strcmp(keys(data), "parent_selection")); PARENT_SELECTION = data("parent_selection"); else; PARENT_SELECTION = "ranking"; end
+if any(strcmp(keys(data), "survivor_selection")); SURVIVOR_SELECTION = data("survivor_selection"); else; SURVIVOR_SELECTION = "elitism"; end
+if any(strcmp(keys(data), "crowding")); CROWDING = data("crowding"); else; CROWDING = 0; end
 
 if VISUAL
     temp = data("visual");
@@ -160,31 +162,43 @@ while gen < MAXGEN
     end
 
     
-    if SELECTION == "ranking"
+    if PARENT_SELECTION == "ranking"
         FitnV=ranking(ObjV);
-    elseif SELECTION == "scaling"
+    elseif PARENT_SELECTION == "scaling"
         FitnV=scaling(ObjV);   
     end
     
-    if SELECTION=="tournament"
-        SelCh = tournament_selection(ObjV,Chrom,floor(0.5*NIND));
-    else
-        SelCh=select('sus', Chrom, FitnV, GGAP);
+    if PARENT_SELECTION=="tournament"
+        ParentSelCh = tournament_selection(ObjV,Chrom,floor(GGAP*NIND));
+    else 
+        ParentSelCh=select('sus', Chrom, FitnV, GGAP);
     end
-    disp("SELCH");
-    size(SelCh)
 
+    ObjVSelParents = tspfun(ParentSelCh, Dist, REPR_ID);
     %recombine individuals (crossover)
-    SelCh = recombin(CROSSOVER, SelCh, REPR_ID, Dist, PR_CROSS);
-
-    % Mutation --> ex7c
-    SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID, DIVERSIFY);  
+    %each pair of children is made by the two parents on the same indices
+    %-> the first two children are made by the first two parents
+    ChildSelCh = recombin(CROSSOVER, ParentSelCh, REPR_ID, Dist, PR_CROSS); 
+    
+    % Mutation
+    ChildSelCh=mutateTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID, DIVERSIFY);  
 
     % Evaluate offspring, call objective function
-    ObjVSel = tspfun(SelCh, Dist, REPR_ID);
+    ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
 
+   %keeping diversity -> crowding
+   if CROWDING ==1
+    ChildSelCh = crowding(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren);
+     % Evaluate offspring after crowding, call objective function
+    ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
+   end
+   
     % Reinsert offspring into population
-    [Chrom, ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
+    if SURVIVOR_SELECTION == "elitism"
+        [Chrom, ObjV]=reins(Chrom,ChildSelCh,1,1,ObjV,ObjVSelChildren);
+    elseif SURVIVOR_SELECTION=="round_robin"
+        [Chrom, ObjV] = round_robin(ChildSelCh, Chrom, ObjV, ObjVSelChildren);
+    end
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
     
     %Local heuristics
