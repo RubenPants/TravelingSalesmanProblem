@@ -185,5 +185,5 @@ Result: adjacency - xalt_edges - scramble - performance: 221.52
 
 Result: path - heuristic_crossover - inversion - performance: 102.33
 Result: path - heuristic_crossover - reciprocal_exchange - performance: 103.54
-Result: path - heuristic_crossover - scramble - performance: 103.52
+Result: path - heuristic_crossover - scramble - performance: 103.62
 %}

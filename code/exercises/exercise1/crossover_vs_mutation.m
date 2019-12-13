@@ -10,7 +10,7 @@ happen again, which is very time-consuming.
 %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-AVG_COUNT=10;               % No. of times the same configuration is played
+AVG_COUNT=20;               % No. of times the same configuration is played
 CALCULATE_NEW=false;        % Calculate a new Avg array (time consuming)
 NCITIES=40;                 % No. of cities
 STEPS=20;                   % 1/STEPS = STEP_SIZE (mutation, crossover)

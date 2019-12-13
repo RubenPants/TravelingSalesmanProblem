@@ -34,10 +34,10 @@ for i=1:length(data_list)
     data("maxgen") = MAXGEN;
     data("stop_stagnation") = STAGNATION;
     
-    % Run experiment 10 times and average results
+    % Run experiment 20 times and average results
     intermediate_dist = zeros(1, 10);
     intermediate_gen = zeros(1, 10);
-    for j=1:10
+    for j=1:20
         output = run_ga(data);
         intermediate_dist(j) = output("minimum");
         intermediate_gen(j) = output("generation");
