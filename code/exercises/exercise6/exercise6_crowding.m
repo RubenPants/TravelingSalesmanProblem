@@ -95,8 +95,7 @@ function c = run_data(set, c)
     data("pr_cross") = 0.2;
     data("mutation") = "inversion";
     data("pr_mut") = 0.2;
-    data("diversify") = true;
-    data("crowding") = c;
+    data("diversify") = c;
     
     % Run experiment
     c = run_ga(data);

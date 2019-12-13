@@ -37,8 +37,9 @@ for i=1:2:NindP
     cdist2 = ObjVSelChildren(i+1,1);
     
     if p1c1+p2c2 < p1c2+p2c1
+        %{
         prob1 = pdist1/(pdist1+cdist1);
-        prob2 = pdist2/(pdist2+cdist2);
+        prob2 = pdist2/(pdist2+cdist2); 
         if (rand > prob1)
              c1 = ParentSelCh(i,:);
         else
@@ -49,8 +50,30 @@ for i=1:2:NindP
         else
             c2 = ChildSelCh(i+1,:);
         end
+        %}
+        if cdist1<pdist1
+            c1 = ChildSelCh(i,:);
+        else
+        c1 = ParentSelCh(i,:);
+        end
+        if cdist2<pdist2
+            c2 = ChildSelCh(i+1,:);
+        else
+        c2 = ParentSelCh(i+1,:);
+        end
        
     else
+         if cdist1<pdist2
+            c1 = ChildSelCh(i,:);
+        else
+        c1 = ParentSelCh(i+1,:);
+        end
+        if cdist2<pdist1
+            c2 = ChildSelCh(i+1,:);
+        else
+        c2 = ParentSelCh(i,:);
+        end
+        %{
         prob1 = pdist1/(pdist1+cdist2);
         prob2 = pdist2/(pdist2+cdist1);
         if (rand > prob1)
@@ -63,6 +86,8 @@ for i=1:2:NindP
         else
             c2 = ChildSelCh(i,:);
         end
+        %}
+        
     end  
     result =[result;c1;c2];
    
