@@ -50,9 +50,9 @@ if CALCULATE_NEW
                 intermediate_worst = intermediate_worst + output("worst");
             end
             total(i) = geomean(intermediate) / optima(i);
-            best_f(i,h,:) = intermediate_best / length(data_list);
-            mean_f(i,h,:) = intermediate_mean / length(data_list);
-            worst_f(i,h,:) = intermediate_worst / length(data_list);
+            best_f(i,h,:) = intermediate_best / RUNS;
+            mean_f(i,h,:) = intermediate_mean / RUNS;
+            worst_f(i,h,:) = intermediate_worst / RUNS;
             fprintf("#")
         end
         performance = mean(total) * 100;  % Percentage of 100 is perfect match
