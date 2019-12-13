@@ -186,8 +186,7 @@ while gen < MAXGEN
     ObjVSelParents = tspfun(ParentSelCh, Dist, REPR_ID);
     
     ChildSelCh = crowding(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REPR_ID);
-     
-    % Evaluate offspring after crowding, call objective function
+     % Evaluate offspring after crowding, call objective function
     ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
    end
    

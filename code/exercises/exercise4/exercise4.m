@@ -1,5 +1,5 @@
 %{
-exercise4_ruben.m
+exercise4.m
 
 Check the influence of each of the heuristic types for the case of:
     #population=128

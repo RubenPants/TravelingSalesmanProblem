@@ -13,21 +13,19 @@ Generalized Crowding for Genetic Algorithms
 function result = crowding(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REPR_ID)
 [NindP,NvarP] = size(ParentSelCh);
 [NindC,NvarC] = size(ChildSelCh);
+ if REPR_ID ==2
+     ParentSelCh=path2adj(ParentSelCh);
+     ChildSelCh=path2adj(ChildSelCh);
+ end
 if NindP ~= NindC, error('NindP and NindC disagree'); end
 if NvarP ~= NvarC, error('NvarP and NvarC disagree'); end
 result=[];
 for i=1:2:NindP
-    if REPR_ID ==1
-        parent1 = ParentSelCh(i,:);
-        parent2 = ParentSelCh(i+1,:);
-        child1 = ChildSelCh(i,:);
-        child2 = ChildSelCh(i+1,:);
-    else
-        parent1 = path2adj(ParentSelCh(i,:));
-        parent2 = path2adj(ParentSelCh(i+1,:));
-        child1 = path2adj(ChildSelCh(i,:));
-        child2 = path2adj(ChildSelCh(i+1,:));
-    end
+    
+    parent1 = ParentSelCh(i,:);
+    parent2 = ParentSelCh(i+1,:);
+    child1 = ChildSelCh(i,:);
+    child2 = ChildSelCh(i+1,:);
     
     p1c1 = genome_distance(parent1,child1);
     p1c2 = genome_distance(parent1,child2);
@@ -41,12 +39,12 @@ for i=1:2:NindP
     if p1c1+p2c2 < p1c2+p2c1
         prob1 = pdist1/(pdist1+cdist1);
         prob2 = pdist2/(pdist2+cdist2);
-        if (rand < prob1)
+        if (rand > prob1)
              c1 = ParentSelCh(i,:);
         else
             c1 = ChildSelCh(i,:);
         end
-        if (rand < prob2)
+        if (rand > prob2)
              c2 = ParentSelCh(i+1,:);
         else
             c2 = ChildSelCh(i+1,:);
@@ -55,22 +53,21 @@ for i=1:2:NindP
     else
         prob1 = pdist1/(pdist1+cdist2);
         prob2 = pdist2/(pdist2+cdist1);
-        if (rand < prob1)
+        if (rand > prob1)
              c1 = ParentSelCh(i,:);
         else
             c1 = ChildSelCh(i+1,:);
         end
-        if (rand < prob2)
+        if (rand > prob2)
              c2 = ParentSelCh(i+1,:);
         else
             c2 = ChildSelCh(i,:);
         end
-    end
-    if REPR_ID==1
-        result =[result;c1;c2];
-    else
-        result =[result;adj2path(c1);adj2path(c2)];
-    end
+    end  
+    result =[result;c1;c2];
+   
 end
-
+if REPR_ID ==2
+     result = adj2path(result);
+end
 end
