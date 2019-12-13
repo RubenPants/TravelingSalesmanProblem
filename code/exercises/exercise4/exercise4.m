@@ -1,5 +1,5 @@
 %{
-exercise4.m
+exercise4_ruben.m
 
 Check the influence of each of the heuristic types for the case of:
     #population=128
@@ -134,7 +134,7 @@ function create_figure(title, best_f, mean_f, worst_f)
     xlabel("Generation")
     %legend("best off", "best inversion", "best 2-opt", "best both", "mean off", "mean inversion", "mean 2-opt", "mean both", "worst off", "worst inversion", "worst 2-opt", "worst both");
     legend("best off", "best both", "mean off", "mean both", "worst off", "worst both");
-    savefig(title);
+    savefig("figures/" + title);
     hold off
 end
 
