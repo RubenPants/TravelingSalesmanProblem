@@ -18,14 +18,15 @@ PARENT_SELECTION="ranking";     % parent selection
 SURVIVOR_SELECTION="elitism";   % survivor selection
 CROWDING=0;                     % crowding
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+disp("START");
 % load the data sets
 datasetslist = dir('datasets/');
 datasets=cell( size(datasetslist,1)-2,1);datasets=cell( size(datasetslist,1)-2 ,1);
 for i=1:size(datasets,1)
+    disp(datasetslist(i+2).name);
     datasets{i} = datasetslist(i+2).name;
 end
-
+disp(datasets)
 % start with first dataset
 data = load(['datasets/' datasets{1}]);
 x=data(:,1)/max([data(:,1);data(:,2)]);
@@ -86,7 +87,7 @@ uicontrol(ph,'Style','popupmenu', 'String',{'off', '2-opt', 'inversion', 'both'}
 row = new_row(row);
 uicontrol(ph,'Style','popupmenu', 'String',{'ranking', 'scaling','tournament'}, 'Value',1,'Position',[20 row 100 20],'Callback',@parent_selection_Callback);
 uicontrol(ph,'Style','popupmenu', 'String',{'elitism', 'round robin'}, 'Value',1,'Position',[130 row 100 20],'Callback',@survivor_selection_Callback);
-uicontrol(ph,'Style','popupmenu', 'String',{'on','off'}, 'Value',1,'Position',[240 row 100 20],'Callback',@crowding_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'crowding off',' crowding on'}, 'Value',1,'Position',[240 row 100 20],'Callback',@crowding_Callback);
 row = new_row(row);
 uicontrol(ph,'Style','pushbutton','String','START','Position',[20 row 430 30],'Callback',@runbutton_Callback);
 
@@ -228,7 +229,7 @@ function crowding_Callback(hObject,~)
         crowding_selection = get(hObject,'String');
         value = crowding_selection(crowding_value);
         switch value{1}
-            case 'on'
+            case 'crowding on'
                 CROWDING = 1;      
             otherwise
                 CROWDING = 0;

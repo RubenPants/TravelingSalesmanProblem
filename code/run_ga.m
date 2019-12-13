@@ -89,6 +89,9 @@ if VISUAL || PRINT
     fprintf("\tStop percentage: %.2f\n", STOP_PERC)
     fprintf("\tStop threshold: %.2f\n", STOP_THR)
     fprintf("\tHeuristic: %s\n", HEUR)
+    fprintf("\tParent selection: %s\n", PARENT_SELECTION)
+    fprintf("\tSurvivor selection: %s\n", SURVIVOR_SELECTION)
+    fprintf("\tcrowding: %d\n", CROWDING)
 end
 
 % Initialize the algorithm
