@@ -45,7 +45,7 @@ if CALCULATE_NEW
                 container = run_ga(data);
                 total(i) = container('minimum');
             end
-            Avg(m+1, c+1) = mean(total);
+            Avg(m+1, c+1) = geomean(total);
         end
     end
 

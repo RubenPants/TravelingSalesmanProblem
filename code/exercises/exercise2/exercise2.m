@@ -43,7 +43,7 @@ for i=1:length(data_list)
         intermediate_gen(j) = output("generation");
         fprintf("#")
     end
-    total_dist(i) = mean(intermediate_dist);
+    total_dist(i) = geomean(intermediate_dist);
     total_gen(i) = mean(intermediate_gen);
     fprintf("\n")
 end

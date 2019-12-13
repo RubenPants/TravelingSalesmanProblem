@@ -51,21 +51,20 @@ if any(strcmp(keys(data), "loop_detect")); LOCALLOOP=data("loop_detect"); else; 
 if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; STOP_PERC = 0; end
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
 if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation'); else; STOP_STAG = 0; end
-if any(strcmp(keys(data), "print")); PRINT = true; else; PRINT= false; end
-if any(strcmp(keys(data), "diversify")); DIVERSIFY = true; else; DIVERSIFY = false; end
+if any(strcmp(keys(data), "print")); PRINT = data('print'); else; PRINT= false; end
+if any(strcmp(keys(data), "diversify")); DIVERSIFY = data('diversify'); else; DIVERSIFY = false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
-if any(strcmp(keys(data), "heu_threefour")); THREEFOUR = true; else; THREEFOUR = false; end
-if any(strcmp(keys(data), "heu_localMUT")); LOCALMUT = data("heu_localMUT"); else; LOCALMUT = 0; end
 if any(strcmp(keys(data), "parent_selection")); PARENT_SELECTION = data("parent_selection"); else; PARENT_SELECTION = "ranking"; end
 if any(strcmp(keys(data), "survivor_selection")); SURVIVOR_SELECTION = data("survivor_selection"); else; SURVIVOR_SELECTION = "elitism"; end
 if any(strcmp(keys(data), "crowding")); CROWDING = data("crowding"); else; CROWDING = 0; end
 
+if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR = "off"; end
+if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.2; end
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
     ah2 = temp("ah2");
     ah3 = temp("ah3");
-    if MAXGEN == Inf; MAXGEN = 9999; end
 end
 
 % Fill in other used parameters
@@ -89,6 +88,7 @@ if VISUAL || PRINT
     fprintf("\tLoop-detection enabled: %d\n", LOCALLOOP)
     fprintf("\tStop percentage: %.2f\n", STOP_PERC)
     fprintf("\tStop threshold: %.2f\n", STOP_THR)
+    fprintf("\tHeuristic: %s\n", HEUR)
 end
 
 % Initialize the algorithm
@@ -182,6 +182,11 @@ while gen < MAXGEN
     
     % Mutation
     ChildSelCh=mutateTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID, DIVERSIFY);  
+    
+    %Local heuristics
+    if HEUR ~= "off"
+        SelCh = local_heuristic(HEUR, ChildSelCh, Dist, REPR_ID, HEUR_PR);
+    end
 
     % Evaluate offspring, call objective function
     ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
@@ -200,14 +205,6 @@ while gen < MAXGEN
         [Chrom, ObjV] = round_robin(ChildSelCh, Chrom, ObjV, ObjVSelChildren);
     end
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
-    
-    %Local heuristics
-    if THREEFOUR       
-        Chrom = four_vertices_three_edges(Chrom,Dist,NVAR,NIND, REPR_ID);           
-    end
-    if LOCALMUT
-        Chrom = single_sample_mutation(Chrom,Dist,NVAR,NIND,LOCALMUT, REPR_ID);
-    end
     
     % Increment generation counter
     gen=gen+1;            

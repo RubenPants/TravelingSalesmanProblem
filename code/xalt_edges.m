@@ -43,7 +43,7 @@ function NewChrom = xalt_edges(OldChrom, Representation, ~, XOVR)
     for row=1:2:maxrows
         % crossover of the two chromosomes results in 2 offsprings
         if rand<XOVR
-            NewChrom(row,:) =cross_alternate_edges([OldChrom(row,:);OldChrom(row+1,:)]);
+            NewChrom(row,:)=cross_alternate_edges([OldChrom(row,:);OldChrom(row+1,:)]);
             NewChrom(row+1,:)=cross_alternate_edges([OldChrom(row+1,:);OldChrom(row,:)]);
         else
             NewChrom(row,:)=OldChrom(row,:);
