@@ -50,6 +50,12 @@ if (Omin > ( Smul * Oave - Omax ) / ( Smul - 1.0 ))
 else
 	delta = Oave - Omin; 
 	a = Oave / delta ;
-	b = -Omin * Oave / delta; 
+	b = -Omin * Oave / delta;
 end
-FitnV = (ObjV.*a + b) ;
+
+FitnV = abs(ObjV.*a + b) ;
+if isequal(FitnV,zeros(Nind,1)) || isequal(isnan(FitnV),ones(Nind,1))
+    FitnV=ObjV;
+end
+%FitnV
+end

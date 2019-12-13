@@ -20,22 +20,25 @@ function result = rts(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REP
 if NindP ~= NindC, error('NindP and NindC disagree'); end
 if NvarP ~= NvarC, error('NvarP and NvarC disagree'); end
 result=[];
+maxParents = max(ObjVSelChildren);
 for i=1:NindC
     
     child = ChildSelCh(i,:);
-    max = size(child,2);
+    maximum = size(child,2);
+    pdist=maxParents;
     for p=1:NindP
         gdist=genome_distance(child,ParentSelCh(p,:));
-        if gdist<max
-            max=gdist;
+        if gdist<maximum
+            maximum=gdist;
             closest=ParentSelCh(p,:);
             pdist=ObjVSelParents(p,1);
         end
     end
    
    cdist = ObjVSelChildren(i,1);
+   
     
-    if cdist < pdist    
+    if cdist <= pdist    
         result =[result;child];
     else
         result =[result;closest];
