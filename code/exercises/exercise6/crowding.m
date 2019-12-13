@@ -9,14 +9,30 @@ if NindP ~= NindC, error('NindP and NindC disagree'); end
 if NvarP ~= NvarC, error('NvarP and NvarC disagree'); end
 result=[];
 for i=1:2:NindP
-    %dsitances: http://www.ia.uned.es/~seve/PDFs/gecco2010.pdf?fbclid=IwAR369dLqnB-IJrLXPStjKqRj64Qw6iA1HWlplJoJIVWQhcDFe76i2spcEO4
+    %dsitances: https://www.academia.edu/972640/Crowding_population-based_ant_colony_optimisation_for_the_multi-objective_travelling_salesman_problem
     % => number of shared edges
     if REPR_ID ==1
+        parent1 = ParentSelCh(i,:);
+        parent2 = ParentSelCh(i+1,:);
+        child1 = ChildSelCh(i,:);
+        child2 = ChildSelCh(i+1,:);
+    else
+        parent1 = path2adj(ParentSelCh(i,:));
+        parent2 = path2adj(ParentSelCh(i+1,:));
+        child1 = path2adj(ChildSelCh(i,:));
+        child2 = path2adj(ChildSelCh(i+1,:));
+    end
+    
+    p1c1 = genome_distance(parent1,child1);
+    p1c2 = genome_distance(parent1,child2);
+    p2c1 = genome_distance(parent2,child1);
+    p2c2 = genome_distance(parent2,child2);
     pdist1 = ObjVSelParents(i,1);
     pdist2 = ObjVSelParents(i+1,1);
     cdist1 = ObjVSelChildren(i,1);
     cdist2 = ObjVSelChildren(i+1,1);
-    if abs(pdist1-cdist1)+abs(pdist2-cdist2) < abs(pdist1-cdist2)+abs(pdist2-cdist1)
+    
+    if p1c1+p2c2 < p1c2+p2c1
         if pdist1-cdist1<0 
             c1 = ParentSelCh(i,:);
         else
