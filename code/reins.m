@@ -96,7 +96,7 @@ function [Chrom, ObjVCh] = reins(Chrom, SelCh, SUBPOP, InsOpt, ObjVCh, ObjVSel);
 
    if INSR == 0, return; end
    NIns = min(max(floor(INSR*NSEL+.5),1),NIND);   % Number of offspring to insert   
-
+   
 % perform insertion for each subpopulation
    for irun = 1:SUBPOP,
       % Calculate positions in old subpopulation, where offspring are inserted

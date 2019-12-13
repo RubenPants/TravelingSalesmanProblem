@@ -28,24 +28,28 @@
 
 
 function FitnV = scaling( ObjV, Smul )
-
+[Nind, Nobj] = size( ObjV ) ;
+for i=1:size(ObjV,1)
+    if(ObjV(i,1)~= 0)
+        ObjV(i,1)=1/ObjV(i,1);
+    end
+end
 if nargin == 1
 	Smul = 2 ;
 end
 
-[Nind, Nobj] = size( ObjV ) ;
+
 Oave = sum( ObjV ) / Nind ;
 Omin = min( ObjV ) ;
 Omax = max( ObjV ) ;
 
 if (Omin > ( Smul * Oave - Omax ) / ( Smul - 1.0 ))
-	delta = Omax - Oave 
-	a = ( Smul - 1.0 ) * Oave / delta 
-	b = Oave * ( Omax - Smul * Oave ) / delta 
+	delta = Omax - Oave; 
+	a = ( Smul - 1.0 ) * Oave / delta ;
+	b = Oave * ( Omax - Smul * Oave ) / delta; 
 else
-	delta = Oave - Omin ;
+	delta = Oave - Omin; 
 	a = Oave / delta ;
-	b = -Omin * Oave / delta ;
+	b = -Omin * Oave / delta; 
 end
-
-FitnV = ObjV.*a + b ;
+FitnV = (ObjV.*a + b) ;

@@ -39,6 +39,7 @@
 %             10.03.94     multiple populations
 
 function FitnV = ranking(ObjV, RFun, SUBPOP);
+   
 
 % Identify the vector size (Nind)
    [Nind,ans] = size(ObjV);
@@ -61,7 +62,7 @@ function FitnV = ranking(ObjV, RFun, SUBPOP);
       elseif isnan(SUBPOP), SUBPOP = 1;
       elseif length(SUBPOP) ~= 1, error('SUBPOP must be a scalar'); end
    end
-
+    %SUBPOP = 1 for the current use
    if (Nind/SUBPOP) ~= fix(Nind/SUBPOP), error('ObjV and SUBPOP disagree'); end
    Nind = Nind/SUBPOP;  % Compute number of individuals per subpopulation
    
@@ -92,6 +93,7 @@ function FitnV = ranking(ObjV, RFun, SUBPOP);
 for irun = 1:SUBPOP,
    % Copy objective values of actual subpopulation
       ObjVSub = ObjV((irun-1)*Nind+1:irun*Nind);
+     
    % Sort does not handle NaN values as required. So, find those...
       NaNix = isnan(ObjVSub);
       Validix = find(~NaNix);

@@ -54,6 +54,10 @@ if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation
 if any(strcmp(keys(data), "print")); PRINT = data('print'); else; PRINT= false; end
 if any(strcmp(keys(data), "diversify")); DIVERSIFY = data('diversify'); else; DIVERSIFY = false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
+if any(strcmp(keys(data), "parent_selection")); PARENT_SELECTION = data("parent_selection"); else; PARENT_SELECTION = "ranking"; end
+if any(strcmp(keys(data), "survivor_selection")); SURVIVOR_SELECTION = data("survivor_selection"); else; SURVIVOR_SELECTION = "elitism"; end
+if any(strcmp(keys(data), "crowding")); CROWDING = data("crowding"); else; CROWDING = 0; end
+
 if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR = "off"; end
 if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.2; end
 if VISUAL
@@ -85,6 +89,9 @@ if VISUAL || PRINT
     fprintf("\tStop percentage: %.2f\n", STOP_PERC)
     fprintf("\tStop threshold: %.2f\n", STOP_THR)
     fprintf("\tHeuristic: %s\n", HEUR)
+    fprintf("\tParent selection: %s\n", PARENT_SELECTION)
+    fprintf("\tSurvivor selection: %s\n", SURVIVOR_SELECTION)
+    fprintf("\tcrowding: %d\n", CROWDING)
 end
 
 % Initialize the algorithm
@@ -117,7 +124,6 @@ end
 
 % evaluate initial population
 ObjV = tspfun(Chrom, Dist, REPR_ID);
-
 % generational loop
 gen=0;
 while gen < MAXGEN
@@ -158,28 +164,37 @@ while gen < MAXGEN
         break    
     end
 
-    %assign fitness values to entire population
-    FitnV=ranking(ObjV);
-
-    %select individuals for breeding
-    SelCh=select('sus', Chrom, FitnV, GGAP);
+    % Parent selection
+    ParentSelCh = parent_selection(ObjV,Chrom,GGAP,NIND,PARENT_SELECTION);
 
     %recombine individuals (crossover)
-    SelCh = recombin(CROSSOVER, SelCh, REPR_ID, Dist, PR_CROSS);
-
+    ChildSelCh = recombin(CROSSOVER, ParentSelCh, REPR_ID, Dist, PR_CROSS); 
+    
     % Mutation
-    SelCh=mutateTSP(MUTATION, SelCh, PR_MUT, REPR_ID, DIVERSIFY);  
+    ChildSelCh=mutateTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID, DIVERSIFY);  
     
     %Local heuristics
     if HEUR ~= "off"
-        SelCh = local_heuristic(HEUR, SelCh, Dist, REPR_ID, HEUR_PR);
+        ChildSelCh = local_heuristic(HEUR, ChildSelCh, Dist, REPR_ID, HEUR_PR);
     end
 
     % Evaluate offspring, call objective function
-    ObjVSel = tspfun(SelCh, Dist, REPR_ID);
+    ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
 
+   %keeping diversity -> crowding
+   if CROWDING ==1
+    ObjVSelParents = tspfun(ParentSelCh, Dist, REPR_ID);
+    
+    ChildSelCh = crowding(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REPR_ID);
+     
+    % Evaluate offspring after crowding, call objective function
+    ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
+   end
+   
     % Reinsert offspring into population
-    [Chrom, ObjV]=reins(Chrom,SelCh,1,1,ObjV,ObjVSel);
+    [Chrom,ObjV] = survivor_selection(ChildSelCh, Chrom, ObjV, ObjVSelChildren, SURVIVOR_SELECTION);
+    
+    %Improve the population by removing loops etc
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
     
     % Increment generation counter
