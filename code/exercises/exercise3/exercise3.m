@@ -7,7 +7,7 @@ combination on each of the benchmarks.
 
 % Parameters
 global CALCULATE_NEW GENERATIONS MUTATION RUNS
-CALCULATE_NEW = true;
+CALCULATE_NEW = false;
 GENERATIONS = 100;
 RUNS = 20;
 
@@ -16,7 +16,7 @@ addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\code'
 addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\code\datasets'
 
 % Load all the datasets
-data_list = ["016", "018", "023", "025", "048", "050", "051", "067", "070", "100", "127"];
+data_list = ["016"];%, "018", "023", "025", "048", "050", "051", "067", "070", "100", "127"];
 optima = load('rondrit_optima.tsp');
 
 % Possible representations
@@ -104,7 +104,7 @@ function c = run_data(set, repr, cross, mut)
     data("pr_cross") = 0.2;
     data("mutation") = mut;
     data("pr_mut") = 0.2;
-    data("diversify") = false;
+    data("diversify") = true;
     
     % Run experiment
     c = run_ga(data);
@@ -118,7 +118,9 @@ function create_figure(title, best_f, mean_f, worst_f)
     figure();
     x=0:length(best_f)-1;
     
+    %MUT = 1;  % reciprocal_exchange
     MUT = 2;  % inversion
+    %MUT = 3;  % scramble
     title = title + sprintf("_%s.fig", MUTATION(MUT));
     
     % Split up data
@@ -138,7 +140,7 @@ function create_figure(title, best_f, mean_f, worst_f)
     ylabel("Fitness")
     xlabel("Generation")
     legend("best adjacency", "best path", "mean adjacency", "mean path", "worst adjacency", "worst path");
-    %savefig(title);
+    savefig("figures/" + title);
     hold off
 end
 
