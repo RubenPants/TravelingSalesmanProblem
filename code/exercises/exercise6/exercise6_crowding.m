@@ -132,8 +132,6 @@ end
 
 %{
 Results:
-
-Result: elitism - performance: 104.18
-
-Result: round_robin - performance: 103.86
+Result: 0 - performance: 104.27 (no crowding)
+Result: 1 - performance: 106.03 (crowding)
 %}
