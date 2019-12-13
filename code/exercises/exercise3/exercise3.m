@@ -6,17 +6,20 @@ combination on each of the benchmarks.
 %}
 
 % Parameters
-global CALCULATE_NEW GENERATIONS MUTATION RUNS
+global CALCULATE_NEW CONFIG GENERATIONS MUTATION PR_CROSS PR_MUT RUNS
 CALCULATE_NEW = false;
 GENERATIONS = 100;
 RUNS = 20;
+PR_CROSS = 0.4;
+PR_MUT = 0.2;
+CONFIG = sprintf("%d_%d", PR_CROSS*100, PR_MUT*100);
 
 % Add paths to other files
 addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\code'
 addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\code\datasets'
 
 % Load all the datasets
-data_list = ["016"];%, "018", "023", "025", "048", "050", "051", "067", "070", "100", "127"];
+data_list = ["016", "018", "023", "025", "048", "050", "051", "067", "070", "100", "127"];
 optima = load('rondrit_optima.tsp');
 
 % Possible representations
@@ -67,17 +70,17 @@ if CALCULATE_NEW
         end
     end
     % Save all the matrices
-    save('total', 'total');
-    save('best_f', 'best_f');
-    save('mean_f', 'mean_f');
-    save('worst_f', 'worst_f');
+    save(CONFIG + "/total", 'total');
+    save(CONFIG + "/best_f", 'best_f');
+    save(CONFIG + "/mean_f", 'mean_f');
+    save(CONFIG + "/worst_f", 'worst_f');
 end
 
 % Load in the matrices
-file = matfile('total'); total = file.total;
-file = matfile('best_f'); best_f = file.best_f;
-file = matfile('mean_f'); mean_f = file.mean_f;
-file = matfile('worst_f'); worst_f = file.worst_f;
+file = matfile(CONFIG + "/total"); total = file.total;
+file = matfile(CONFIG + "/best_f"); best_f = file.best_f;
+file = matfile(CONFIG + "/mean_f"); mean_f = file.mean_f;
+file = matfile(CONFIG + "/worst_f"); worst_f = file.worst_f;
 
 % Display all the figures
 for i=1:length(data_list)
@@ -88,7 +91,7 @@ end
 
 % Function called to run each of the configurations
 function c = run_data(set, repr, cross, mut)
-    global GENERATIONS
+    global GENERATIONS PR_CROSS PR_MUT
     
     % Load data
     data = load(sprintf('rondrit%s.tsp', set));
@@ -101,9 +104,9 @@ function c = run_data(set, repr, cross, mut)
     data("maxgen") = GENERATIONS;
     data("representation") = repr;
     data("crossover") = cross;
-    data("pr_cross") = 0.2;
+    data("pr_cross") = PR_CROSS;
     data("mutation") = mut;
-    data("pr_mut") = 0.2;
+    data("pr_mut") = PR_MUT;
     data("diversify") = true;
     
     % Run experiment
@@ -113,14 +116,14 @@ end
 
 % Function called to visualize the progress
 function create_figure(title, best_f, mean_f, worst_f)
-    global MUTATION
+    global MUTATION CONFIG
     
     figure();
     x=0:length(best_f)-1;
     
     %MUT = 1;  % reciprocal_exchange
-    MUT = 2;  % inversion
-    %MUT = 3;  % scramble
+    %MUT = 2;  % inversion
+    MUT = 3;  % scramble
     title = title + sprintf("_%s.fig", MUTATION(MUT));
     
     % Split up data
@@ -140,7 +143,7 @@ function create_figure(title, best_f, mean_f, worst_f)
     ylabel("Fitness")
     xlabel("Generation")
     legend("best adjacency", "best path", "mean adjacency", "mean path", "worst adjacency", "worst path");
-    savefig("figures/" + title);
+    savefig(CONFIG + "/figures/" + title);
     hold off
 end
 
@@ -149,41 +152,41 @@ end
 Results:
 
 --> pr_cross=0.2; pr_mut=0.2;
-Result: adjacency - xalt_edges - inversion - performance: 187.93
-Result: adjacency - xalt_edges - reciprocal_exchange - performance: 190.84
-Result: adjacency - xalt_edges - scramble - performance: 210.85
+Result: adjacency - xalt_edges - inversion - performance: 184.95
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 189.71
+Result: adjacency - xalt_edges - scramble - performance: 209.87
 
-Result: path - heuristic_crossover - inversion - performance: 105.10
-Result: path - heuristic_crossover - reciprocal_exchange - performance: 106.24
-Result: path - heuristic_crossover - scramble - performance: 107.08
+Result: path - heuristic_crossover - inversion - performance: 103.99
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 105.62
+Result: path - heuristic_crossover - scramble - performance: 105.85
 
 
 --> pr_cross=0.2; pr_mut=0.4;
-Result: adjacency - xalt_edges - inversion - performance: 184.46
-Result: adjacency - xalt_edges - reciprocal_exchange - performance: 192.31
-Result: adjacency - xalt_edges - scramble - performance: 222.37
+Result: adjacency - xalt_edges - inversion - performance: 184.28
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 190.47
+Result: adjacency - xalt_edges - scramble - performance: 220.97
 
-Result: path - heuristic_crossover - inversion - performance: 103.52
-Result: path - heuristic_crossover - reciprocal_exchange - performance: 105.44
-Result: path - heuristic_crossover - scramble - performance: 105.89
+Result: path - heuristic_crossover - inversion - performance: 103.81
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 105.05
+Result: path - heuristic_crossover - scramble - performance: 106.04
 
 
 --> pr_cross=0.4; pr_mut=0.2;
-Result: adjacency - xalt_edges - inversion - performance: 188.03
-Result: adjacency - xalt_edges - reciprocal_exchange - performance: 190.81
-Result: adjacency - xalt_edges - scramble - performance: 209.07
+Result: adjacency - xalt_edges - inversion - performance: 189.65
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 193.22
+Result: adjacency - xalt_edges - scramble - performance: 209.72
 
-Result: path - heuristic_crossover - inversion - performance: 102.75
-Result: path - heuristic_crossover - reciprocal_exchange - performance: 103.58
-Result: path - heuristic_crossover - scramble - performance: 103.68
+Result: path - heuristic_crossover - inversion - performance: 102.59
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 103.76
+Result: path - heuristic_crossover - scramble - performance: 103.88
 
 
 --> pr_cross=0.4; pr_mut=0.4;
-Result: adjacency - xalt_edges - inversion - performance: 191.29
-Result: adjacency - xalt_edges - reciprocal_exchange - performance: 198.10
-Result: adjacency - xalt_edges - scramble - performance: 221.52
+Result: adjacency - xalt_edges - inversion - performance: 190.53
+Result: adjacency - xalt_edges - reciprocal_exchange - performance: 197.06
+Result: adjacency - xalt_edges - scramble - performance: 223.75
 
-Result: path - heuristic_crossover - inversion - performance: 102.33
-Result: path - heuristic_crossover - reciprocal_exchange - performance: 103.54
-Result: path - heuristic_crossover - scramble - performance: 103.62
+Result: path - heuristic_crossover - inversion - performance: 102.17
+Result: path - heuristic_crossover - reciprocal_exchange - performance: 103.61
+Result: path - heuristic_crossover - scramble - performance: 103.72
 %}
