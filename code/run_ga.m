@@ -161,23 +161,10 @@ while gen < MAXGEN
         break    
     end
 
-    
-    if PARENT_SELECTION == "ranking"
-        FitnV=ranking(ObjV);
-    elseif PARENT_SELECTION == "scaling"
-        FitnV=scaling(ObjV);   
-    end
-    
-    if PARENT_SELECTION=="tournament"
-        ParentSelCh = tournament_selection(ObjV,Chrom,floor(GGAP*NIND));
-    else 
-        ParentSelCh=select('sus', Chrom, FitnV, GGAP);
-    end
+    % Parent selection
+    ParentSelCh = parent_selection(ObjV,Chrom,GGAP,NIND,PARENT_SELECTION);
 
-    ObjVSelParents = tspfun(ParentSelCh, Dist, REPR_ID);
     %recombine individuals (crossover)
-    %each pair of children is made by the two parents on the same indices
-    %-> the first two children are made by the first two parents
     ChildSelCh = recombin(CROSSOVER, ParentSelCh, REPR_ID, Dist, PR_CROSS); 
     
     % Mutation
@@ -185,7 +172,7 @@ while gen < MAXGEN
     
     %Local heuristics
     if HEUR ~= "off"
-        SelCh = local_heuristic(HEUR, ChildSelCh, Dist, REPR_ID, HEUR_PR);
+        ChildSelCh = local_heuristic(HEUR, ChildSelCh, Dist, REPR_ID, HEUR_PR);
     end
 
     % Evaluate offspring, call objective function
@@ -193,17 +180,18 @@ while gen < MAXGEN
 
    %keeping diversity -> crowding
    if CROWDING ==1
+    ObjVSelParents = tspfun(ParentSelCh, Dist, REPR_ID);
+    
     ChildSelCh = crowding(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REPR_ID);
-     % Evaluate offspring after crowding, call objective function
+     
+    % Evaluate offspring after crowding, call objective function
     ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
    end
    
     % Reinsert offspring into population
-    if SURVIVOR_SELECTION == "elitism"
-        [Chrom, ObjV]=reins(Chrom,ChildSelCh,1,1,ObjV,ObjVSelChildren);
-    elseif SURVIVOR_SELECTION=="round_robin"
-        [Chrom, ObjV] = round_robin(ChildSelCh, Chrom, ObjV, ObjVSelChildren);
-    end
+    [Chrom,ObjV] = survivor_selection(ChildSelCh, Chrom, ObjV, ObjVSelChildren, SURVIVOR_SELECTION);
+    
+    %Improve the population by removing loops etc
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
     
     % Increment generation counter

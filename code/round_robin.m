@@ -1,3 +1,10 @@
+%{
+round_robin.m
+
+Selects survivors from the old population using the round_robin strategy.
+After this selection, form a new population from the survivors and the
+given offspring
+%}
 function [Chrom, ObjV] = round_robin(SelCh, Chrom, ObjV, ObjVSel);
 % Identify the population size (Nind)
    [NindCh,Nvar] = size(Chrom);

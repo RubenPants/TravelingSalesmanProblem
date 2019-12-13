@@ -1,5 +1,5 @@
 
-NUMBER_OF_TESTS=100;
+NUMBER_OF_TESTS=10;
 
 
 % Add paths to other files

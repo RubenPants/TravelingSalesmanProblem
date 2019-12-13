@@ -14,6 +14,9 @@ PR_MUT=.20;                     % probability of mutation
 LOCALLOOP=false;                % local loop removal
 DIVERSIFY=false;                % enforce diversity in the population
 LOCAL_HEUR="off";               % local heursitic method
+PARENT_SELECTION="ranking";     % parent selection
+SURVIVOR_SELECTION="elitism";   % survivor selection
+CROWDING=0;                     % crowding
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % load the data sets
@@ -80,6 +83,10 @@ uicontrol(ph,'Style','popupmenu', 'String',{'adjacency', 'path'}, 'Value',1,'Pos
 uicontrol(ph,'Style','popupmenu', 'String',{'AEX', 'HGreX'}, 'Value',1,'Position',[130 row 100 20],'Callback',@crossover_Callback);
 uicontrol(ph,'Style','popupmenu', 'String',{'inversion', 'swap', 'scramble'}, 'Value',1,'Position',[240 row 100 20],'Callback',@mutation_Callback);
 uicontrol(ph,'Style','popupmenu', 'String',{'off', '2-opt', 'inversion', 'both'}, 'Value',1,'Position',[350 row 100 20],'Callback',@heuristic_Callback);
+row = new_row(row);
+uicontrol(ph,'Style','popupmenu', 'String',{'ranking', 'scaling','tournament'}, 'Value',1,'Position',[20 row 100 20],'Callback',@parent_selection_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'elitism', 'round robin'}, 'Value',1,'Position',[130 row 100 20],'Callback',@survivor_selection_Callback);
+uicontrol(ph,'Style','popupmenu', 'String',{'on','off'}, 'Value',1,'Position',[240 row 100 20],'Callback',@crowding_Callback);
 row = new_row(row);
 uicontrol(ph,'Style','pushbutton','String','START','Position',[20 row 430 30],'Callback',@runbutton_Callback);
 
@@ -192,6 +199,41 @@ set(fh,'Visible','on');
                 LOCAL_HEUR = "off";
         end
     end
+ function parent_selection_Callback(hObject,~)
+        parent_value = get(hObject,'Value');
+        parent_selection = get(hObject,'String');
+        value = parent_selection(parent_value);
+        switch value{1}
+            case 'tournament'
+                PARENT_SELECTION = "tournament";
+            case 'scaling'
+                PARENT_SELECTION = "scaling";       
+            otherwise
+                LOCAL_HEUR = "ranking";
+        end
+ end
+function survivor_selection_Callback(hObject,~)
+        survivor_value = get(hObject,'Value');
+        survivor_selection = get(hObject,'String');
+        value = survivor_selection(survivor_value);
+        switch value{1}
+            case 'round_robin'
+                SURVIVOR_SELECTION = "round_robin";      
+            otherwise
+                SURVIVOR_SELECTION = "elitism";
+        end
+end
+function crowding_Callback(hObject,~)
+        crowding_value = get(hObject,'Value');
+        crowding_selection = get(hObject,'String');
+        value = crowding_selection(crowding_value);
+        switch value{1}
+            case 'on'
+                CROWDING = 1;      
+            otherwise
+                CROWDING = 0;
+        end
+    end
     function runbutton_Callback(~,~)
         %set(ncitiesslider, 'Visible','off');
         set(nindslider,'Visible','off');
@@ -215,6 +257,9 @@ set(fh,'Visible','on');
         data("diversify") = DIVERSIFY;
         data("local_heur") = LOCAL_HEUR;
         data("stop_perc") = STOP_PERCENTAGE;
+        data("parent_selection")=PARENT_SELECTION;
+        data("survivor_selection")=SURVIVOR_SELECTION;
+        data("crowding")=CROWDING;
         visual = containers.Map;
         visual("ah1") = ah1;
         visual("ah2") = ah2;
