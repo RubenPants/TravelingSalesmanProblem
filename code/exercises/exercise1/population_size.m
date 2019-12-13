@@ -7,7 +7,7 @@ and 0.4 respectively.
 %}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Parameters %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-AVG_COUNT=10;               % No. of times the same configuration is played
+AVG_COUNT=20;               % No. of times the same configuration is played
 NCITIES=40;                 % No. of cities
 STEPS=20;                   % 1/STEPS=STEP_SIZE (mutation, crossover)
 OPTIMUM = 3.14;             % Optimum used as stopping criterium
