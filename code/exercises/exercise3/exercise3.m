@@ -11,7 +11,7 @@ CALCULATE_NEW = false;
 GENERATIONS = 100;
 RUNS = 20;
 PR_CROSS = 0.4;
-PR_MUT = 0.4;
+PR_MUT = 0.2;
 CONFIG = sprintf("%d_%d", PR_CROSS*100, PR_MUT*100);
 
 % Add paths to other files
@@ -85,8 +85,7 @@ file = matfile(CONFIG + "/worst_f"); worst_f = file.worst_f;
 % Display all the figures
 for i=1:length(data_list)
     title = sprintf("%s", data_list(i));
-    % TODO: Create figures for best combination (or 127 for each of the combinations?)
-    %create_figure(data_list(i), best_f(i,:,:,:), mean_f(i,:,:,:), worst_f(i,:,:,:));
+    create_figure(data_list(i), best_f(i,:,:,:), mean_f(i,:,:,:), worst_f(i,:,:,:));
 end
 
 
@@ -123,8 +122,8 @@ function create_figure(title, best_f, mean_f, worst_f)
     x=0:length(best_f)-1;
     
     %MUT = 1;  % reciprocal_exchange
-    MUT = 2;  % inversion
-    %MUT = 3;  % scramble
+    %MUT = 2;  % inversion
+    MUT = 3;  % scramble
     title = title + sprintf("_%s.fig", MUTATION(MUT));
     
     % Split up data
