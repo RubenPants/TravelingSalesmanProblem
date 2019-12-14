@@ -100,8 +100,8 @@ end
 GGAP = 1 - ELITIST;
 mean_fits = zeros(1,0);
 worst = zeros(1,0);
-best = zeros(1, 0);
-
+best = zeros(SUBPOP, 0);
+counter = zeros(SUBPOP,1);
 Dist=zeros(NVAR,NVAR);
 for i=1:size(x,1)
     for j=1:size(y,1)
@@ -130,7 +130,7 @@ ObjV = tspfun(Chrom, Dist, REPR_ID);
 gen=0;
 while gen < MAXGEN
     sObjV=sort(ObjV);
-    best(gen+1)=min(ObjV);
+    best(:,gen+1)=sub_minima(ObjV,SUBPOP);
     minimum=best(gen+1);
     mean_fits(gen+1)=mean(ObjV);
     worst(gen+1)=max(ObjV);
@@ -207,8 +207,14 @@ while gen < MAXGEN
     %if there are islands -> do a switch every 20 generations
     
     if SUBPOP >1 
-        subminima = sub_minima(ObjV,SUBPOP);
-       [Chrom, ObjV] = switch_islands(Chrom, ObjV, SUBPOP);
+        counter = counter + OnjV==previous_best;
+        while sum(counter>5)>1 
+            index1 = find(ready,1);
+            index2 = find(ready,2);
+            [Chrom, ObjV] = switch_islands(Chrom, ObjV,index1,index2, SUBPOP);
+            counter(index1,1)=0;
+            counter(index2,1)=0;
+        end
     end
     
     % Increment generation counter
@@ -219,6 +225,6 @@ end
 output = containers.Map;
 output('minimum') = minimum;
 output('generation') = gen;
-output('best') = best;
+output('best') = min(best);
 output('worst') = worst;
 output('mean_fits') = mean_fits;
