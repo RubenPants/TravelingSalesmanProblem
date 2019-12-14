@@ -17,17 +17,18 @@ ADAPTIVE_MUT=false;             % enforce diversity by mutating more when popula
 LOCAL_HEUR="off";               % local heursitic method
 PARENT_SELECTION="ranking";     % parent selection
 SURVIVOR_SELECTION="elitism";   % survivor selection
+DATASET='benchmarks/';           % choose which dataset to use: datasets or benchmarks
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % load the data sets
-datasetslist = dir('datasets/');
+datasetslist = dir(DATASET);
 datasets=cell( size(datasetslist,1)-2,1);datasets=cell( size(datasetslist,1)-2 ,1);
 for i=1:size(datasets,1)
     datasets{i} = datasetslist(i+2).name;
 end
 
 % start with first dataset
-data = load(['datasets/' datasets{1}]);
+data = load([DATASET datasets{1}]);
 x=data(:,1)/max([data(:,1);data(:,2)]);
 y=data(:,2)/max([data(:,1);data(:,2)]);
 NVAR=size(data,1);
@@ -108,7 +109,8 @@ set(fh,'Visible','on');
         dataset_value = get(hObject,'Value');
         dataset = datasets{dataset_value};
         % load the dataset
-        data = load(['datasets/' dataset]);
+        data = load([DATASET dataset]);
+        disp(max([data(:,1);data(:,2)]))
         x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
         %x=data(:,1);y=data(:,2);
         NVAR=size(data,1); 
