@@ -137,13 +137,4 @@ Result: 0 - xqf131 - performance: 108.23
 Result: 1 - xqf131 - performance: 107.93
 Result: 0 - xqf662 - performance: 126.27
 Result: 1 - xqf662 - performance: 125.76
-
-
---> pr_cross=0.2; pr_mut=0.4;
-
-
---> pr_cross=0.4; pr_mut=0.2;
-
-
---> pr_cross=0.4; pr_mut=0.4;
 %}
