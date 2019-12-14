@@ -17,8 +17,8 @@ function SelCh = tournament_selection( ObjV, Chrom, GGAP, SUBPOP)
    SelCh=[];
 for irun=1:SUBPOP
     for i=1:NSel
-        random1 = randi([1,Nind]);
-        random2 = randi([1,Nind]);
+        random1 = randi(Nind);
+        random2 = randi(Nind);
         ObjVSub = ObjV((irun-1)*Nind+1:irun*Nind);
         if ObjVSub(random1)<ObjVSub(random2)
             result=Chrom((irun-1)*Nind+random1,:);

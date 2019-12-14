@@ -17,7 +17,7 @@ for irun=1:SUBPOP
         fit = ObjVSub(i,1);
         score = 0;
         for fight=1:10
-            random = randi([1,Nind]); 
+            random = randi(Nind); 
             contestant = ObjVSub(random,1);
             if (fit < contestant)
                 score = score +1;
