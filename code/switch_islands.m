@@ -6,8 +6,8 @@ extra = ceil(Nind/SUBPOP);
 ChromSub=Chrom((index1-1)*Nind+1:index1*Nind,:);
 ObjVSub=ObjV((index1-1)*Nind+1:index1*Nind);
 
-NextChromSub=Chrom(index2*Nind+1:(index2+1)*Nind,:);
-NextObjVSub=ObjV(index2*Nind+1:(index2+1)*Nind);
+NextChromSub=Chrom((index2-1)*Nind+1:index2*Nind,:);
+NextObjVSub=ObjV((index2-1)*Nind+1:index2*Nind);
 
 for index=1:extra
     random = randi(Nind);
@@ -31,7 +31,7 @@ end
 %}
 Chrom((index1-1)*Nind+1:index1*Nind,:)=ChromSub;
 ObjV((index1-1)*Nind+1:index1*Nind)=ObjVSub;
-Chrom(index2*Nind+1:(index2+1)*Nind,:)=NextChromSub;
-ObjV(index2*Nind+1:(index2+1)*Nind)=NextObjVSub;
+Chrom((index2-1)*Nind+1:index2*Nind,:)=NextChromSub;
+ObjV((index2-1)*Nind+1:index2*Nind)=NextObjVSub;
 end
 
