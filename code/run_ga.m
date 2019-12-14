@@ -59,11 +59,20 @@ if any(strcmp(keys(data), "parent_selection")); PARENT_SELECTION = data("parent_
 if any(strcmp(keys(data), "survivor_selection")); SURVIVOR_SELECTION = data("survivor_selection"); else; SURVIVOR_SELECTION = "elitism"; end
 if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR = "off"; end
 if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.2; end
+SUBPOP = 4;  % TODO: Fix (create slider in tspgui)
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
     ah2 = temp("ah2");
     ah3 = temp("ah3");
+end
+
+% Check subpopulation
+if mod(NIND, SUBPOP) ~= 0
+    ME = MException("The number of subpopulations must be a multiple of the total number of individuals");
+    throw(ME)
+else
+    SUBPOP_SIZE = NIND / SUBPOP;
 end
 
 % Fill in other used parameters
@@ -92,13 +101,14 @@ if VISUAL || PRINT
     fprintf("\tSurvivor selection: %s\n", SURVIVOR_SELECTION)
     fprintf("\tAdaptive mutation: %d\n", ADAPTIVE_MUT)
     fprintf("\tPreserve diveristy: %s\n", PRESERVE_DIVERSITY)
+    fprintf("\tNumber of populations: %d\n", SUBPOP)
 end
 
 % Initialize the algorithm
 GGAP = 1 - ELITIST;
-mean_fits = zeros(1,0);
-worst = zeros(1,0);
-best = zeros(1, 0);
+mean_fits = zeros(SUBPOP,0);
+worst = zeros(SUBPOP,0);
+best = zeros(SUBPOP, 0);
 
 Dist=zeros(NVAR,NVAR);
 for i=1:size(x,1)
@@ -124,15 +134,18 @@ end
 
 % evaluate initial population
 ObjV = tspfun(Chrom, Dist, REPR_ID);
+
 % generational loop
 gen=0;
 while gen < MAXGEN
-    best(gen+1)=min(ObjV);
-    minimum=best(gen+1);
-    mean_fits(gen+1)=mean(ObjV);
-    worst(gen+1)=max(ObjV);
+    for s=1:SUBPOP
+        best(s, gen+1) =     min(ObjV(SUBPOP_SIZE * (s-1) + 1 : SUBPOP_SIZE * s));
+        mean_fits(s, gen+1)=mean(ObjV(SUBPOP_SIZE * (s-1) + 1 : SUBPOP_SIZE * s));
+        worst(s, gen+1)=     max(ObjV(SUBPOP_SIZE * (s-1) + 1 : SUBPOP_SIZE * s));
+    end
+    minimum = min(best(:,gen+1));  % Global minimum
     
-    % TODO: remove if 't' is never used
+    % Find globally most fit genome
     for t=1:size(ObjV,1)
         if (ObjV(t)==minimum)
             break;
@@ -167,7 +180,7 @@ while gen < MAXGEN
     end
 
     % Parent selection
-    ParentSelCh = parent_selection(ObjV,Chrom,GGAP,NIND,PARENT_SELECTION);
+    ParentSelCh = parent_selection(ObjV, Chrom, GGAP, NIND, PARENT_SELECTION, SUBPOP);
     ChildSelCh = ParentSelCh;
     
     if ADAPTIVE_MUT
