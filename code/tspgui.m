@@ -12,7 +12,8 @@ PR_CROSS=.20;                   % probability of crossover
 MUTATION = 'inversion';         % default mutation operator
 PR_MUT=.20;                     % probability of mutation
 LOCALLOOP=false;                % local loop removal
-DIVERSIFY=false;                % enforce diversity in the population
+PRESERVE_DIVERSITY="off";       % enforce diversity in the population
+ADAPTIVE_MUT=false;             % enforce diversity by mutating more when population stagnates
 LOCAL_HEUR="off";               % local heursitic method
 PARENT_SELECTION="ranking";     % parent selection
 SURVIVOR_SELECTION="elitism";   % survivor selection
@@ -46,8 +47,8 @@ axes(ah3);
 xlabel('Distance');
 ylabel('Number');
 
-ph = uipanel('Parent',fh,'Title','Settings','Position',[.635 .2 .335 .68]);
-row = 465;
+ph = uipanel('Parent',fh,'Title','Settings','Position',[.635 .2 .335 .71]);
+row = 490;
 uicontrol(ph,'Style','text','String','Dataset','Position',[0 row 130 20]);
 uicontrol(ph,'Style','popupmenu','String',datasets,'Value',1,'Position',[130 row 150 20],'Callback',@datasetpopup_Callback);
 ncitiessliderv = uicontrol(ph,'Style','text','String',NVAR,'Position',[280 row 50 20]);
@@ -90,11 +91,14 @@ uicontrol(ph,'Style','text','String','Survivor percentage','Position',[0 row 130
 elitslider = uicontrol(ph,'Style','slider','Max',100,'Min',0,'Value',round(ELITIST*100),'Sliderstep',[0.01 0.05],'Position',[130 row 150 20],'Callback',@elitslider_Callback);
 elitsliderv = uicontrol(ph,'Style','text','String',round(ELITIST*100),'Position',[280 row 50 20]);
 row = new_row(row);
+uicontrol(ph,'Style','text','String','Preserve diversity','Position',[0 row 130 20]);
+uicontrol(ph,'Style','popupmenu','String',{'off','crowding', 'islands'},'Value',1,'Position',[130 row 150 20],'Callback',@preserve_Callback);
+row = new_row(row);
+uicontrol(ph,'Style','text','String','Adaptive mutation','Position',[0 row 130 20]);
+uicontrol(ph,'Style','popupmenu','String',{'off','on'},'Value',1,'Position',[130 row 50 20],'Callback',@adaptive_Callback);
+row = new_row(row);
 uicontrol(ph,'Style','text','String','Loop Detection','Position',[0 row 130 20]);
 uicontrol(ph,'Style','popupmenu','String',{'off','on'},'Value',1,'Position',[130 row 50 20],'Callback',@llooppopup_Callback);
-row = new_row(row);
-uicontrol(ph,'Style','text','String','Enforce diversity','Position',[0 row 130 20]);
-uicontrol(ph,'Style','popupmenu','String',{'off','on'},'Value',1,'Position',[130 row 50 20],'Callback',@diversity_Callback);
 row = new_row(row);
 row = new_row(row);
 uicontrol(ph,'Style','pushbutton','String','START','Position',[20 row 300 30],'Callback',@runbutton_Callback);
@@ -114,18 +118,31 @@ set(fh,'Visible','on');
     end
     function llooppopup_Callback(hObject,~)
         lloop_value = get(hObject,'Value');
-        if lloop_value==1
+        if lloop_value==1  % first option
             LOCALLOOP = 0;
         else
             LOCALLOOP = 1;
         end
     end
-    function diversity_Callback(hObject,~)
-        lloop_value = get(hObject,'Value');
-        if lloop_value==1
-            DIVERSIFY = false;
+    function preserve_Callback(hObject,~)
+        preserver_value = get(hObject,'Value');
+        options = get(hObject,'String');
+        value = options(preserver_value);
+        switch value{1}
+            case 'inversion'
+                PRESERVE_DIVERSITY = 'off';
+            case 'crowding'
+                PRESERVE_DIVERSITY = 'crowding';    
+            case 'islands'
+                PRESERVE_DIVERSITY = 'islands';           
+        end
+    end
+    function adaptive_Callback(hObject,~)
+        adaptive_value = get(hObject,'Value');
+        if adaptive_value == 1  % first option
+            ADAPTIVE_MUT = false;
         else
-            DIVERSIFY = true;
+            ADAPTIVE_MUT = true;
         end
     end
     function nindslider_Callback(hObject,~)
@@ -243,19 +260,20 @@ set(fh,'Visible','on');
         data = containers.Map;
         data("x") = x;
         data("y") = y;
-        data("nind") = NIND;
-        data("maxgen") = MAXGEN;
-        data("elite") = ELITIST;
-        data("representation") = REPRESENTATION;
+        data("adaptive_mut") = ADAPTIVE_MUT;
         data("crossover") = CROSSOVER;
-        data("pr_cross") = PR_CROSS;
-        data("mutation") = MUTATION;
-        data("pr_mut") = PR_MUT;
-        data("loop_detect") = LOCALLOOP;
-        data("diversify") = DIVERSIFY;
+        data("elite") = ELITIST;
         data("local_heur") = LOCAL_HEUR;
-        data("stop_perc") = STOP_PERCENTAGE;
+        data("loop_detect") = LOCALLOOP;
+        data("maxgen") = MAXGEN;
+        data("mutation") = MUTATION;
+        data("nind") = NIND;
         data("parent_selection")=PARENT_SELECTION;
+        data("preserve_diversity") = PRESERVE_DIVERSITY;
+        data("pr_cross") = PR_CROSS;
+        data("pr_mut") = PR_MUT;
+        data("representation") = REPRESENTATION;
+        data("stop_perc") = STOP_PERCENTAGE;
         data("survivor_selection")=SURVIVOR_SELECTION;
         visual = containers.Map;
         visual("ah1") = ah1;

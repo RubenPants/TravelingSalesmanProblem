@@ -52,7 +52,8 @@ if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; ST
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
 if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation'); else; STOP_STAG = 0; end
 if any(strcmp(keys(data), "print")); PRINT = data('print'); else; PRINT= false; end
-if any(strcmp(keys(data), "diversify")); DIVERSIFY = data('diversify'); else; DIVERSIFY = false; end
+if any(strcmp(keys(data), "preserve_diveristy")); PRESERVE_DIVERSITY = data('preserve_diversity'); else; ADAPTIVE_MUT = false; end
+if any(strcmp(keys(data), "adaptive_mut")); ADAPTIVE_MUT = false; else; PRESERVE_DIVERSITY = false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if any(strcmp(keys(data), "parent_selection")); PARENT_SELECTION = data("parent_selection"); else; PARENT_SELECTION = "ranking"; end
 if any(strcmp(keys(data), "survivor_selection")); SURVIVOR_SELECTION = data("survivor_selection"); else; SURVIVOR_SELECTION = "elitism"; end
@@ -89,7 +90,8 @@ if VISUAL || PRINT
     fprintf("\tHeuristic: %s\n", HEUR)
     fprintf("\tParent selection: %s\n", PARENT_SELECTION)
     fprintf("\tSurvivor selection: %s\n", SURVIVOR_SELECTION)
-    fprintf("\tDiversify: %d\n", DIVERSIFY)
+    fprintf("\tAdaptive mutatiton: %d\n", ADAPTIVE_MUT)
+    fprintf("\tPreserve diveristy: %s\n", PRESERVE_DIVERSITY)
 end
 
 % Initialize the algorithm
@@ -169,7 +171,7 @@ while gen < MAXGEN
     ChildSelCh = recombin(CROSSOVER, ParentSelCh, REPR_ID, Dist, PR_CROSS); 
     
     % Mutation
-    ChildSelCh=mutateTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID, DIVERSIFY);  
+    ChildSelCh=mutateTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID, ADAPTIVE_MUT);  
     
     %Local heuristics
     if HEUR ~= "off"
@@ -180,8 +182,11 @@ while gen < MAXGEN
     ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
 
     % Keeping diversity -> crowding
-    if DIVERSIFY
+    if PRESERVE_DIVERSITY ~= "off"
         ObjVSelParents = tspfun(ParentSelCh, Dist, REPR_ID);
+        % TODO: Sieben
+        % if PRESERVE_DIVERSITY == "crowding"
+        % if PRESERVE_DIVERSITY == "islands"
         ChildSelCh = rts(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REPR_ID);
         
         % Evaluate offspring after crowding, call objective function
