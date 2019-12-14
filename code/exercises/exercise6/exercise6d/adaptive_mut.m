@@ -136,5 +136,5 @@ Result: 1 - rbx711 - performance: 122.34
 Result: 0 - xqf131 - performance: 108.23
 Result: 1 - xqf131 - performance: 107.93
 Result: 0 - xqf662 - performance: 126.27
-Result: 1 - xqf662 - performance: 125.76
+Result: 1 - xqf662 - performance: 125.76    
 %}

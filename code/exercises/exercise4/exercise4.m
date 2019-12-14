@@ -4,10 +4,10 @@ exercise4_ruben.m
 Check the influence of each of the heuristic types for the case of:
     #population=128
     elitism=0.05
+    maxgen=100
     representation=path
     crossover=heuristic_crossover
     mutation=inversion
-    maxgen=100
 
 Performance scores depict how much longer the found solution is compared to
 the real optimum.
@@ -95,7 +95,6 @@ function c = run_data(set, h)
     data("pr_cross") = 0.2;
     data("mutation") = "inversion";
     data("pr_mut") = 0.2;
-    data("diversify") = true;
     data("local_heur") = h;
     
     % Run experiment
