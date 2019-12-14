@@ -90,7 +90,7 @@ function FitnV = ranking(ObjV, RFun, SUBPOP);
    FitnV = [];
 
 % loop over all subpopulations
-for irun = 1:SUBPOP,
+for irun = 1:SUBPOP
    % Copy objective values of actual subpopulation
       ObjVSub = ObjV((irun-1)*Nind+1:irun*Nind);
      

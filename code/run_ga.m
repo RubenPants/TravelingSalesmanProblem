@@ -106,7 +106,7 @@ for i=1:size(x,1)
         Dist(i,j)=sqrt((x(i)-x(j))^2+(y(i)-y(j))^2);
     end
 end
-
+SUBPOP=8;
 % initialize population
 Chrom=zeros(NIND,NVAR);
 for row=1:NIND
@@ -165,10 +165,10 @@ while gen < MAXGEN
     end
 
     % Parent selection
-    ParentSelCh = parent_selection(ObjV,Chrom,GGAP,NIND,PARENT_SELECTION);
+    ParentSelCh = parent_selection(ObjV,Chrom,GGAP,NIND,PARENT_SELECTION, SUBPOP);
 
     %recombine individuals (crossover)
-    ChildSelCh = recombin(CROSSOVER, ParentSelCh, REPR_ID, Dist, PR_CROSS); 
+    ChildSelCh = recombin(CROSSOVER, ParentSelCh, REPR_ID, Dist, PR_CROSS, SUBPOP); 
     
     % Mutation
     ChildSelCh=mutateTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID, ADAPTIVE_MUT);  
@@ -187,14 +187,14 @@ while gen < MAXGEN
         % TODO: Sieben
         % if PRESERVE_DIVERSITY == "crowding"
         % if PRESERVE_DIVERSITY == "islands"
-        ChildSelCh = rts(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REPR_ID);
+        ChildSelCh = crowding(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REPR_ID);
         
         % Evaluate offspring after crowding, call objective function
         ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
     end
    
     % Reinsert offspring into population
-    [Chrom,ObjV] = survivor_selection(ChildSelCh, Chrom, ObjV, ObjVSelChildren, SURVIVOR_SELECTION);
+    [Chrom,ObjV] = survivor_selection(ChildSelCh, Chrom, ObjV, ObjVSelChildren, SURVIVOR_SELECTION, SUBPOP);
     
     %Improve the population by removing loops etc
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);

@@ -27,21 +27,23 @@
 % Date: 24-Feb-94
 
 
-function FitnV = scaling( ObjV, Smul )
-[Nind, Nobj] = size( ObjV ) ;
+function FitnV = scaling( ObjV,SUBPOP, Smul )
+[Nind, ~] = size( ObjV ) ;
+Nind=Nind/SUBPOP;
 for i=1:size(ObjV,1)
     if(ObjV(i,1)~= 0)
         ObjV(i,1)=1/ObjV(i,1);
     end
 end
-if nargin == 1
+if nargin ~=3
 	Smul = 2 ;
 end
-
-
-Oave = sum( ObjV ) / Nind ;
-Omin = min( ObjV ) ;
-Omax = max( ObjV ) ;
+FitnV=[];
+for irun=1:SUBPOP
+    ObjVSub = ObjV((irun-1)*Nind+1:irun*Nind);
+Oave = sum( ObjVSub ) / Nind ;
+Omin = min( ObjVSub ) ;
+Omax = max( ObjVSub) ;
 
 if (Omin > ( Smul * Oave - Omax ) / ( Smul - 1.0 ))
 	delta = Omax - Oave; 
@@ -52,4 +54,6 @@ else
 	a = Oave / delta ;
 	b = -Omin * Oave / delta; 
 end
-FitnV = (ObjV.*a + b) ;
+FitnVSub = (ObjVSub.*a + b) ;
+end
+FitnV=[FitnV;FitnVSub];
