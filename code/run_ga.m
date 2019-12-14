@@ -127,7 +127,6 @@ ObjV = tspfun(Chrom, Dist, REPR_ID);
 % generational loop
 gen=0;
 while gen < MAXGEN
-    sObjV=sort(ObjV);
     best(gen+1)=min(ObjV);
     minimum=best(gen+1);
     mean_fits(gen+1)=mean(ObjV);
@@ -150,8 +149,11 @@ while gen < MAXGEN
     end
 
     % Stop criteria if X% of candidates equal to minimum 
-    if STOP_PERC && (sObjV(stopN)-sObjV(1) <= 1e-15)
-        break;
+    if STOP_PERC
+        sObjV=sort(ObjV);
+        if sObjV(stopN)-sObjV(1) <= 1e-15
+            break;
+        end
     end
     
     % Stopping criteria based on threshold
