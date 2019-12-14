@@ -205,7 +205,9 @@ while gen < MAXGEN
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
     
     %if there are islands -> do a switch every 20 generations
-    if SUBPOP >1 && mod(gen,10)==0
+    
+    if SUBPOP >1 
+        subminima = sub_minima(ObjV,SUBPOP);
        [Chrom, ObjV] = switch_islands(Chrom, ObjV, SUBPOP);
     end
     
