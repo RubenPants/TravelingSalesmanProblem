@@ -38,17 +38,5 @@ for irun=1:SUBPOP
     Chrom=[newChrom;SelCh];
     ObjV=[newObjV;ObjVSel];
 end
-length= NindCh-NindOff-size(Chrom,1);
-if length <0
-    k = randperm(size(Chrom,1));
-    Ex_Ran = Chrom;
-    Ex_Ran(k(1:abs(length)),:) = [];
-    Chrom=Ex_Ran;
-elseif length > 0
-    for i=1:length
-        random = randi(1,size(Chrom,1));
-        Chrom = [Chrom;Chrom(random,:)];
-        ObjV = [ObjV;ObjV(random,1)];
-    end    
-end
+
 end

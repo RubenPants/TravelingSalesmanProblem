@@ -59,6 +59,8 @@ if any(strcmp(keys(data), "parent_selection")); PARENT_SELECTION = data("parent_
 if any(strcmp(keys(data), "survivor_selection")); SURVIVOR_SELECTION = data("survivor_selection"); else; SURVIVOR_SELECTION = "elitism"; end
 if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR = "off"; end
 if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.2; end
+if any(strcmp(keys(data), "subpopulations")); SUBPOP = data("subpopulations"); else; SUBPOP = 1; end
+
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
@@ -106,7 +108,7 @@ for i=1:size(x,1)
         Dist(i,j)=sqrt((x(i)-x(j))^2+(y(i)-y(j))^2);
     end
 end
-SUBPOP=8;
+
 % initialize population
 Chrom=zeros(NIND,NVAR);
 for row=1:NIND
@@ -182,11 +184,8 @@ while gen < MAXGEN
     ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
 
     % Keeping diversity -> crowding
-    if PRESERVE_DIVERSITY ~= "off"
+    if PRESERVE_DIVERSITY == "on"
         ObjVSelParents = tspfun(ParentSelCh, Dist, REPR_ID);
-        % TODO: Sieben
-        % if PRESERVE_DIVERSITY == "crowding"
-        % if PRESERVE_DIVERSITY == "islands"
         ChildSelCh = crowding(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REPR_ID);
         
         % Evaluate offspring after crowding, call objective function
@@ -198,6 +197,11 @@ while gen < MAXGEN
     
     %Improve the population by removing loops etc
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
+    
+    %if there are islands -> do a switch every 20 generations
+    if SUBPOP >1 && mod(gen,20)==0
+       [Chrom, ObjV] = switch_islands(Chrom, ObjV, SUBPOP);
+    end
     
     % Increment generation counter
     gen=gen+1;            
