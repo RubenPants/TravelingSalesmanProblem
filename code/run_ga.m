@@ -207,10 +207,12 @@ while gen < MAXGEN
     %if there are islands -> do a switch every 20 generations
     
     if SUBPOP >1 
-        counter = counter + OnjV==previous_best;
-        while sum(counter>5)>1 
-            index1 = find(ready,1);
-            index2 = find(ready,2);
+        check = sub_minima(ObjV,SUBPOP) ==best(:,gen+1);
+        counter = counter + check;
+        
+        while sum(counter>=5)>1 
+            index1 = find(counter>5,1);
+            index2 = find(counter>5,2);
             [Chrom, ObjV] = switch_islands(Chrom, ObjV,index1,index2, SUBPOP);
             counter(index1,1)=0;
             counter(index2,1)=0;
@@ -225,6 +227,11 @@ end
 output = containers.Map;
 output('minimum') = minimum;
 output('generation') = gen;
+if SUBPOP~=1
 output('best') = min(best);
+else
+output('best') = best;    
+end
+
 output('worst') = worst;
 output('mean_fits') = mean_fits;

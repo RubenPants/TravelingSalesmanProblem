@@ -12,9 +12,9 @@ NextObjVSub=ObjV(index2*Nind+1:(index2+1)*Nind);
 for index=1:extra
     random = randi(Nind);
     substitute = ChromSub(random,:);
-    substituteObjV = ObjVSub(random,:);
+    substituteObjV = ObjVSub(random,1);
     ChromSub(random,:)=NextChromSub(random,:);
-    ObjVSub(random,1)=NextObjVSub(random,:);
+    ObjVSub(random,1)=NextObjVSub(random,1);
     NextChromSub(random,:)=substitute;
     NextObjVSub(random,1)=substituteObjV;
 
