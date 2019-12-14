@@ -23,7 +23,7 @@
 %                after mutation in the same format as OldChrom.
 
 
-function Chrom = mutateTSP(MUT_F, Chrom, MutOpt, Representation)
+function Chrom = mutateAdaptiveTSP(MUT_F, Chrom, MutOpt, Representation)
     % Ensure path-representation
     if Representation==1 
         Chrom=adj2path(Chrom);
@@ -31,10 +31,17 @@ function Chrom = mutateTSP(MUT_F, Chrom, MutOpt, Representation)
     
     % Loop over all the chromosomes and mutate if needed
     [rows,~]=size(Chrom);
+    dic = string(zeros(1,rows));
+    frac = rows / 20;  % Start extra mutation if genome occupies more than 10% of population
     for r=1:rows
-        if rand < MutOpt
-            Chrom(r,:) = feval(MUT_F, Chrom(r,:));
+        k = join(string(Chrom(r,:)),"");
+        if sum(k==dic) > frac  % Only mutate if enough occurrences
+            while rand < MutOpt
+                Chrom(r,:) = feval(MUT_F, Chrom(r,:));
+            end
+            k = join(string(Chrom(r,:)),"");
         end
+        dic(r) = k;
     end
     
     % Put back to starting representation

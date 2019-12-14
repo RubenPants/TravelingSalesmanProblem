@@ -90,7 +90,7 @@ if VISUAL || PRINT
     fprintf("\tHeuristic: %s\n", HEUR)
     fprintf("\tParent selection: %s\n", PARENT_SELECTION)
     fprintf("\tSurvivor selection: %s\n", SURVIVOR_SELECTION)
-    fprintf("\tAdaptive mutatiton: %d\n", ADAPTIVE_MUT)
+    fprintf("\tAdaptive mutation: %d\n", ADAPTIVE_MUT)
     fprintf("\tPreserve diveristy: %s\n", PRESERVE_DIVERSITY)
 end
 
@@ -166,12 +166,17 @@ while gen < MAXGEN
 
     % Parent selection
     ParentSelCh = parent_selection(ObjV,Chrom,GGAP,NIND,PARENT_SELECTION);
+    ChildSelCh = ParentSelCh;
+    
+    if ADAPTIVE_MUT
+        ChildSelCh = mutateAdaptiveTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID); 
+    end
 
     %recombine individuals (crossover)
-    ChildSelCh = recombin(CROSSOVER, ParentSelCh, REPR_ID, Dist, PR_CROSS); 
+    ChildSelCh = recombin(CROSSOVER, ChildSelCh, REPR_ID, Dist, PR_CROSS); 
     
     % Mutation
-    ChildSelCh=mutateTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID, ADAPTIVE_MUT);  
+    ChildSelCh=mutateTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID);  
     
     %Local heuristics
     if HEUR ~= "off"
