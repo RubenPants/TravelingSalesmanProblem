@@ -52,14 +52,15 @@ if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; ST
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
 if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation'); else; STOP_STAG = 0; end
 if any(strcmp(keys(data), "print")); PRINT = data('print'); else; PRINT= false; end
-if any(strcmp(keys(data), "preserve_diveristy")); PRESERVE_DIVERSITY = data('preserve_diversity'); else; PRESERVE_DIVERSITY = "off"; end
+if any(strcmp(keys(data), "crowding")); CROWDING = data('crowding'); else; CROWDING = 0; end
 if any(strcmp(keys(data), "adaptive_mut")); ADAPTIVE_MUT = data('adaptive_mut'); else; ADAPTIVE_MUT = false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if any(strcmp(keys(data), "parent_selection")); PARENT_SELECTION = data("parent_selection"); else; PARENT_SELECTION = "ranking"; end
 if any(strcmp(keys(data), "survivor_selection")); SURVIVOR_SELECTION = data("survivor_selection"); else; SURVIVOR_SELECTION = "elitism"; end
 if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR = "off"; end
 if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.2; end
-SUBPOP = 4;  % TODO: Fix (create slider in tspgui)
+if any(strcmp(keys(data), "subpop")); SUBPOP = data("subpop"); else; SUBPOP = 1; end
+if any(strcmp(keys(data), "pop_stag")); POP_STAG = data("pop_stag"); else; POP_STAG = 20; end
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
@@ -100,8 +101,9 @@ if VISUAL || PRINT
     fprintf("\tParent selection: %s\n", PARENT_SELECTION)
     fprintf("\tSurvivor selection: %s\n", SURVIVOR_SELECTION)
     fprintf("\tAdaptive mutation: %d\n", ADAPTIVE_MUT)
-    fprintf("\tPreserve diveristy: %s\n", PRESERVE_DIVERSITY)
+    fprintf("\tCrowding: %d\n", CROWDING)
     fprintf("\tNumber of populations: %d\n", SUBPOP)
+    fprintf("\tPopulation stagnation: %d\n", POP_STAG)
 end
 
 % Initialize the algorithm
@@ -154,10 +156,11 @@ while gen < MAXGEN
 
     % Visualize progress
     if VISUAL
-        if REPR_ID == 1
-            visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
-        else
-            visualizeTSP(x,y,Chrom(t,:), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
+        if size(best, 1) > 1, best_ = min(best); mean_fits_ = mean(mean_fits); worst_ = max(worst);
+        else, best_ = best; mean_fits_ = mean_fits; worst_ = worst;
+        end
+        if REPR_ID == 1, visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best_, mean_fits_, worst_, ah2, ObjV, NIND, ah3);
+        else, visualizeTSP(x,y,Chrom(t,:), minimum, ah1, gen, best_, mean_fits_, worst_, ah2, ObjV, NIND, ah3);
         end
     end
 
@@ -175,8 +178,13 @@ while gen < MAXGEN
     end 
     
     % Stopping criteria based on generational improvement
-    if STOP_STAG && (gen >= STOP_STAG) && (best(gen+1) == best(gen+1-STOP_STAG))
+    if STOP_STAG && (gen >= STOP_STAG) && (min(best(gen+1)) == min(best(gen+1-STOP_STAG)))
         break    
+    end
+    
+    % Merge islands if stagnated
+    if SUBPOP > 1
+        Chrom = islands(Chrom, SUBPOP, SUBPOP_SIZE, best, gen, POP_STAG, REPR_ID);
     end
 
     % Parent selection
@@ -188,7 +196,7 @@ while gen < MAXGEN
     end
 
     %recombine individuals (crossover)
-    ChildSelCh = recombin(CROSSOVER, ChildSelCh, REPR_ID, Dist, PR_CROSS); 
+    ChildSelCh = recombin(CROSSOVER, ChildSelCh, REPR_ID, Dist, PR_CROSS, SUBPOP); 
     
     % Mutation
     ChildSelCh=mutateTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID);  
@@ -202,11 +210,8 @@ while gen < MAXGEN
     ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
 
     % Keeping diversity -> crowding
-    if PRESERVE_DIVERSITY ~= "off"
+    if CROWDING
         ObjVSelParents = tspfun(ParentSelCh, Dist, REPR_ID);
-        % TODO: Sieben
-        % if PRESERVE_DIVERSITY == "crowding"
-        % if PRESERVE_DIVERSITY == "islands"
         ChildSelCh = rts(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REPR_ID);
         
         % Evaluate offspring after crowding, call objective function
@@ -224,6 +229,7 @@ while gen < MAXGEN
 end
 
 % Create the output-container
+if size(best, 1) > 1, best = min(best); mean_fits = mean(mean_fits); worst = max(worst); end
 output = containers.Map;
 output('minimum') = minimum;
 output('generation') = gen;
