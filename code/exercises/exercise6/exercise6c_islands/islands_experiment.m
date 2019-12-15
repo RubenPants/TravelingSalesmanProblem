@@ -129,11 +129,43 @@ Results: In all rondrits 016, 018, 023, and 025, all island configurations
 obtained perfect results in at least one run out of 20. This is why we
 discarded these samples for this experiment.
 
-Result: 1 - 048 - performance: 100.98
-Result: 1 - 050 - performance: 100.60
-Result: 1 - 051 - performance: 101.33
-Result: 1 - 067 - performance: 101.07
-Result: 1 - 070 - performance: 102.01
-Result: 1 - 100 - performance: 103.81
-Result: 1 - 127 - performance: 100.00
+Result: 1 - 048 - performance: 101.30
+Result: 1 - 050 - performance: 101.03
+Result: 1 - 051 - performance: 101.11
+Result: 1 - 067 - performance: 101.17
+Result: 1 - 070 - performance: 102.51
+Result: 1 - 100 - performance: 103.75
+Result: 1 - 127 - performance: 102.76
+
+Result: 2 - 048 - performance: 100.93
+Result: 2 - 050 - performance: 100.67
+Result: 2 - 051 - performance: 100.96
+Result: 2 - 067 - performance: 100.81
+Result: 2 - 070 - performance: 102.10
+Result: 2 - 100 - performance: 102.90
+Result: 2 - 127 - performance: 103.21
+
+Result: 4 - 048 - performance: 100.86
+Result: 4 - 050 - performance: 100.75
+Result: 4 - 051 - performance: 101.33
+Result: 4 - 067 - performance: 101.79
+Result: 4 - 070 - performance: 101.82
+Result: 4 - 100 - performance: 103.04
+Result: 4 - 127 - performance: 102.31
+
+Result: 8 - 048 - performance: 100.88
+Result: 8 - 050 - performance: 101.15
+Result: 8 - 051 - performance: 101.15
+Result: 8 - 067 - performance: 101.68
+Result: 8 - 070 - performance: 101.88
+Result: 8 - 100 - performance: 103.47
+Result: 8 - 127 - performance: 103.25
+
+Result: 16 - 048 - performance: 101.21
+Result: 16 - 050 - performance: 100.42
+Result: 16 - 051 - performance: 101.28
+Result: 16 - 067 - performance: 101.60
+Result: 16 - 070 - performance: 102.42
+Result: 16 - 100 - performance: 103.03
+Result: 16 - 127 - performance: 102.86
 %}
