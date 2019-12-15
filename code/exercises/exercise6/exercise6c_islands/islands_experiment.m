@@ -19,7 +19,7 @@ addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\code'
 addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\code\datasets'
 
 % Load all the datasets
-data_list = ["016", "018", "023", "025", "048", "050", "051", "067", "070", "100", "127"];
+data_list = ["048", "050", "051", "067", "070", "100", "127"];
 optima = load('rondrit_optima.tsp');
 
 ISLANDS = [1, 2, 4, 8, 16];
@@ -98,7 +98,7 @@ end
 
 
 % Function called to visualize the progress
-function create_figure(title, best_f, mean_f, worst_f)    
+function create_figure(title, best_f, ~, ~)    
     figure();
     x=0:length(best_f)-1;
     title = title + ".fig";
@@ -125,7 +125,15 @@ end
 
 
 %{
-Results:
+Results: In all rondrits 016, 018, 023, and 025, all island configurations
+obtained perfect results in at least one run out of 20. This is why we
+discarded these samples for this experiment.
 
---> pr_cross=0.2; pr_mut=0.2;  
+Result: 1 - 048 - performance: 100.98
+Result: 1 - 050 - performance: 100.60
+Result: 1 - 051 - performance: 101.33
+Result: 1 - 067 - performance: 101.07
+Result: 1 - 070 - performance: 102.01
+Result: 1 - 100 - performance: 103.81
+Result: 1 - 127 - performance: 100.00
 %}
