@@ -1,7 +1,7 @@
 function [Chrom,ObjV] = switch_islands(Chrom, ObjV,index1,index2, SUBPOP)
 [NindCh,Nvar] = size(Chrom);
 Nind = NindCh/SUBPOP;
-extra = ceil(Nind/SUBPOP);
+extra = 2*ceil(Nind/SUBPOP);
 
 ChromSub=Chrom((index1-1)*Nind+1:index1*Nind,:);
 ObjVSub=ObjV((index1-1)*Nind+1:index1*Nind);

@@ -131,7 +131,7 @@ gen=0;
 while gen < MAXGEN
     sObjV=sort(ObjV);
     best(:,gen+1)=sub_minima(ObjV,SUBPOP);
-    minimum=best(gen+1);
+    minimum=min(best(:,gen+1));
     mean_fits(gen+1)=mean(ObjV);
     worst(gen+1)=max(ObjV);
     

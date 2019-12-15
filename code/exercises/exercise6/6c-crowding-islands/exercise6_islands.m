@@ -26,7 +26,7 @@ addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code\dataset
 data_list = ["016", "018", "023", "025", "048", "050", "051", "067", "070", "100", "127"];
 optima = load('rondrit_optima.tsp');
 
-ISLANDS = [1,8];
+ISLANDS = [1,4];
 %ISLANDS = [1,2,4,8];
 % Run the experiment
 if CALCULATE_NEW
