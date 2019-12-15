@@ -206,17 +206,20 @@ while gen < MAXGEN
     
     %if there are islands -> do a switch every 20 generations
     
-    if SUBPOP >1 
+    if SUBPOP >1 && mod(gen,20)==0
+        [Chrom, ObjV] = migrate(Chrom, SUBPOP, [0.4,1,2], ObjV);
+        %{
         check = sub_minima(ObjV,SUBPOP) ==best(:,gen+1);
         counter = counter + check;
         
-        while sum(counter >= 5)>1 
+        while sum(counter >= NIND/SUBPOP/2)>1 
             index1 = find(counter>=5,1);
             counter(index1,1)=0;
             index2 = find(counter>=5,1);
             counter(index2,1)=0;
             [Chrom, ObjV] = switch_islands(Chrom, ObjV,index1,index2, SUBPOP);
         end
+        %}
     end
     
     % Increment generation counter

@@ -55,5 +55,6 @@ else
 	b = -Omin * Oave / delta; 
 end
 FitnVSub = (ObjVSub.*a + b) ;
-end
 FitnV=[FitnV;FitnVSub];
+end
+

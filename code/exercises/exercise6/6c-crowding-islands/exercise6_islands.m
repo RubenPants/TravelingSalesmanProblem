@@ -21,12 +21,14 @@ RUNS=20;
 % Add paths to other files
 addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code'
 addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code\datasets'
+addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code\benchmarks'
 
 % Load all the datasets
 data_list = ["016", "018", "023", "025", "048", "050", "051", "067", "070", "100", "127"];
 optima = load('rondrit_optima.tsp');
-
-ISLANDS = [1,4];
+%data_list=["bcl380.tsp","belgiumtour.tsp","rbx711.tsp","xqf131.tsp","xql662.tsp"];
+%optima=load('benchmark_optima.tsp');
+ISLANDS = [1,8];
 %ISLANDS = [1,2,4,8];
 % Run the experiment
 if CALCULATE_NEW
@@ -82,6 +84,7 @@ function c = run_data(set, i)
     
     % Load data
     data = load(sprintf('rondrit%s.tsp', set));
+    %data=load(set);
     x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
     
     % Create input container
@@ -135,7 +138,7 @@ function create_figure(title, best_f, mean_f, worst_f)
     %legend("best without ISLANDS", "best 2 ISLANDS","best 4 ISLANDS","best 8 ISLANDS", "mean without ISLANDS", "mean 2 ISLANDS","mean 4 ISLANDS","mean 8 ISLANDS", "worst without ISLANDS", "worst 2 ISLANDS","worst 4 ISLANDS","worst 8 ISLANDS");
     legend("best without ISLANDS","best 8 ISLANDS", "mean without ISLANDS","mean 8 ISLANDS", "worst without ISLANDS","worst 8 ISLANDS");
     
-    savefig(title);
+    %savefig(title);
     hold off
 end
 
