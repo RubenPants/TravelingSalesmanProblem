@@ -10,12 +10,12 @@ the real optimum.
 % Parameters
 global GENERATIONS RUNS CALCULATE_NEW
 CALCULATE_NEW = true;
-GENERATIONS = 100;
+GENERATIONS = 400;
 RUNS=20;
 % Add paths to other files
 addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code'
 addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code\benchmarks'
-BENCHMARK("No improbements","all improvements");
+BENCHMARK = ["all improvements","No improbements"];
 % Load all the datasets
 data_list=["bcl380.tsp","belgiumtour.tsp","rbx711.tsp","xqf131.tsp","xql662.tsp"];
 optima=load('benchmark_optima.tsp');
@@ -73,7 +73,7 @@ function c = run_data(set, i)
     global GENERATIONS
     
     % Load data
-    data = load(sprintf('rondrit%s.tsp', set));
+    data = load(set);
     %data=load(set);
     x=data(:,1)/max([data(:,1);data(:,2)]);y=data(:,2)/max([data(:,1);data(:,2)]);
     data = containers.Map;
@@ -83,12 +83,18 @@ function c = run_data(set, i)
     data("representation") = "path";
     if i=="all improvements"       
     % Create input container
-    
-    data("crossover") = "heuristic_crossover";
+     data("crossover") = "heuristic_crossover";
     data("pr_cross") = 0.4;
     data("mutation") = "inversion";
     data("pr_mut") = 0.4;
-    data("parent_selection") = "scaling";
+    data("diversify") = 1;
+    data("loop_detect")=1;
+    data("parent_selection")="scaling";
+    data("survivor_selection")="round_robin";
+    data("preserve_diversity")="on";
+    data("local_heur")="both";
+    data("adaptive_mut")=true;
+    
     end
     % Run experiment
     c = run_ga(data);
@@ -121,13 +127,9 @@ function create_figure(title, best_f, mean_f, worst_f)
     plot(x, mean_without_BENCHMARK, 'b',x,mean_2_BENCHMARK, 'b:')
     plot(x, worst_without_BENCHMARK, 'r',x,worst_2_BENCHMARK, 'r:')
     
-    %plot(x, best_without_BENCHMARK, 'g',x,best_2_BENCHMARK, 'g:',x,best_4_BENCHMARK, 'g-.', x, best_8_BENCHMARK, 'g--')
-    %plot(x, mean_without_BENCHMARK, 'b',x,mean_2_BENCHMARK, 'b:',x,mean_4_BENCHMARK, 'b-.', x, mean_8_BENCHMARK, 'b--')
-    %plot(x, worst_without_BENCHMARK, 'r',x,worst_2_BENCHMARK, 'r:',x,worst_4_BENCHMARK, 'r-.', x, worst_8_BENCHMARK, 'r--')
      ylabel("Fitness")
     xlabel("Generation")
-    %legend("best without BENCHMARK", "best 2 BENCHMARK","best 4 BENCHMARK","best 8 BENCHMARK", "mean without BENCHMARK", "mean 2 BENCHMARK","mean 4 BENCHMARK","mean 8 BENCHMARK", "worst without BENCHMARK", "worst 2 BENCHMARK","worst 4 BENCHMARK","worst 8 BENCHMARK");
-    legend("best without BENCHMARK","best 8 BENCHMARK", "mean without BENCHMARK","mean 8 BENCHMARK", "worst without BENCHMARK","worst 8 BENCHMARK");
+    legend("best without improvements","best with improvements", "mean without improvements","mean with improvements", "worst without improvements","with improvements");
     
     %savefig(title);
     hold off

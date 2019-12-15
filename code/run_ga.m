@@ -52,7 +52,7 @@ if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; ST
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
 if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation'); else; STOP_STAG = 0; end
 if any(strcmp(keys(data), "print")); PRINT = data('print'); else; PRINT= false; end
-if any(strcmp(keys(data), "preserve_diveristy")); PRESERVE_DIVERSITY = data('preserve_diversity'); else; PRESERVE_DIVERSITY = "off"; end
+if any(strcmp(keys(data), "preserve_diversity")); PRESERVE_DIVERSITY = data('preserve_diversity'); else; PRESERVE_DIVERSITY = "off"; end
 if any(strcmp(keys(data), "adaptive_mut")); ADAPTIVE_MUT = data('adaptive_mut'); else; ADAPTIVE_MUT = false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if any(strcmp(keys(data), "parent_selection")); PARENT_SELECTION = data("parent_selection"); else; PARENT_SELECTION = "ranking"; end
