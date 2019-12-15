@@ -44,7 +44,7 @@ if CALCULATE_NEW
                 intermediate_worst = intermediate_worst + output("worst");
                 fprintf("#")
             end
-            result = 100 * geomean(intermediate) / optima(i);
+            result = 100 * geomean(intermediate) / optima(i+4);  % Shift optima since we discarded first 4 experiments
             best_f(i,island,:) = intermediate_best / RUNS;
             mean_f(i,island,:) = intermediate_mean / RUNS;
             worst_f(i,island,:) = intermediate_worst / RUNS;
