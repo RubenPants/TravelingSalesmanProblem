@@ -10,14 +10,15 @@ the real optimum.
 % Parameters
 global GENERATIONS RUNS CALCULATE_NEW
 CALCULATE_NEW = true;
-GENERATIONS = 400;
+GENERATIONS = 300;
 RUNS=20;
 % Add paths to other files
 addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code'
 addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code\benchmarks'
-BENCHMARK = ["all improvements","No improbements"];
+BENCHMARK = ["all improvements","No improvements",];
 % Load all the datasets
 data_list=["bcl380.tsp","belgiumtour.tsp","rbx711.tsp","xqf131.tsp","xql662.tsp"];
+
 optima=load('benchmark_optima.tsp');
 
 % Run the experiment
@@ -26,25 +27,28 @@ if CALCULATE_NEW
     mean_f = zeros(length(data_list), length(BENCHMARK), GENERATIONS);
     worst_f = zeros(length(data_list), length(BENCHMARK), GENERATIONS);
     for c=1:length(BENCHMARK)
-        fprintf("Calculating %s - Progress: ", BENCHMARK(c))
+        fprintf("Calculating %s - Progress: \n", BENCHMARK(c))
         total = zeros(1,length(data_list));
         for i=1:length(data_list)
+            fprintf(data_list(i)+": \n");
             intermediate = zeros(1, RUNS);
             intermediate_best = zeros(1,GENERATIONS);
             intermediate_mean = zeros(1,GENERATIONS);
             intermediate_worst = zeros(1,GENERATIONS);
             for j=1:RUNS
+                fprintf("run: %d ",j);
                 output = run_data(data_list(i), BENCHMARK(c));
                 intermediate(j) = output("minimum");
                 intermediate_best = intermediate_best + output("best");
                 intermediate_mean = intermediate_mean + output("mean_fits");
                 intermediate_worst = intermediate_worst + output("worst");
+                fprintf("# \n");
             end
             total(i) = geomean(intermediate) / optima(i);
             best_f(i,c,:) = intermediate_best / RUNS;
             mean_f(i,c,:) = intermediate_mean / RUNS;
             worst_f(i,c,:) = intermediate_worst / RUNS;
-            fprintf("#")
+            
         end
         performance = mean(total) * 100;  % Percentage of 100 is perfect match
         fprintf("\nResult: %s - performance: %.2f\n\n", BENCHMARK(c), performance);
@@ -139,6 +143,9 @@ end
 
 %{
 Results:
-Result: 0 - performance: 104.27 (no BENCHMARK)
-Result: 1 - performance: 106.03 (BENCHMARK)
+Calculating all improvements - Progress: #####
+Result: all improvements - performance: 111.88
+
+Calculating No improvements - Progress: #####
+Result: No improvements - performance: 807.43
 %}

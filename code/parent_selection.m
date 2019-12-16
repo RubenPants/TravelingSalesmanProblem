@@ -9,7 +9,8 @@ function ParentSelCh = parent_selection(ObjV,Chrom,GGAP,NIND,PARENT_SELECTION, S
 if PARENT_SELECTION == "ranking"
         FitnV=ranking(ObjV,NaN, SUBPOP);
 elseif PARENT_SELECTION == "scaling"
-        FitnV=scaling(ObjV,SUBPOP);   
+        FitnV=scaling(ObjV,SUBPOP);
+        
 end
     
 if PARENT_SELECTION=="tournament"

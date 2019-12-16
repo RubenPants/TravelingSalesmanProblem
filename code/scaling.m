@@ -57,4 +57,8 @@ end
 FitnVSub = (ObjVSub.*a + b) ;
 FitnV=[FitnV;FitnVSub];
 end
+FitnV(FitnV<0)=0;
+if isequal(FitnV,zeros(Nind,1)) || isequal(isnan(FitnV),ones(Nind,1))
+    FitnV=ObjV;
+end
 

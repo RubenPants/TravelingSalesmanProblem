@@ -14,10 +14,6 @@
 %   Representation  - integer specifying which encoding is used
 %                       1 : adjacency representation
 %                       2 : path representation
-%   diversify       - integer specifying if diversity must be enforced
-%                       0: No
-%                       1: Yes
-%
 % Output parameter:
 %    NewChrom  - Matrix containing the chromosomes of the population
 %                after mutation in the same format as OldChrom.
