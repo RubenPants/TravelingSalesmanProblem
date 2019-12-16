@@ -5,6 +5,14 @@ Swap two cities and check if the local distance decreased. If so, return
 the mutated chromosome back.
 
 Reference paper: https://arxiv.org/ftp/arxiv/papers/1409/1409.3078.pdf
+
+input parameters:
+    Chrom: matrix containing the population
+    
+    Dist: matrix containing the distances between two cities
+
+output parameter:
+    Chrom: the changed population
 %}
 
 function Chrom =  two_opt(Chrom, Dist)

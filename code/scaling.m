@@ -30,7 +30,7 @@
 function FitnV = scaling( ObjV,SUBPOP, Smul )
 [Nind, ~] = size( ObjV ) ;
 Nind=Nind/SUBPOP;
-for i=1:size(ObjV,1)
+for i=1:size(ObjV,1) %as we are working with distances -> invert them
     if(ObjV(i,1)~= 0)
         ObjV(i,1)=1/ObjV(i,1);
     end
