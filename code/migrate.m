@@ -47,7 +47,11 @@
 
 function [Chrom, ObjV] = migrate(Chrom, SUBPOP, MigOpt, ObjV);
 
-
+    for i=1:size(ObjV,1) %as we are working with distances -> invert them
+    if(ObjV(i,1)~= 0)
+        ObjV(i,1)=1/ObjV(i,1);
+    end
+    end
 % Check parameter consistency
    if nargin < 2, error('Input parameter SUBPOP missing'); end
    if (nargout == 2 & nargin < 4), error('Input parameter ObjV missing'); end
@@ -143,6 +147,12 @@ function [Chrom, ObjV] = migrate(Chrom, SUBPOP, MigOpt, ObjV);
             Chrom((1:MigTeil)+(irun-1)*NIND,:) = ChromMig(IndMigN,:);
             if IsObjV == 1, ObjV((1:MigTeil)+(irun-1)*NIND,:) = ObjVMig(IndMigN,:); end
       end
+      for i=1:size(ObjV,1) %as we are working with distances -> invert them
+    if(ObjV(i,1)~= 0)
+        ObjV(i,1)=1/ObjV(i,1);
+    end
+      end
+end
 
 
 % End of function

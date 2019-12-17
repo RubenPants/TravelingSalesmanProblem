@@ -14,10 +14,6 @@
 %   Representation  - integer specifying which encoding is used
 %                       1 : adjacency representation
 %                       2 : path representation
-%   diversify       - integer specifying if diversity must be enforced
-%                       0: No
-%                       1: Yes
-%
 % Output parameter:
 %    NewChrom  - Matrix containing the chromosomes of the population
 %                after mutation in the same format as OldChrom.
@@ -32,7 +28,7 @@ function Chrom = mutateAdaptiveTSP(MUT_F, Chrom, MutOpt, Representation)
     % Loop over all the chromosomes and mutate if needed
     [rows,~]=size(Chrom);
     dic = string(zeros(1,rows));
-    frac = rows / 20;  % Start extra mutation if genome occupies more than 10% of population
+    frac = rows / 20;  % Start extra mutation if genome occupies more than 5% of population
     for r=1:rows
         k = join(string(Chrom(r,:)),"");
         if sum(k==dic) > frac  % Only mutate if enough occurrences

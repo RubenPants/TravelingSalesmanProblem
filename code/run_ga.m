@@ -52,13 +52,15 @@ if any(strcmp(keys(data), "stop_perc")); STOP_PERC = data('stop_perc'); else; ST
 if any(strcmp(keys(data), "stop_thr")); STOP_THR = data('stop_thr'); else; STOP_THR = 0; end
 if any(strcmp(keys(data), "stop_stagnation")); STOP_STAG = data('stop_stagnation'); else; STOP_STAG = 0; end
 if any(strcmp(keys(data), "print")); PRINT = data('print'); else; PRINT= false; end
-if any(strcmp(keys(data), "preserve_diveristy")); PRESERVE_DIVERSITY = data('preserve_diversity'); else; PRESERVE_DIVERSITY = "off"; end
+if any(strcmp(keys(data), "preserve_diversity")); PRESERVE_DIVERSITY = data('preserve_diversity'); else; PRESERVE_DIVERSITY = "off"; end
 if any(strcmp(keys(data), "adaptive_mut")); ADAPTIVE_MUT = data('adaptive_mut'); else; ADAPTIVE_MUT = false; end
 if any(strcmp(keys(data), "visual")); VISUAL = true; else; VISUAL = false; end
 if any(strcmp(keys(data), "parent_selection")); PARENT_SELECTION = data("parent_selection"); else; PARENT_SELECTION = "ranking"; end
 if any(strcmp(keys(data), "survivor_selection")); SURVIVOR_SELECTION = data("survivor_selection"); else; SURVIVOR_SELECTION = "elitism"; end
 if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR = "off"; end
 if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.2; end
+if any(strcmp(keys(data), "subpopulations")); SUBPOP = data("subpopulations"); else; SUBPOP = 1; end
+
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
@@ -98,8 +100,8 @@ end
 GGAP = 1 - ELITIST;
 mean_fits = zeros(1,0);
 worst = zeros(1,0);
-best = zeros(1, 0);
-
+best = zeros(SUBPOP, 0);
+counter = zeros(SUBPOP,1);
 Dist=zeros(NVAR,NVAR);
 for i=1:size(x,1)
     for j=1:size(y,1)
@@ -127,8 +129,9 @@ ObjV = tspfun(Chrom, Dist, REPR_ID);
 % generational loop
 gen=0;
 while gen < MAXGEN
-    best(gen+1)=min(ObjV);
-    minimum=best(gen+1);
+    sObjV=sort(ObjV);
+    best(:,gen+1)=sub_minima(ObjV,SUBPOP);
+    minimum=min(best(:,gen+1));
     mean_fits(gen+1)=mean(ObjV);
     worst(gen+1)=max(ObjV);
     
@@ -167,7 +170,8 @@ while gen < MAXGEN
     end
 
     % Parent selection
-    ParentSelCh = parent_selection(ObjV,Chrom,GGAP,NIND,PARENT_SELECTION);
+    ParentSelCh = parent_selection(ObjV,Chrom,GGAP,NIND,PARENT_SELECTION, SUBPOP);
+
     ChildSelCh = ParentSelCh;
     
     if ADAPTIVE_MUT
@@ -175,7 +179,7 @@ while gen < MAXGEN
     end
 
     %recombine individuals (crossover)
-    ChildSelCh = recombin(CROSSOVER, ChildSelCh, REPR_ID, Dist, PR_CROSS); 
+    ChildSelCh = recombin(CROSSOVER, ChildSelCh, REPR_ID, Dist, PR_CROSS, SUBPOP); 
     
     % Mutation
     ChildSelCh=mutateTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID);  
@@ -189,22 +193,37 @@ while gen < MAXGEN
     ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
 
     % Keeping diversity -> crowding
-    if PRESERVE_DIVERSITY ~= "off"
+    if PRESERVE_DIVERSITY == "on"
         ObjVSelParents = tspfun(ParentSelCh, Dist, REPR_ID);
-        % TODO: Sieben
-        % if PRESERVE_DIVERSITY == "crowding"
-        % if PRESERVE_DIVERSITY == "islands"
-        ChildSelCh = rts(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REPR_ID);
+        ChildSelCh = crowding(ParentSelCh, ObjVSelParents,ChildSelCh,ObjVSelChildren,REPR_ID);
         
         % Evaluate offspring after crowding, call objective function
         ObjVSelChildren = tspfun(ChildSelCh, Dist, REPR_ID);
     end
    
     % Reinsert offspring into population
-    [Chrom,ObjV] = survivor_selection(ChildSelCh, Chrom, ObjV, ObjVSelChildren, SURVIVOR_SELECTION);
+    [Chrom,ObjV] = survivor_selection(ChildSelCh, Chrom, ObjV, ObjVSelChildren, SURVIVOR_SELECTION, SUBPOP);
     
     %Improve the population by removing loops etc
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
+    
+    %if there are islands -> do a switch every 20 generations
+    
+    if SUBPOP >1 && mod(gen,20)==0
+        [Chrom, ObjV] = migrate(Chrom, SUBPOP, [0.1,0,1], ObjV);
+        %{
+        check = sub_minima(ObjV,SUBPOP) ==best(:,gen+1);
+        counter = counter + check;
+        
+        while sum(counter >= NIND/SUBPOP/2)>1 
+            index1 = find(counter>=5,1);
+            counter(index1,1)=0;
+            index2 = find(counter>=5,1);
+            counter(index2,1)=0;
+            [Chrom, ObjV] = switch_islands(Chrom, ObjV,index1,index2, SUBPOP);
+        end
+        %}
+    end
     
     % Increment generation counter
     gen=gen+1;            
@@ -214,6 +233,11 @@ end
 output = containers.Map;
 output('minimum') = minimum;
 output('generation') = gen;
-output('best') = best;
+if SUBPOP~=1
+output('best') = min(best);
+else
+output('best') = best;    
+end
+
 output('worst') = worst;
 output('mean_fits') = mean_fits;

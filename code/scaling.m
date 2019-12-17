@@ -27,21 +27,23 @@
 % Date: 24-Feb-94
 
 
-function FitnV = scaling( ObjV, Smul )
-[Nind, Nobj] = size( ObjV ) ;
-for i=1:size(ObjV,1)
+function FitnV = scaling( ObjV,SUBPOP, Smul )
+[Nind, ~] = size( ObjV ) ;
+Nind=Nind/SUBPOP;
+for i=1:size(ObjV,1) %as we are working with distances -> invert them
     if(ObjV(i,1)~= 0)
         ObjV(i,1)=1/ObjV(i,1);
     end
 end
-if nargin == 1
+if nargin ~=3
 	Smul = 2 ;
 end
-
-
-Oave = sum( ObjV ) / Nind ;
-Omin = min( ObjV ) ;
-Omax = max( ObjV ) ;
+FitnV=[];
+for irun=1:SUBPOP
+    ObjVSub = ObjV((irun-1)*Nind+1:irun*Nind);
+Oave = sum( ObjVSub ) / Nind ;
+Omin = min( ObjVSub ) ;
+Omax = max( ObjVSub) ;
 
 if (Omin > ( Smul * Oave - Omax ) / ( Smul - 1.0 ))
 	delta = Omax - Oave; 
@@ -52,4 +54,11 @@ else
 	a = Oave / delta ;
 	b = -Omin * Oave / delta; 
 end
-FitnV = (ObjV.*a + b) ;
+FitnVSub = (ObjVSub.*a + b) ;
+FitnV=[FitnV;FitnVSub];
+end
+FitnV(FitnV<0)=0;
+if isequal(FitnV,zeros(Nind,1)) || isequal(isnan(FitnV),ones(Nind,1))
+    FitnV=ObjV;
+end
+

@@ -14,8 +14,8 @@ PR_CROSS = 0.2;
 PR_MUT = 0.2;
 
 % Add paths to other files
-addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\code'
-addpath 'C:\Users\Ruben\Documents\Projects\TravelingSalesmanProblem\code\benchmarks'
+addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code'
+addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code\benchmarks'
 
 % Load all the datasets
 data_list = ["bcl380", "belgiumtour", "rbx711", "xqf131", "xql662"];
@@ -88,7 +88,7 @@ function c = run_data(set, adaptive)
     data("mutation") = "inversion";
     data("pr_mut") = PR_MUT;
     data("loop_detect") = true;
-    data("adaptive_mut") = adaptive;
+    data("adaptive_mut") = ~adaptive;
     
     % Run experiment
     c = run_ga(data);

@@ -136,8 +136,8 @@ end
 %{
 Results:
 
-Result: ranking - performance: 104.00
+Result: ranking - performance: 104.98
 Result: scaling - performance: 103.63
-Result: tournament - performance: 104.40
+Result: tournament - performance: 105.24
 
 %}
