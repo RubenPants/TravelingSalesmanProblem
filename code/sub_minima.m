@@ -13,9 +13,9 @@ output parameter:
     minima: column vector containg the maximum fitness of each
     subpopulations
     
-%REMARK
+REMARK
 as we are dealing with distances: maximum fitness = minimum distance
-
+%}
 function minima=sub_minima(ObjV,SUBPOP)
 minima=[];
 Nind=size(ObjV,1)/SUBPOP;

@@ -28,8 +28,8 @@ data_list = ["016", "018", "023", "025", "048", "050", "051", "067", "070", "100
 optima = load('rondrit_optima.tsp');
 %data_list=["bcl380.tsp","belgiumtour.tsp","rbx711.tsp","xqf131.tsp","xql662.tsp"];
 %optima=load('benchmark_optima.tsp');
-ISLANDS = [1,8];
-%ISLANDS = [1,2,4,8];
+%ISLANDS = [1,8];
+ISLANDS = [1,2,4,8];
 % Run the experiment
 if CALCULATE_NEW
     best_f = zeros(length(data_list), length(ISLANDS), GENERATIONS);
@@ -111,32 +111,32 @@ function create_figure(title, best_f, mean_f, worst_f)
     % Split up data
     best_without_ISLANDS = squeeze(best_f(1,1,:));
     best_2_ISLANDS = squeeze(best_f(1,2,:));
-   % best_4_ISLANDS = squeeze(best_f(1,3,:));
-   % best_8_ISLANDS = squeeze(best_f(1,4,:));
+    best_4_ISLANDS = squeeze(best_f(1,3,:));
+    best_8_ISLANDS = squeeze(best_f(1,4,:));
     
     
     mean_without_ISLANDS = squeeze(mean_f(1,1,:));
     mean_2_ISLANDS = squeeze(mean_f(1,2,:));
-   % mean_4_ISLANDS = squeeze(mean_f(1,3,:));
-   % mean_8_ISLANDS = squeeze(mean_f(1,4,:));
+    mean_4_ISLANDS = squeeze(mean_f(1,3,:));
+    mean_8_ISLANDS = squeeze(mean_f(1,4,:));
     
     worst_without_ISLANDS = squeeze(worst_f(1,1,:));
     worst_2_ISLANDS = squeeze(worst_f(1,2,:));
-  %  worst_4_ISLANDS = squeeze(worst_f(1,3,:));
-  %  worst_8_ISLANDS = squeeze(worst_f(1,4,:));
+    worst_4_ISLANDS = squeeze(worst_f(1,3,:));
+    worst_8_ISLANDS = squeeze(worst_f(1,4,:));
     
     hold on
-    plot(x, best_without_ISLANDS, 'g',x,best_2_ISLANDS, 'g:')
-    plot(x, mean_without_ISLANDS, 'b',x,mean_2_ISLANDS, 'b:')
-    plot(x, worst_without_ISLANDS, 'r',x,worst_2_ISLANDS, 'r:')
+  %  plot(x, best_without_ISLANDS, 'g',x,best_2_ISLANDS, 'g:')
+  %  plot(x, mean_without_ISLANDS, 'b',x,mean_2_ISLANDS, 'b:')
+  %  plot(x, worst_without_ISLANDS, 'r',x,worst_2_ISLANDS, 'r:')
     
-    %plot(x, best_without_ISLANDS, 'g',x,best_2_ISLANDS, 'g:',x,best_4_ISLANDS, 'g-.', x, best_8_ISLANDS, 'g--')
-    %plot(x, mean_without_ISLANDS, 'b',x,mean_2_ISLANDS, 'b:',x,mean_4_ISLANDS, 'b-.', x, mean_8_ISLANDS, 'b--')
-    %plot(x, worst_without_ISLANDS, 'r',x,worst_2_ISLANDS, 'r:',x,worst_4_ISLANDS, 'r-.', x, worst_8_ISLANDS, 'r--')
+    plot(x, best_without_ISLANDS, 'g',x,best_2_ISLANDS, 'g:',x,best_4_ISLANDS, 'g-.', x, best_8_ISLANDS, 'g--')
+    plot(x, mean_without_ISLANDS, 'b',x,mean_2_ISLANDS, 'b:',x,mean_4_ISLANDS, 'b-.', x, mean_8_ISLANDS, 'b--')
+    plot(x, worst_without_ISLANDS, 'r',x,worst_2_ISLANDS, 'r:',x,worst_4_ISLANDS, 'r-.', x, worst_8_ISLANDS, 'r--')
      ylabel("Fitness")
     xlabel("Generation")
-    %legend("best without ISLANDS", "best 2 ISLANDS","best 4 ISLANDS","best 8 ISLANDS", "mean without ISLANDS", "mean 2 ISLANDS","mean 4 ISLANDS","mean 8 ISLANDS", "worst without ISLANDS", "worst 2 ISLANDS","worst 4 ISLANDS","worst 8 ISLANDS");
-    legend("best without ISLANDS","best 8 ISLANDS", "mean without ISLANDS","mean 8 ISLANDS", "worst without ISLANDS","worst 8 ISLANDS");
+    legend("best without ISLANDS", "best 2 ISLANDS","best 4 ISLANDS","best 8 ISLANDS", "mean without ISLANDS", "mean 2 ISLANDS","mean 4 ISLANDS","mean 8 ISLANDS", "worst without ISLANDS", "worst 2 ISLANDS","worst 4 ISLANDS","worst 8 ISLANDS");
+    %legend("best without ISLANDS","best 8 ISLANDS", "mean without ISLANDS","mean 8 ISLANDS", "worst without ISLANDS","worst 8 ISLANDS");
     
     %savefig(title);
     hold off

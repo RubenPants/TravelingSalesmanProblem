@@ -10,12 +10,12 @@ the real optimum.
 % Parameters
 global GENERATIONS RUNS CALCULATE_NEW
 CALCULATE_NEW = true;
-GENERATIONS = 300;
+GENERATIONS = 100;
 RUNS=20;
 % Add paths to other files
 addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code'
 addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code\benchmarks'
-BENCHMARK = ["all improvements","No improvements",];
+BENCHMARK = ["No improvements","all improvements"];
 % Load all the datasets
 data_list=["bcl380.tsp","belgiumtour.tsp","rbx711.tsp","xqf131.tsp","xql662.tsp"];
 
@@ -54,12 +54,14 @@ if CALCULATE_NEW
         fprintf("\nResult: %s - performance: %.2f\n\n", BENCHMARK(c), performance);
     end
     % Save all the matrices
+    %{
     save('total_BENCHMARK', 'total');
     save('best_f_BENCHMARK', 'best_f');
     save('mean_f_BENCHMARK', 'mean_f');
     save('worst_f_BENCHMARK', 'worst_f');
+    %}
 end
-
+%{
 % Load in the matrices
 file = matfile('total_BENCHMARK'); total = file.total;
 file = matfile('best_f_BENCHMARK'); best_f = file.best_f;
@@ -69,8 +71,9 @@ file = matfile('worst_f_BENCHMARK'); worst_f = file.worst_f;
 % Display all the figures
 for i=1:length(data_list)
     title = sprintf("%s.fig", data_list(i));
-    create_figure(data_list(i)+"_BENCHMARK", best_f(i,:,:), mean_f(i,:,:), worst_f(i,:,:));
+    create_figure(data_list(i)+"_BENCHMARK_without_crowding", best_f(i,:,:), mean_f(i,:,:), worst_f(i,:,:));
 end
+%}
 
 % Function called to run each of the configurations
 function c = run_data(set, i)
@@ -95,7 +98,6 @@ function c = run_data(set, i)
     data("loop_detect")=1;
     data("parent_selection")="scaling";
     data("survivor_selection")="round_robin";
-    data("preserve_diversity")="on";
     data("local_heur")="both";
     data("adaptive_mut")=true;
     
@@ -112,19 +114,13 @@ function create_figure(title, best_f, mean_f, worst_f)
     % Split up data
     best_without_BENCHMARK = squeeze(best_f(1,1,:));
     best_2_BENCHMARK = squeeze(best_f(1,2,:));
-   % best_4_BENCHMARK = squeeze(best_f(1,3,:));
-   % best_8_BENCHMARK = squeeze(best_f(1,4,:));
     
     
     mean_without_BENCHMARK = squeeze(mean_f(1,1,:));
     mean_2_BENCHMARK = squeeze(mean_f(1,2,:));
-   % mean_4_BENCHMARK = squeeze(mean_f(1,3,:));
-   % mean_8_BENCHMARK = squeeze(mean_f(1,4,:));
     
     worst_without_BENCHMARK = squeeze(worst_f(1,1,:));
     worst_2_BENCHMARK = squeeze(worst_f(1,2,:));
-  %  worst_4_BENCHMARK = squeeze(worst_f(1,3,:));
-  %  worst_8_BENCHMARK = squeeze(worst_f(1,4,:));
     
     hold on
     plot(x, best_without_BENCHMARK, 'g',x,best_2_BENCHMARK, 'g:')
@@ -135,7 +131,7 @@ function create_figure(title, best_f, mean_f, worst_f)
     xlabel("Generation")
     legend("best without improvements","best with improvements", "mean without improvements","mean with improvements", "worst without improvements","with improvements");
     
-    %savefig(title);
+    savefig(title);
     hold off
 end
 

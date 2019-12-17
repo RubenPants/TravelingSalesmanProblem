@@ -27,6 +27,8 @@ function [Chrom, ObjV] = round_robin(SelCh, Chrom, ObjV, ObjVSel, SUBPOP);
    [NindOff,VarOff] = size(SelCh);
    keeping=ceil((NindCh-NindOff)/SUBPOP);
    Nind = NindCh/SUBPOP;
+   newChrom=[];
+   newObjV=[];
 for irun=1:SUBPOP
      ObjVSub = ObjV((irun-1)*Nind+1:irun*Nind); %if Subpop=1 => ObjVSub = ObjV
     for i=1:Nind %loop over each genome

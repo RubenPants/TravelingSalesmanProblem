@@ -6,7 +6,7 @@ The distance used in the algorithm is based on the following paper:
  
 Crowding Population-based Ant ColonyOptimisation for the Multi-objective TravellingSalesman Problem
 
-The use of probabilistic crowding is based on the following paper:
+The use of deterministic crowding is based on the following paper:
 Generalized Crowding for Genetic Algorithms
 
 input parameters:

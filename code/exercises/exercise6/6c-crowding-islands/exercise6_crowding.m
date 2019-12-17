@@ -27,7 +27,7 @@ addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code\dataset
 data_list = ["016", "018", "023", "025", "048", "050", "051", "067", "070", "100", "127"];
 optima = load('rondrit_optima.tsp');
 
-CROWDING = [0, 1];
+CROWDING = ["off", "on"];
 
 % Run the experiment
 if CALCULATE_NEW
@@ -35,7 +35,7 @@ if CALCULATE_NEW
     mean_f = zeros(length(data_list), length(CROWDING), GENERATIONS);
     worst_f = zeros(length(data_list), length(CROWDING), GENERATIONS);
     for c=1:length(CROWDING)
-        fprintf("Calculating %d - Progress: ", CROWDING(c))
+        fprintf("Calculating %s - Progress: ", CROWDING(c))
         total = zeros(1,length(data_list));
         for i=1:length(data_list)
             intermediate = zeros(1, RUNS);
@@ -56,7 +56,7 @@ if CALCULATE_NEW
             fprintf("#")
         end
         performance = mean(total) * 100;  % Percentage of 100 is perfect match
-        fprintf("\nResult: %d - performance: %.2f\n\n", CROWDING(c), performance);
+        fprintf("\nResult: %s - performance: %.2f\n\n", CROWDING(c), performance);
     end
     % Save all the matrices
     save('total_crowding', 'total');
@@ -95,7 +95,7 @@ function c = run_data(set, c)
     data("pr_cross") = 0.2;
     data("mutation") = "inversion";
     data("pr_mut") = 0.2;
-    data("diversify") = c;
+    data("preserve_diversity") = c;
     
     % Run experiment
     c = run_ga(data);

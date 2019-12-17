@@ -207,7 +207,7 @@ while gen < MAXGEN
     %if there are islands -> do a switch every 20 generations
     
     if SUBPOP >1 && mod(gen,20)==0
-        [Chrom, ObjV] = migrate(Chrom, SUBPOP, [0.4,1,2], ObjV);
+        [Chrom, ObjV] = migrate(Chrom, SUBPOP, [0.1,0,1], ObjV);
         %{
         check = sub_minima(ObjV,SUBPOP) ==best(:,gen+1);
         counter = counter + check;
