@@ -123,7 +123,7 @@ function create_figure(title, best_f, mean_f, worst_f)
     ylabel("Fitness")
     xlabel("Generation")
     legend("best without crowding", "best crowding", "mean without crowding", "mean crowding", "worst without crowding", "worst crowding");
-    savefig(title);
+    savefig("figures/" + title);
     hold off
 end
 

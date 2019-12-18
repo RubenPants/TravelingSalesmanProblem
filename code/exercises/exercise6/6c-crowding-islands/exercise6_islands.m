@@ -140,7 +140,7 @@ function create_figure(title, best_f, mean_f, worst_f)
     legend("best without ISLANDS", "best 2 ISLANDS","best 4 ISLANDS","best 8 ISLANDS", "mean without ISLANDS", "mean 2 ISLANDS","mean 4 ISLANDS","mean 8 ISLANDS", "worst without ISLANDS", "worst 2 ISLANDS","worst 4 ISLANDS","worst 8 ISLANDS");
     %legend("best without ISLANDS","best 8 ISLANDS", "mean without ISLANDS","mean 8 ISLANDS", "worst without ISLANDS","worst 8 ISLANDS");
     
-    savefig(title);
+    savefig("figures/" + title);
     hold off
 end
 
