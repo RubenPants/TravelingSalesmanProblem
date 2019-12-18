@@ -9,9 +9,7 @@ input parameters:
     Chrom: matrix containing the population (each row is a genome)
 
     GGAP: Percentage of the population that need to be selected as parents
-    
-    NIND: Number of individuals
-
+   
     PARENT_SELECTION: type of parent selector that is needed (currently
         containing 'ranking', 'scaling' and 'tournament')
 
@@ -21,7 +19,7 @@ ouput parameter:
     ParentSelCh: a matrix containing the chosen parent genomes
 %}
 
-function ParentSelCh = parent_selection(ObjV,Chrom,GGAP,NIND,PARENT_SELECTION, SUBPOP)
+function ParentSelCh = parent_selection(ObjV,Chrom,GGAP,PARENT_SELECTION, SUBPOP)
 if PARENT_SELECTION == "ranking"
         FitnV=ranking(ObjV,NaN, SUBPOP);
 elseif PARENT_SELECTION == "scaling"

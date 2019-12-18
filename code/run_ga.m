@@ -60,12 +60,20 @@ if any(strcmp(keys(data), "survivor_selection")); SURVIVOR_SELECTION = data("sur
 if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR = "off"; end
 if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.2; end
 if any(strcmp(keys(data), "subpopulations")); SUBPOP = data("subpopulations"); else; SUBPOP = 1; end
-
+if any(strcmp(keys(data), "pop_stag")); POP_STAG = data("pop_stag"); else; POP_STAG = 20; end
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
     ah2 = temp("ah2");
     ah3 = temp("ah3");
+end
+
+% Check subpopulation
+if mod(NIND, SUBPOP) ~= 0
+    ME = MException("The number of subpopulations must be a multiple of the total number of individuals");
+    throw(ME)
+else
+    SUBPOP_SIZE = NIND / SUBPOP;
 end
 
 % Fill in other used parameters
@@ -93,14 +101,17 @@ if VISUAL || PRINT
     fprintf("\tParent selection: %s\n", PARENT_SELECTION)
     fprintf("\tSurvivor selection: %s\n", SURVIVOR_SELECTION)
     fprintf("\tAdaptive mutation: %d\n", ADAPTIVE_MUT)
-    fprintf("\tPreserve diveristy: %s\n", PRESERVE_DIVERSITY)
+    fprintf("\tCrowding: %d\n", CROWDING)
+    fprintf("\tNumber of populations: %d\n", SUBPOP)
+    fprintf("\tPopulation stagnation: %d\n", POP_STAG)
 end
 
 % Initialize the algorithm
 GGAP = 1 - ELITIST;
-mean_fits = zeros(1,0);
-worst = zeros(1,0);
+mean_fits = zeros(SUBPOP,0);
+worst = zeros(SUBPOP,0);
 best = zeros(SUBPOP, 0);
+
 Dist=zeros(NVAR,NVAR);
 for i=1:size(x,1)
     for j=1:size(y,1)
@@ -125,15 +136,18 @@ end
 
 % evaluate initial population
 ObjV = tspfun(Chrom, Dist, REPR_ID);
+
 % generational loop
 gen=0;
 while gen < MAXGEN
-    best(:,gen+1)=sub_minima(ObjV,SUBPOP);
-    minimum=min(best(:,gen+1));
-    mean_fits(gen+1)=mean(ObjV);
-    worst(gen+1)=max(ObjV);
+    for s=1:SUBPOP
+        best(s, gen+1) =     min(ObjV(SUBPOP_SIZE * (s-1) + 1 : SUBPOP_SIZE * s));
+        mean_fits(s, gen+1)=mean(ObjV(SUBPOP_SIZE * (s-1) + 1 : SUBPOP_SIZE * s));
+        worst(s, gen+1)=     max(ObjV(SUBPOP_SIZE * (s-1) + 1 : SUBPOP_SIZE * s));
+    end
+    minimum = min(best(:,gen+1));  % Global minimum
     
-    % TODO: remove if 't' is never used
+    % Find globally most fit genome
     for t=1:size(ObjV,1)
         if (ObjV(t)==minimum)
             break;
@@ -142,10 +156,11 @@ while gen < MAXGEN
 
     % Visualize progress
     if VISUAL
-        if REPR_ID == 1
-            visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
-        else
-            visualizeTSP(x,y,Chrom(t,:), minimum, ah1, gen, best, mean_fits, worst, ah2, ObjV, NIND, ah3);
+        if size(best, 1) > 1, best_ = min(best); mean_fits_ = mean(mean_fits); worst_ = max(worst);
+        else, best_ = best; mean_fits_ = mean_fits; worst_ = worst;
+        end
+        if REPR_ID == 1, visualizeTSP(x,y,adj2path(Chrom(t,:)), minimum, ah1, gen, best_, mean_fits_, worst_, ah2, ObjV, NIND, ah3);
+        else, visualizeTSP(x,y,Chrom(t,:), minimum, ah1, gen, best_, mean_fits_, worst_, ah2, ObjV, NIND, ah3);
         end
     end
 
@@ -163,12 +178,17 @@ while gen < MAXGEN
     end 
     
     % Stopping criteria based on generational improvement
-    if STOP_STAG && (gen >= STOP_STAG) && (best(gen+1) == best(gen+1-STOP_STAG))
+    if STOP_STAG && (gen >= STOP_STAG) && (min(best(gen+1)) == min(best(gen+1-STOP_STAG)))
         break    
+    end
+    
+    % Merge islands if stagnated
+    if SUBPOP > 1
+        Chrom = islands(Chrom, SUBPOP, SUBPOP_SIZE, best, gen, POP_STAG, REPR_ID);
     end
 
     % Parent selection
-    ParentSelCh = parent_selection(ObjV,Chrom,GGAP,NIND,PARENT_SELECTION, SUBPOP);
+    ParentSelCh = parent_selection(ObjV,Chrom,GGAP,PARENT_SELECTION, SUBPOP);
 
     ChildSelCh = ParentSelCh;
     
@@ -217,13 +237,10 @@ while gen < MAXGEN
 end
 
 % Create the output-container
+if size(best, 1) > 1, best = min(best); mean_fits = mean(mean_fits); worst = max(worst); end
 output = containers.Map;
 output('minimum') = minimum;
 output('generation') = gen;
-if SUBPOP~=1
-output('best') = min(best);
-else
-output('best') = best;    
-end
+output('best') = best;   
 output('worst') = worst;
 output('mean_fits') = mean_fits;

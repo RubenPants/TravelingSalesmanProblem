@@ -2,6 +2,8 @@ function tspgui()
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 NIND=128;                       % Number of individuals
+SUBPOP=1;                       % Number of populations
+POP_STAG=20;                    % Stagnation generations before population switch
 MAXGEN=100;                     % Maximum no. of generations
 NVAR=26;                        % No. of variables
 ELITIST=0.05;                   % percentage of the elite population
@@ -12,12 +14,12 @@ PR_CROSS=.20;                   % probability of crossover
 MUTATION = 'inversion';         % default mutation operator
 PR_MUT=.20;                     % probability of mutation
 LOCALLOOP=false;                % local loop removal
-PRESERVE_DIVERSITY="off";       % enforce diversity in the population
+CROWDING=0;                     % enforce diversity in the population
 ADAPTIVE_MUT=false;             % enforce diversity by mutating more when population stagnates
 LOCAL_HEUR="off";               % local heursitic method
 PARENT_SELECTION="ranking";     % parent selection
 SURVIVOR_SELECTION="elitism";   % survivor selection
-DATASET='benchmarks/';           % choose which dataset to use: datasets or benchmarks
+DATASET='datasets/';           % choose which dataset to use: datasets or benchmarks
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % load the data sets
@@ -48,8 +50,8 @@ axes(ah3);
 xlabel('Distance');
 ylabel('Number');
 
-ph = uipanel('Parent',fh,'Title','Settings','Position',[.635 .2 .335 .71]);
-row = 490;
+ph = uipanel('Parent',fh,'Title','Settings','Position',[.635 .125 .335 .78]);
+row = 550;
 uicontrol(ph,'Style','text','String','Dataset','Position',[0 row 130 20]);
 uicontrol(ph,'Style','popupmenu','String',datasets,'Value',1,'Position',[130 row 150 20],'Callback',@datasetpopup_Callback);
 ncitiessliderv = uicontrol(ph,'Style','text','String',NVAR,'Position',[280 row 50 20]);
@@ -62,7 +64,7 @@ nindslider = uicontrol(ph,'Style','slider','Max',1000,'Min',10,'Value',NIND,'Sli
 nindsliderv = uicontrol(ph,'Style','text','String',NIND,'Position',[280 row 50 20]);
 row = new_row(row);
 uicontrol(ph,'Style','text','String','# Generations','Position',[0 row 130 20]);
-genslider = uicontrol(ph,'Style','slider','Max',1000,'Min',10,'Value',MAXGEN,'Sliderstep',[0.001 0.05],'Position',[130 row 150 20],'Callback',@genslider_Callback);
+genslider = uicontrol(ph,'Style','slider','Max',1000,'Min',10,'Value',MAXGEN,'Sliderstep',[0.001 0.051],'Position',[130 row 150 20],'Callback',@genslider_Callback);
 gensliderv = uicontrol(ph,'Style','text','String',MAXGEN,'Position',[280 row 50 20]);
 row = new_row(row);
 uicontrol(ph,'Style','text','String','Selection mechanism','Position',[0 row 130 20]);
@@ -92,8 +94,16 @@ uicontrol(ph,'Style','text','String','Survivor percentage','Position',[0 row 130
 elitslider = uicontrol(ph,'Style','slider','Max',100,'Min',0,'Value',round(ELITIST*100),'Sliderstep',[0.01 0.05],'Position',[130 row 150 20],'Callback',@elitslider_Callback);
 elitsliderv = uicontrol(ph,'Style','text','String',round(ELITIST*100),'Position',[280 row 50 20]);
 row = new_row(row);
-uicontrol(ph,'Style','text','String','Preserve diversity','Position',[0 row 130 20]);
-uicontrol(ph,'Style','popupmenu','String',{'off','crowding', 'islands'},'Value',1,'Position',[130 row 150 20],'Callback',@preserve_Callback);
+uicontrol(ph,'Style','text','String','# Populations','Position',[0 row 130 20]);
+popslider = uicontrol(ph,'Style','slider','Max',16,'Min',1,'Value',SUBPOP,'Sliderstep',[0.001 0.05],'Position',[130 row 150 20],'Callback',@popslider_Callback);
+popsliderv = uicontrol(ph,'Style','text','String',SUBPOP,'Position',[280 row 50 20]);
+row = new_row(row);
+uicontrol(ph,'Style','text','String','Population stagnation','Position',[0 row 130 20]);
+popstagslider = uicontrol(ph,'Style','slider','Max',50,'Min',5,'Value',POP_STAG,'Sliderstep',[0.001 0.05],'Position',[130 row 150 20],'Callback',@popstagslider_Callback);
+popstagsliderv = uicontrol(ph,'Style','text','String',POP_STAG,'Position',[280 row 50 20]);
+row = new_row(row);
+uicontrol(ph,'Style','text','String','Crowding','Position',[0 row 130 20]);
+uicontrol(ph,'Style','popupmenu','String',{'off','on'},'Value',1,'Position',[130 row 50 20],'Callback',@crowding_Callback);
 row = new_row(row);
 uicontrol(ph,'Style','text','String','Adaptive mutation','Position',[0 row 130 20]);
 uicontrol(ph,'Style','popupmenu','String',{'off','on'},'Value',1,'Position',[130 row 50 20],'Callback',@adaptive_Callback);
@@ -126,17 +136,15 @@ set(fh,'Visible','on');
             LOCALLOOP = 1;
         end
     end
-    function preserve_Callback(hObject,~)
-        preserver_value = get(hObject,'Value');
+    function crowding_Callback(hObject,~)
+        crowding_value = get(hObject,'Value');
         options = get(hObject,'String');
-        value = options(preserver_value);
+        value = options(crowding_value);
         switch value{1}
-            case 'inversion'
-                PRESERVE_DIVERSITY = 'off';
-            case 'crowding'
-                PRESERVE_DIVERSITY = 'crowding';    
-            case 'islands'
-                PRESERVE_DIVERSITY = 'islands';           
+            case 'off'
+                CROWDING = 0;
+            case 'on'
+                CROWDING = 1;  
         end
     end
     function adaptive_Callback(hObject,~)
@@ -227,17 +235,31 @@ set(fh,'Visible','on');
                 LOCAL_HEUR = "off";
         end
     end
+    function popslider_Callback(hObject,~)
+        fslider_value = get(hObject,'Value');
+        slider_value = round(fslider_value);
+        set(hObject,'Value',slider_value);
+        set(popsliderv,'String',slider_value);
+        SUBPOP = round(slider_value);
+    end
+    function popstagslider_Callback(hObject,~)
+        fslider_value = get(hObject,'Value');
+        slider_value = round(fslider_value);
+        set(hObject,'Value',slider_value);
+        set(popstagsliderv,'String',slider_value);
+        POP_STAG = round(slider_value);
+    end
     function parent_selection_Callback(hObject,~)
         parent_value = get(hObject,'Value');
         parent_selection = get(hObject,'String');
         value = parent_selection(parent_value);
         switch value{1}
-            case 'tournament'
+            case "tournament"
                 PARENT_SELECTION = "tournament";
-            case 'scaling'
+            case "scaling"
                 PARENT_SELECTION = "scaling";       
             otherwise
-                LOCAL_HEUR = "ranking";
+                PARENT_SELECTION = "ranking";
         end
     end
     function survivor_selection_Callback(hObject,~)
@@ -258,12 +280,15 @@ set(fh,'Visible','on');
         set(mutslider,'Visible','off');
         set(crossslider,'Visible','off');
         set(elitslider,'Visible','off');
+        set(popslider,'Visible','off');
+        set(popstagslider,'Visible','off');
         
         data = containers.Map;
         data("x") = x;
         data("y") = y;
         data("adaptive_mut") = ADAPTIVE_MUT;
         data("crossover") = CROSSOVER;
+        data("crowding") = CROWDING;
         data("elite") = ELITIST;
         data("local_heur") = LOCAL_HEUR;
         data("loop_detect") = LOCALLOOP;
@@ -271,11 +296,12 @@ set(fh,'Visible','on');
         data("mutation") = MUTATION;
         data("nind") = NIND;
         data("parent_selection")=PARENT_SELECTION;
-        data("preserve_diversity") = PRESERVE_DIVERSITY;
         data("pr_cross") = PR_CROSS;
         data("pr_mut") = PR_MUT;
         data("representation") = REPRESENTATION;
         data("stop_perc") = STOP_PERCENTAGE;
+        data("subpop") = SUBPOP;
+        data("pop_stag") = POP_STAG;
         data("survivor_selection")=SURVIVOR_SELECTION;
         visual = containers.Map;
         visual("ah1") = ah1;
@@ -293,6 +319,8 @@ set(fh,'Visible','on');
         set(mutslider,'Visible','on');
         set(crossslider,'Visible','on');
         set(elitslider,'Visible','on');
+        set(popslider,'Visible','on');
+        set(popstagslider,'Visible','on');
     end
 end
 
