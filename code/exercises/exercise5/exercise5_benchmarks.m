@@ -130,8 +130,7 @@ function create_figure(title, best_f, mean_f, worst_f)
      ylabel("Fitness")
     xlabel("Generation")
     legend("best without improvements","best with improvements", "mean without improvements","mean with improvements", "worst without improvements","with improvements");
-    
-    savefig(title);
+    savefig("figures/" + title);
     hold off
 end
 
