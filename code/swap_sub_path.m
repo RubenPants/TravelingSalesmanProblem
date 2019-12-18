@@ -1,4 +1,4 @@
-function result = SwapSubpath(ncities, path, start, length)
+function result = swap_sub_path(ncities, path, start, length)
     i = start;
     j = mod(start-1 + length - 1, ncities)+1;
 
