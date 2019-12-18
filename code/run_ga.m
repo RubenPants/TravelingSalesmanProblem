@@ -101,7 +101,6 @@ GGAP = 1 - ELITIST;
 mean_fits = zeros(1,0);
 worst = zeros(1,0);
 best = zeros(SUBPOP, 0);
-counter = zeros(SUBPOP,1);
 Dist=zeros(NVAR,NVAR);
 for i=1:size(x,1)
     for j=1:size(y,1)
@@ -129,7 +128,6 @@ ObjV = tspfun(Chrom, Dist, REPR_ID);
 % generational loop
 gen=0;
 while gen < MAXGEN
-    sObjV=sort(ObjV);
     best(:,gen+1)=sub_minima(ObjV,SUBPOP);
     minimum=min(best(:,gen+1));
     mean_fits(gen+1)=mean(ObjV);
@@ -211,18 +209,7 @@ while gen < MAXGEN
     
     if SUBPOP >1 && mod(gen,20)==0
         [Chrom, ObjV] = migrate(Chrom, SUBPOP, [0.1,0,1], ObjV);
-        %{
-        check = sub_minima(ObjV,SUBPOP) ==best(:,gen+1);
-        counter = counter + check;
         
-        while sum(counter >= NIND/SUBPOP/2)>1 
-            index1 = find(counter>=5,1);
-            counter(index1,1)=0;
-            index2 = find(counter>=5,1);
-            counter(index2,1)=0;
-            [Chrom, ObjV] = switch_islands(Chrom, ObjV,index1,index2, SUBPOP);
-        end
-        %}
     end
     
     % Increment generation counter
@@ -238,6 +225,5 @@ output('best') = min(best);
 else
 output('best') = best;    
 end
-
 output('worst') = worst;
 output('mean_fits') = mean_fits;
