@@ -16,7 +16,7 @@ the real optimum.
 % Parameters
 global GENERATIONS RUNS CALCULATE_NEW
 CALCULATE_NEW = true;
-GENERATIONS = 100;
+GENERATIONS = 200;
 RUNS=20;
 % Add paths to other files
 addpath 'D:\User\Documents\School\Genetics\TravelingSalesmanProblem\code'
@@ -98,6 +98,8 @@ function c = run_data(set, i)
     data("mutation") = "inversion";
     data("pr_mut") = 0.2;
     data("subpopulations") = i;
+    data("loop_detect")=1;
+    data("nind")=256;
     
     % Run experiment
     c = run_ga(data);
@@ -138,7 +140,7 @@ function create_figure(title, best_f, mean_f, worst_f)
     legend("best without ISLANDS", "best 2 ISLANDS","best 4 ISLANDS","best 8 ISLANDS", "mean without ISLANDS", "mean 2 ISLANDS","mean 4 ISLANDS","mean 8 ISLANDS", "worst without ISLANDS", "worst 2 ISLANDS","worst 4 ISLANDS","worst 8 ISLANDS");
     %legend("best without ISLANDS","best 8 ISLANDS", "mean without ISLANDS","mean 8 ISLANDS", "worst without ISLANDS","worst 8 ISLANDS");
     
-    %savefig(title);
+    savefig(title);
     hold off
 end
 

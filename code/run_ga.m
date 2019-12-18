@@ -184,7 +184,7 @@ while gen < MAXGEN
     
     % Merge islands if stagnated
     if SUBPOP > 1
-        Chrom = islands(Chrom, SUBPOP, SUBPOP_SIZE, best, gen, POP_STAG, REPR_ID);
+        Chrom = migrate(Chrom, SUBPOP,[0.1,0,1], ObjV);
     end
 
     % Parent selection
