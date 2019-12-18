@@ -101,7 +101,7 @@ if VISUAL || PRINT
     fprintf("\tParent selection: %s\n", PARENT_SELECTION)
     fprintf("\tSurvivor selection: %s\n", SURVIVOR_SELECTION)
     fprintf("\tAdaptive mutation: %d\n", ADAPTIVE_MUT)
-    fprintf("\tCrowding: %d\n", CROWDING)
+    fprintf("\tPreserve diversity: %s\n", PRESERVE_DIVERSITY)
     fprintf("\tNumber of populations: %d\n", SUBPOP)
     fprintf("\tPopulation stagnation: %d\n", POP_STAG)
 end

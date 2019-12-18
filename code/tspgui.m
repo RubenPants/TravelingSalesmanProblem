@@ -14,7 +14,7 @@ PR_CROSS=.20;                   % probability of crossover
 MUTATION = 'inversion';         % default mutation operator
 PR_MUT=.20;                     % probability of mutation
 LOCALLOOP=false;                % local loop removal
-CROWDING=0;                     % enforce diversity in the population
+PRESERVE_DIVERSITY="off";                     % enforce diversity in the population
 ADAPTIVE_MUT=false;             % enforce diversity by mutating more when population stagnates
 LOCAL_HEUR="off";               % local heursitic method
 PARENT_SELECTION="ranking";     % parent selection
@@ -142,9 +142,9 @@ set(fh,'Visible','on');
         value = options(crowding_value);
         switch value{1}
             case 'off'
-                CROWDING = 0;
+                PRESERVE_DIVERSITY = 'on';
             case 'on'
-                CROWDING = 1;  
+                PRESERVE_DIVERSITY = 'off';  
         end
     end
     function adaptive_Callback(hObject,~)
@@ -288,7 +288,7 @@ set(fh,'Visible','on');
         data("y") = y;
         data("adaptive_mut") = ADAPTIVE_MUT;
         data("crossover") = CROSSOVER;
-        data("crowding") = CROWDING;
+        data("preserve_diversity") = PRESERVE_DIVERSITY;
         data("elite") = ELITIST;
         data("local_heur") = LOCAL_HEUR;
         data("loop_detect") = LOCALLOOP;
@@ -300,7 +300,7 @@ set(fh,'Visible','on');
         data("pr_mut") = PR_MUT;
         data("representation") = REPRESENTATION;
         data("stop_perc") = STOP_PERCENTAGE;
-        data("subpop") = SUBPOP;
+        data("subpopulations") = SUBPOP;
         data("pop_stag") = POP_STAG;
         data("survivor_selection")=SURVIVOR_SELECTION;
         visual = containers.Map;
