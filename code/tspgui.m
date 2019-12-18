@@ -3,7 +3,7 @@ function tspgui()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 NIND=128;                       % Number of individuals
 SUBPOP=1;                       % Number of populations
-POP_STAG=20;                    % Stagnation generations before population switch
+SWAP_INTERVAL=20;               % Stagnation generations before population switch
 MAXGEN=100;                     % Maximum no. of generations
 NVAR=26;                        % No. of variables
 ELITIST=0.05;                   % percentage of the elite population
@@ -14,12 +14,12 @@ PR_CROSS=.20;                   % probability of crossover
 MUTATION = 'inversion';         % default mutation operator
 PR_MUT=.20;                     % probability of mutation
 LOCALLOOP=false;                % local loop removal
-PRESERVE_DIVERSITY="off";                     % enforce diversity in the population
+PRESERVE_DIVERSITY="off";       % enforce diversity in the population
 ADAPTIVE_MUT=false;             % enforce diversity by mutating more when population stagnates
 LOCAL_HEUR="off";               % local heursitic method
 PARENT_SELECTION="ranking";     % parent selection
 SURVIVOR_SELECTION="elitism";   % survivor selection
-DATASET='datasets/';           % choose which dataset to use: datasets or benchmarks
+DATASET='datasets/';            % choose which dataset to use: datasets or benchmarks
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % load the data sets
@@ -98,9 +98,9 @@ uicontrol(ph,'Style','text','String','# Populations','Position',[0 row 130 20]);
 popslider = uicontrol(ph,'Style','slider','Max',16,'Min',1,'Value',SUBPOP,'Sliderstep',[0.001 0.05],'Position',[130 row 150 20],'Callback',@popslider_Callback);
 popsliderv = uicontrol(ph,'Style','text','String',SUBPOP,'Position',[280 row 50 20]);
 row = new_row(row);
-uicontrol(ph,'Style','text','String','Population stagnation','Position',[0 row 130 20]);
-popstagslider = uicontrol(ph,'Style','slider','Max',50,'Min',5,'Value',POP_STAG,'Sliderstep',[0.001 0.05],'Position',[130 row 150 20],'Callback',@popstagslider_Callback);
-popstagsliderv = uicontrol(ph,'Style','text','String',POP_STAG,'Position',[280 row 50 20]);
+uicontrol(ph,'Style','text','String','Island swap interval','Position',[0 row 130 20]);
+popstagslider = uicontrol(ph,'Style','slider','Max',50,'Min',5,'Value',SWAP_INTERVAL,'Sliderstep',[0.001 0.05],'Position',[130 row 150 20],'Callback',@popstagslider_Callback);
+popstagsliderv = uicontrol(ph,'Style','text','String',SWAP_INTERVAL,'Position',[280 row 50 20]);
 row = new_row(row);
 uicontrol(ph,'Style','text','String','Crowding','Position',[0 row 130 20]);
 uicontrol(ph,'Style','popupmenu','String',{'off','on'},'Value',1,'Position',[130 row 50 20],'Callback',@crowding_Callback);
@@ -247,7 +247,7 @@ set(fh,'Visible','on');
         slider_value = round(fslider_value);
         set(hObject,'Value',slider_value);
         set(popstagsliderv,'String',slider_value);
-        POP_STAG = round(slider_value);
+        SWAP_INTERVAL = round(slider_value);
     end
     function parent_selection_Callback(hObject,~)
         parent_value = get(hObject,'Value');
@@ -301,7 +301,7 @@ set(fh,'Visible','on');
         data("representation") = REPRESENTATION;
         data("stop_perc") = STOP_PERCENTAGE;
         data("subpopulations") = SUBPOP;
-        data("pop_stag") = POP_STAG;
+        data("swap_interval") = SWAP_INTERVAL;
         data("survivor_selection")=SURVIVOR_SELECTION;
         visual = containers.Map;
         visual("ah1") = ah1;

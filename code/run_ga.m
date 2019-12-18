@@ -60,7 +60,7 @@ if any(strcmp(keys(data), "survivor_selection")); SURVIVOR_SELECTION = data("sur
 if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR = "off"; end
 if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.2; end
 if any(strcmp(keys(data), "subpopulations")); SUBPOP = data("subpopulations"); else; SUBPOP = 1; end
-if any(strcmp(keys(data), "pop_stag")); POP_STAG = data("pop_stag"); else; POP_STAG = 20; end
+if any(strcmp(keys(data), "swap_interval")); SWAP_INTERVAL = data("swap_interval"); else; SWAP_INTERVAL = 20; end
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
@@ -103,7 +103,7 @@ if VISUAL || PRINT
     fprintf("\tAdaptive mutation: %d\n", ADAPTIVE_MUT)
     fprintf("\tPreserve diversity: %s\n", PRESERVE_DIVERSITY)
     fprintf("\tNumber of populations: %d\n", SUBPOP)
-    fprintf("\tPopulation stagnation: %d\n", POP_STAG)
+    fprintf("\tPopulation swap interval: %d\n", SWAP_INTERVAL)
 end
 
 % Initialize the algorithm
@@ -189,9 +189,9 @@ while gen < MAXGEN
 
     % Parent selection
     ParentSelCh = parent_selection(ObjV,Chrom,GGAP,PARENT_SELECTION, SUBPOP);
-
     ChildSelCh = ParentSelCh;
     
+    % Adaptive mutation to enforce diversity before crossover
     if ADAPTIVE_MUT
         ChildSelCh = mutateAdaptiveTSP(MUTATION, ChildSelCh, PR_MUT, REPR_ID); 
     end
@@ -226,10 +226,8 @@ while gen < MAXGEN
     Chrom = tsp_ImprovePopulation(NIND, NVAR, Chrom, LOCALLOOP, Dist, REPR_ID);
     
     %if there are islands -> do a switch every 20 generations
-    
-    if SUBPOP >1 && mod(gen,20)==0
+    if SUBPOP > 1 && mod(gen, SWAP_INTERVAL) == 0
         [Chrom, ObjV] = migrate(Chrom, SUBPOP, [0.1,0,1], ObjV);
-        
     end
     
     % Increment generation counter
