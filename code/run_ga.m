@@ -22,7 +22,8 @@ function output = run_ga(data)
 %   loop_detect:            loop-detection [def=0]
 %   stop_perc:              percentage of equal fitness (stop criterium) [def=0.9]
 %   stop_thr:               threshold under which the algorithm stops if reached by minimum [def=0]
-%   stop_gen_incr:          stop when less than delta increase over timespan of N generations [def=0]              
+%   stop_gen_incr:          stop when less than delta increase over timespan of N generations [def=0]   
+%   knn:                    boolean indicating if initialized with 1-NN or not
 %   visual:
 %       ah1:                graph visualization
 %       ah2:                minimum, mean, and maximum visualization
@@ -61,6 +62,7 @@ if any(strcmp(keys(data), "local_heur")); HEUR = data("local_heur"); else; HEUR 
 if any(strcmp(keys(data), "local_heur_pr")); HEUR_PR = data("local_heur_pr"); else; HEUR_PR = 0.2; end
 if any(strcmp(keys(data), "subpopulations")); SUBPOP = data("subpopulations"); else; SUBPOP = 1; end
 if any(strcmp(keys(data), "swap_interval")); SWAP_INTERVAL = data("swap_interval"); else; SWAP_INTERVAL = 20; end
+if any(strcmp(keys(data), "knn")); KNN_INIT = data("knn"); else; KNN_INIT = false; end
 if VISUAL
     temp = data("visual");
     ah1 = temp("ah1");
@@ -122,10 +124,13 @@ end
 % initialize population
 Chrom=zeros(NIND,NVAR);
 for row=1:NIND
+    if KNN_INIT
+        Chrom(row,:) = knn_init(NVAR, Dist);
+    else
+        Chrom(row,:)=randperm(NVAR);  % Path representation
+    end
     if REPR_ID == 1  % Adjacency
-        Chrom(row,:)=path2adj(randperm(NVAR));
-    else  % Path
-        Chrom(row,:)=randperm(NVAR);
+        Chrom(row,:) = path2adj(Chrom(row,:));
     end
 end
 

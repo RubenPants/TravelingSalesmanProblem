@@ -19,6 +19,7 @@ ADAPTIVE_MUT=false;             % enforce diversity by mutating more when popula
 LOCAL_HEUR="off";               % local heursitic method
 PARENT_SELECTION="ranking";     % parent selection
 SURVIVOR_SELECTION="elitism";   % survivor selection
+KNN_INIT=false;                 % 1-NN initialisation
 DATASET='datasets/';            % choose which dataset to use: datasets or benchmarks
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -50,8 +51,8 @@ axes(ah3);
 xlabel('Distance');
 ylabel('Number');
 
-ph = uipanel('Parent',fh,'Title','Settings','Position',[.635 .125 .335 .78]);
-row = 550;
+ph = uipanel('Parent',fh,'Title','Settings','Position',[.635 .125 .335 .82]);
+row = 580;
 uicontrol(ph,'Style','text','String','Dataset','Position',[0 row 130 20]);
 uicontrol(ph,'Style','popupmenu','String',datasets,'Value',1,'Position',[130 row 150 20],'Callback',@datasetpopup_Callback);
 ncitiessliderv = uicontrol(ph,'Style','text','String',NVAR,'Position',[280 row 50 20]);
@@ -62,6 +63,9 @@ row = new_row(row);
 uicontrol(ph,'Style','text','String','# Individuals','Position',[0 row 130 20]);
 nindslider = uicontrol(ph,'Style','slider','Max',1000,'Min',10,'Value',NIND,'Sliderstep',[0.001 0.05],'Position',[130 row 150 20],'Callback',@nindslider_Callback);
 nindsliderv = uicontrol(ph,'Style','text','String',NIND,'Position',[280 row 50 20]);
+row = new_row(row);
+uicontrol(ph,'Style','text','String','1-NN initialisation','Position',[0 row 130 20]);
+uicontrol(ph,'Style','popupmenu','String',{'off','on'},'Value',1,'Position',[130 row 50 20],'Callback',@knn_init_Callback);
 row = new_row(row);
 uicontrol(ph,'Style','text','String','# Generations','Position',[0 row 130 20]);
 genslider = uicontrol(ph,'Style','slider','Max',1000,'Min',10,'Value',MAXGEN,'Sliderstep',[0.001 0.051],'Position',[130 row 150 20],'Callback',@genslider_Callback);
@@ -153,6 +157,14 @@ set(fh,'Visible','on');
             ADAPTIVE_MUT = false;
         else
             ADAPTIVE_MUT = true;
+        end
+    end
+    function knn_init_Callback(hObject,~)
+        knn_value = get(hObject,'Value');
+        if knn_value == 1  % first option
+            KNN_INIT = false;
+        else
+            KNN_INIT = true;
         end
     end
     function nindslider_Callback(hObject,~)
@@ -303,6 +315,7 @@ set(fh,'Visible','on');
         data("subpopulations") = SUBPOP;
         data("swap_interval") = SWAP_INTERVAL;
         data("survivor_selection")=SURVIVOR_SELECTION;
+        data("knn")=KNN_INIT;
         visual = containers.Map;
         visual("ah1") = ah1;
         visual("ah2") = ah2;
