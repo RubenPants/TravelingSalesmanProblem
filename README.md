@@ -1,103 +1,24 @@
-# Traveling Salesman Problem
- Solution to the Sales Man Problem using genetic algorithms (neuro-evolution)
+# Traveling Salesman Problem via Genetic Algorithms
+## Introduction
 
+The **Traveling Salesman Problem** (TSP) was properly written down the first time in 1832, but no concise solution was formulated. Since then, a lot of new mathematical and computer based fields have originated, which led to better and better solution approximations for this well known problem. The problem at hand states that a salesman wants to visit a set of cities exactly once before returning to its starting position, whilst minimizing its total distance travelled.
 
+The main problem with the TSP is that it doesn't scale well for larger datasets, implying a drastic decrease in performance. To handle these larger datasets, more complicated algorithms are needed. **Genetic algorithms** (GA) provide a way to tackle this problem since they provide an efficient way of traversing the search space. The algorithm is based on a population of individuals that each roam the search space in an evolutionary manner. The best performing individuals are used each generation to setup the next generation. By doing so, GA's manage to nd close approximations of the solution fairly quick and elegant.
 
-## Notes
+## Overview
 
-* Put all the custom-created files in the subfolder `custom_scripts`. If a file is exercise-specific (i.e. nowhere used outside of that exercise), than please name it `exerciseX_*`.
+In the first exercise of this project, the provided algorithm is analyzed to form a baseline for the project. Exercise 2 extends the catalogue of possible stopping criteria which are used to prevent the algorithm from performing redundant calculations. Next, Exercise 3 discusses an alternative way of representing the cities in the algorithm, together with appropriate crossover and mutation operators. Exercise 4 introduces the notion of local heuristics, which try to optimize only select parts of the solution. Exercise 5 discusses small additions to the algorithm which further increase its performance. The last section, Exercise 6, bundles all our findings together and compares the performance of our best performing algorithm to that of the baseline. 
 
+In the end, our algorithm finds on average a path for the benchmark dataset which is 9.12 times shorter than the baseline when evolved for only one hundred generations. Furthermore, the found path is on average only 11.83% longer than its optimum.
 
+## Project
 
-## Project Progress
+To run the project in **MatLab**, run the *tspgui.m* file or type "tspgui" in the Command Window when in the *code* directory.
 
-* Question 2 - Finished
+<p align="center">
+  <img src="https://github.com/RubenPants/TravelingSalesmanProblem/blob/master/program.png"/>
+</p>
 
+## Report
 
-
-## Questions - TODO
-
-### Question 3 [Sieben]
-
-* Stagnation (multiple species?)
-* Cut-off (stop when threshold found) --> Rational in report why not ideal
-http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.91.9167&rep=rep1&type=pdf (stopping criterion reference)
-
-### Question 4 [Ruben]
-
-* Adjacency to path representation (needed?)
-* Binary representation (with corresponding mutation and selection). Generalize to variable length of bit-strings.
-* Cycle-crossover
-
-### Question 5 [Sieben]
-
-* Not completely sure, extra form of mutation <br>
-   https://arxiv.org/ftp/arxiv/papers/1409/1409.3078.pdf 
-
-### Question 6 [NaN]
-
-* Run the boiii
-
-### Question 7
-
-#### Sub-question a
-
-* H5 
-
-#### Sub-question b
-
-* Novelty Search?
-
-#### Sub-question c
-
-* k-NN for species-selection
-
-#### Sub-question d
-
-* Let the mutation rates, k-NN (if used) and other parameters co-evolve.
-
-
-
-## Project Components
-
-### tspgui
-
-`tspgui.m` can be run to visualize the progress of the evolutionary algorithm, however, this decreases performance drastically.
-
-### run_ga
-
-`run_ga` is where its at, since this call is the one that will invoke the GA. Several arguments are given with this call:
-
-* `x` List of coordinates expressing the x-coordinate of the cities 
-* `y` List of coordinates expressing the y-coordinate of the cities
-* `NIND` The number of individuals<br> Default: 50
-* `MAXGEN` The maximal number of generations <br> Default: 100
-* `NVAR` The size of the chromosome (genome) <br> Default: 16
-* `ELITIST` The elitist-percentage <br> Default: 0.05
-* `STOP_PERCENTAGE` Percentage of equal fitness (stop criterium) <br> Default: 0.95
-* `PR_CROSS` The probability for applying crossover between two parents <br> Default: 0.95
-* `PR_MUT` The probability for applying mutation to an allele of the gene of a candidate (after crossover) <br> Default 0.05
-* `CROSSOVER` The crossover operator <br> Default: `xalt_edges` (reference to MatLab file `xalt_edges.m`)
-* `LOCALLOOP` The loop-checking mechanism (0 for False and 1 for True) <br> Default: 0
-* `ah1`, `ah2`, `ah3` Axes handles to visualize the TSP
-
-
-
-## Q&As
-
-* **[Ruben] Are there constraints on which paths to take in the assignments? How to tackle those if there are any?** <br> No.
-
-
-
-## TODOs
-
-* [Ruben] Experiment with different **selection** mechanisms from chapter 5.
-* [Ruben] Most likely we'll use an *Integer **Representation*** (p54). (Adjacency)
-* [Ruben] For **recombination**, I'd choose the *cycle crossover* discussed on page 73. An alternative would be to choose order crossover. Interesting comparison if you ask me? (I think the latter would become unstable due to the many fluctuations in choices, i.e. the crossover would become too stochastic).
-
-
-
-## Ideas
-
-* [Ruben] Use a form of ***Novelty Search*** in our algorithm to efficiently explore the whole search space. A possible way to add novelty is to compare the Hamming distance between two strings. I think it could be beneficial, however the introduction of an objective function is straight forward in this case. ***Quality Diversity*** could be the "solution" to this. 
-* [Ruben] For the first exercise, I wanted to create a circle of 20 cities. The reason why is that in this case, the search space is tremendously large, but the solution is still very notable. Next, I would set the parameters for generations and population-size fixed, (e.g.) 100 and 256 respectively. Next, I would see what the average (over 10 runs) distance would be for f(mutation, selection). A nice visualization would be to do all possible combinations of range(0,100,5) for both mutation and selection (400 possibilities, for 10 runs equals 4000 tests). Next, the points got interpolated to visualize the "performance space" (3D wave with x=mutation, y=selection, z=1/distance).
+The report corresponding this project can be found under the main branch of this repository, titled "*report_bocklandt_broekx.pdf*".
